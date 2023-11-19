@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=12 format=3 uid="uid://dmv7hq177kus8"]
 
 [ext_resource type="PackedScene" uid="uid://c7xuvylsuwi2a" path="res://entities/characters/player/player.tscn" id="1_64nu0"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="1_qbkpu"]
+[ext_resource type="PackedScene" uid="uid://c8hufy0b7hp07" path="res://entities/interactable_test.tscn" id="3_igorc"]
+[ext_resource type="Script" path="res://entities/Lightswitch.cs" id="4_maqg4"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_c0kdr"]
 sky_top_color = Color(0.388235, 0.552941, 0.788235, 1)
@@ -17,7 +19,22 @@ background_mode = 2
 sky = SubResource("Sky_gmltm")
 tonemap_mode = 2
 ssao_enabled = true
-glow_enabled = true
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8q72t"]
+load_path = "res://.godot/imported/dev_1.png-bd0d19e05387360765cf4c562407257e.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ss8p8"]
+albedo_color = Color(1, 0.698039, 0, 1)
+albedo_texture = SubResource("CompressedTexture2D_8q72t")
+uv1_triplanar = true
+texture_filter = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_lqqxr"]
+material = SubResource("StandardMaterial3D_ss8p8")
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2b7y2"]
+size = Vector3(0.5, 0.5, 0.5)
 
 [node name="map_test" type="Node"]
 
@@ -27,6 +44,9 @@ environment = SubResource("Environment_174wc")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.999848, -0.0130307, 0.0116099, 0, 0.66523, 0.746638, -0.0174525, 0.746524, -0.665129, 0, 0, 0)
 shadow_enabled = true
+directional_shadow_mode = 0
+directional_shadow_split_1 = 0.165
+directional_shadow_max_distance = 14.8
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
 use_collision = true
@@ -37,15 +57,41 @@ size = Vector3(10, 0, 10)
 material = ExtResource("1_qbkpu")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.5, -3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, -3)
 material_override = ExtResource("1_qbkpu")
-size = Vector3(3, 3, 3)
+size = Vector3(2, 1, 2)
 material = ExtResource("1_qbkpu")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D"]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 2, 1.5, -3)
 material_override = ExtResource("1_qbkpu")
-size = Vector3(3, 3, 3)
+size = Vector3(2, 1, 2)
 material = ExtResource("1_qbkpu")
 
 [node name="Player" parent="." instance=ExtResource("1_64nu0")]
+Sensitivity = 0.2
+
+[node name="test_objs" type="Node" parent="."]
+
+[node name="InteractableTest" parent="test_objs" instance=ExtResource("3_igorc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.298285, 0.679339, -3)
+
+[node name="Lightswitch" type="StaticBody3D" parent="test_objs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.44082, 0.927259, -1.81021)
+script = ExtResource("4_maqg4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="test_objs/Lightswitch"]
+mesh = SubResource("BoxMesh_lqqxr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="test_objs/Lightswitch"]
+shape = SubResource("BoxShape3D_2b7y2")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="test_objs"]
+transform = Transform3D(-0.999848, -0.0130307, 0.0116099, -6.19544e-10, 0.66523, 0.746638, -0.0174525, 0.746524, -0.665129, -2.48612, 0.535934, -1.83187)
+light_energy = 1.19
+light_indirect_energy = 2.333
+light_specular = 0.69
+omni_range = 0.762
+omni_attenuation = 1.86607
+
+[connection signal="SwitchLightVisibility" from="test_objs/Lightswitch" to="test_objs/OmniLight3D" method="set_visible"]
