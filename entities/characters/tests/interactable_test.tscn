@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://c8hufy0b7hp07"]
 
-[ext_resource type="Script" path="res://entities/InteractableTest.cs" id="1_ct1ar"]
+[ext_resource type="Script" path="res://entities/characters/tests/InteractableTest.cs" id="1_ct1ar"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8q72t"]
 load_path = "res://.godot/imported/dev_1.png-bd0d19e05387360765cf4c562407257e.s3tc.ctex"

@@ -20,8 +20,9 @@ config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=576
-window/size/viewport_height=324
+window/size/viewport_width=720
+window/size/viewport_height=405
+window/vsync/vsync_mode=2
 
 [dotnet]
 
@@ -29,7 +30,7 @@ project/assembly_name="scp-game"
 
 [editor]
 
-movie_writer/movie_file="D:/gd.avi"
+movie_writer/movie_file="D:/gamedev_devlog/unnamed.avi"
 movie_writer/disable_vsync=true
 
 [input]

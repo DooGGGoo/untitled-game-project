@@ -1,21 +1,26 @@
-[gd_scene load_steps=12 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=24 format=3 uid="uid://dmv7hq177kus8"]
 
 [ext_resource type="PackedScene" uid="uid://c7xuvylsuwi2a" path="res://entities/characters/player/player.tscn" id="1_64nu0"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="1_qbkpu"]
-[ext_resource type="PackedScene" uid="uid://c8hufy0b7hp07" path="res://entities/interactable_test.tscn" id="3_igorc"]
+[ext_resource type="PackedScene" uid="uid://c8hufy0b7hp07" path="res://entities/characters/tests/interactable_test.tscn" id="3_igorc"]
 [ext_resource type="Script" path="res://entities/Lightswitch.cs" id="4_maqg4"]
+[ext_resource type="Script" path="res://entities/characters/enemy/GenericEnemy.cs" id="5_euh7m"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_c0kdr"]
-sky_top_color = Color(0.388235, 0.552941, 0.788235, 1)
-sky_horizon_color = Color(0.623529, 0.659804, 0.712745, 1)
-ground_bottom_color = Color(0.105882, 0.0862745, 0.0627451, 1)
-ground_horizon_color = Color(0.623529, 0.659804, 0.712745, 1)
+sky_top_color = Color(0.364706, 0.505882, 0.690196, 1)
+sky_horizon_color = Color(0.690196, 0.639216, 0.772549, 1)
+sky_curve = 0.0477959
+ground_bottom_color = Color(0.0901961, 0.0705882, 0.0509804, 1)
+ground_horizon_color = Color(0.607843, 0.603922, 0.67451, 1)
+ground_curve = 0.0246229
+sun_curve = 0.102453
 
 [sub_resource type="Sky" id="Sky_gmltm"]
 sky_material = SubResource("ProceduralSkyMaterial_c0kdr")
 
 [sub_resource type="Environment" id="Environment_174wc"]
 background_mode = 2
+background_energy_multiplier = 0.65
 sky = SubResource("Sky_gmltm")
 tonemap_mode = 2
 ssao_enabled = true
@@ -36,13 +41,64 @@ size = Vector3(0.5, 0.5, 0.5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_2b7y2"]
 size = Vector3(0.5, 0.5, 0.5)
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_icjm7"]
+friction = 0.85
+rough = true
+bounce = 0.1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q6enk"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_kkcpk"]
+material = ExtResource("1_qbkpu")
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_lwgu3"]
+friction = 0.85
+rough = true
+bounce = 0.1
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0sjrc"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_dxk2x"]
+radial_segments = 8
+rings = 4
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vf835"]
+size = Vector3(0.5, 1.8, 0.5)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ge60a"]
+load_path = "res://.godot/imported/dev_1.png-bd0d19e05387360765cf4c562407257e.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ifhss"]
+albedo_color = Color(1, 0.0313726, 0, 1)
+albedo_texture = SubResource("CompressedTexture2D_ge60a")
+metallic_specular = 0.0
+emission = Color(0.243137, 0, 0, 1)
+emission_energy_multiplier = 0.73
+uv1_triplanar = true
+texture_filter = 2
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_5k02a"]
+material = SubResource("StandardMaterial3D_ifhss")
+radius = 0.365
+height = 1.8
+radial_segments = 16
+rings = 3
+
+[sub_resource type="SphereMesh" id="SphereMesh_omeaf"]
+material = ExtResource("1_qbkpu")
+radius = 0.37
+height = 0.53
+radial_segments = 8
+rings = 4
+
 [node name="map_test" type="Node"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_174wc")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.999848, -0.0130307, 0.0116099, 0, 0.66523, 0.746638, -0.0174525, 0.746524, -0.665129, 0, 0, 0)
+transform = Transform3D(-0.999848, -0.0130307, 0.0116099, -0.00256157, 0.767596, 0.640929, -0.0172635, 0.640801, -0.767513, 0, 0, 0)
+light_energy = 0.84
 shadow_enabled = true
 directional_shadow_mode = 0
 directional_shadow_split_1 = 0.165
@@ -53,7 +109,7 @@ use_collision = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
 material_override = ExtResource("1_qbkpu")
-size = Vector3(10, 0, 10)
+size = Vector3(20, 0, 20)
 material = ExtResource("1_qbkpu")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D"]
@@ -68,7 +124,7 @@ material_override = ExtResource("1_qbkpu")
 size = Vector3(2, 1, 2)
 material = ExtResource("1_qbkpu")
 
-[node name="Player" parent="." instance=ExtResource("1_64nu0")]
+[node name="Player" parent="." groups=["Player"] instance=ExtResource("1_64nu0")]
 Sensitivity = 0.2
 
 [node name="test_objs" type="Node" parent="."]
@@ -79,6 +135,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.298285, 0.679339, -3)
 [node name="Lightswitch" type="StaticBody3D" parent="test_objs"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.44082, 0.927259, -1.81021)
 script = ExtResource("4_maqg4")
+SwitchState = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="test_objs/Lightswitch"]
 mesh = SubResource("BoxMesh_lqqxr")
@@ -93,5 +150,47 @@ light_indirect_energy = 2.333
 light_specular = 0.69
 omni_range = 0.762
 omni_attenuation = 1.86607
+
+[node name="RBPushTest" type="RigidBody3D" parent="test_objs"]
+transform = Transform3D(0.926509, 0, 0.376273, 0, 1, 0, -0.376273, 0, 0.926509, 2.75439, 0.653083, -0.617845)
+mass = 2.69
+physics_material_override = SubResource("PhysicsMaterial_icjm7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="test_objs/RBPushTest"]
+shape = SubResource("BoxShape3D_q6enk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="test_objs/RBPushTest"]
+material_override = ExtResource("1_qbkpu")
+mesh = SubResource("BoxMesh_kkcpk")
+
+[node name="RBPushTest2" type="RigidBody3D" parent="test_objs"]
+transform = Transform3D(0.926509, 0, 0.376273, 0, 1, 0, -0.376273, 0, 0.926509, 2.75439, 0.653083, 1.40488)
+mass = 3.05
+physics_material_override = SubResource("PhysicsMaterial_lwgu3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="test_objs/RBPushTest2"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
+shape = SubResource("SphereShape3D_0sjrc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="test_objs/RBPushTest2"]
+material_override = ExtResource("1_qbkpu")
+mesh = SubResource("SphereMesh_dxk2x")
+
+[node name="Enemy >x3" type="CharacterBody3D" parent="." groups=["Enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4)
+script = ExtResource("5_euh7m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy >x3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("BoxShape3D_vf835")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy >x3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+mesh = SubResource("CapsuleMesh_5k02a")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enemy >x3/MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.522649, -0.125961)
+mesh = SubResource("SphereMesh_omeaf")
+skeleton = NodePath("../..")
 
 [connection signal="SwitchLightVisibility" from="test_objs/Lightswitch" to="test_objs/OmniLight3D" method="set_visible"]

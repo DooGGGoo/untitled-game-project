@@ -64,6 +64,17 @@ public partial class Player : CharacterBody3D
 		{
 			ProcessMovement(delta);
 		}
+
+
+		var collision = MoveAndCollide(Velocity * (float)delta, true);
+
+		if (collision != null && collision.GetCollider() is RigidBody3D rigidbody)
+		{
+			var pushVector = collision.GetNormal() * (Velocity.Length() * 2f / rigidbody.Mass);
+			rigidbody.ApplyImpulse(-pushVector, collision.GetPosition() - rigidbody.GlobalPosition);
+		}
+
+		MoveAndSlide();
 	}
 
 
@@ -92,7 +103,6 @@ public partial class Player : CharacterBody3D
 		}
 
 		Velocity = velocity;
-		MoveAndSlide();
 	}
 
 
@@ -109,7 +119,6 @@ public partial class Player : CharacterBody3D
 			velocity = velocity.Lerp(Vector3.Zero, 12f * (float)delta);
 
 		Velocity = velocity;
-		MoveAndSlide();
 	}
 
 
