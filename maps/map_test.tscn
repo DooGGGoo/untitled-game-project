@@ -1,22 +1,18 @@
-[gd_scene load_steps=24 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=20 format=3 uid="uid://dmv7hq177kus8"]
 
 [ext_resource type="PackedScene" uid="uid://c7xuvylsuwi2a" path="res://entities/characters/player/player.tscn" id="1_64nu0"]
+[ext_resource type="Texture2D" uid="uid://bd2datw4a75dw" path="res://assets/materials/textures/dev_1.png" id="1_gxu3p"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="1_qbkpu"]
-[ext_resource type="PackedScene" uid="uid://c8hufy0b7hp07" path="res://entities/characters/tests/interactable_test.tscn" id="3_igorc"]
+[ext_resource type="PackedScene" uid="uid://c8hufy0b7hp07" path="res://entities/tests/interactable_test.tscn" id="3_igorc"]
 [ext_resource type="Script" path="res://entities/Lightswitch.cs" id="4_maqg4"]
-[ext_resource type="Script" path="res://entities/characters/enemy/GenericEnemy.cs" id="5_euh7m"]
+[ext_resource type="PackedScene" uid="uid://bk8e1unhd8k4d" path="res://entities/characters/enemy/GenericEnemy.tscn" id="6_838wa"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_c0kdr"]
-sky_top_color = Color(0.364706, 0.505882, 0.690196, 1)
-sky_horizon_color = Color(0.690196, 0.639216, 0.772549, 1)
-sky_curve = 0.0477959
-ground_bottom_color = Color(0.0901961, 0.0705882, 0.0509804, 1)
-ground_horizon_color = Color(0.607843, 0.603922, 0.67451, 1)
-ground_curve = 0.0246229
-sun_curve = 0.102453
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_eox80"]
+panorama = ExtResource("1_gxu3p")
+filter = false
 
 [sub_resource type="Sky" id="Sky_gmltm"]
-sky_material = SubResource("ProceduralSkyMaterial_c0kdr")
+sky_material = SubResource("PanoramaSkyMaterial_eox80")
 
 [sub_resource type="Environment" id="Environment_174wc"]
 background_mode = 2
@@ -62,35 +58,6 @@ bounce = 0.1
 radial_segments = 8
 rings = 4
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_vf835"]
-size = Vector3(0.5, 1.8, 0.5)
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ge60a"]
-load_path = "res://.godot/imported/dev_1.png-bd0d19e05387360765cf4c562407257e.s3tc.ctex"
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ifhss"]
-albedo_color = Color(1, 0.0313726, 0, 1)
-albedo_texture = SubResource("CompressedTexture2D_ge60a")
-metallic_specular = 0.0
-emission = Color(0.243137, 0, 0, 1)
-emission_energy_multiplier = 0.73
-uv1_triplanar = true
-texture_filter = 2
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_5k02a"]
-material = SubResource("StandardMaterial3D_ifhss")
-radius = 0.365
-height = 1.8
-radial_segments = 16
-rings = 3
-
-[sub_resource type="SphereMesh" id="SphereMesh_omeaf"]
-material = ExtResource("1_qbkpu")
-radius = 0.37
-height = 0.53
-radial_segments = 8
-rings = 4
-
 [node name="map_test" type="Node"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -108,8 +75,9 @@ directional_shadow_max_distance = 14.8
 use_collision = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 material_override = ExtResource("1_qbkpu")
-size = Vector3(20, 0, 20)
+size = Vector3(40, 0.1, 40)
 material = ExtResource("1_qbkpu")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D"]
@@ -119,9 +87,29 @@ size = Vector3(2, 1, 2)
 material = ExtResource("1_qbkpu")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D"]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 2, 1.5, -3)
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 2, 1.89038, -3)
 material_override = ExtResource("1_qbkpu")
-size = Vector3(2, 1, 2)
+size = Vector3(2, 0.900879, 2)
+material = ExtResource("1_qbkpu")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 2.5, 2.31, -0.6)
+material_override = ExtResource("1_qbkpu")
+material = ExtResource("1_qbkpu")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D/CSGBox3D4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -0.25, 0)
+material_override = ExtResource("1_qbkpu")
+material = ExtResource("1_qbkpu")
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="CSGCombiner3D/CSGBox3D4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.5, 0)
+material_override = ExtResource("1_qbkpu")
+material = ExtResource("1_qbkpu")
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="CSGCombiner3D/CSGBox3D4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, -0.75, 0)
+material_override = ExtResource("1_qbkpu")
 material = ExtResource("1_qbkpu")
 
 [node name="Player" parent="." groups=["Player"] instance=ExtResource("1_64nu0")]
@@ -152,7 +140,7 @@ omni_range = 0.762
 omni_attenuation = 1.86607
 
 [node name="RBPushTest" type="RigidBody3D" parent="test_objs"]
-transform = Transform3D(0.926509, 0, 0.376273, 0, 1, 0, -0.376273, 0, 0.926509, 2.75439, 0.653083, -0.617845)
+transform = Transform3D(0.123654, 0, -0.992326, 0, 1, 0, 0.992326, 0, 0.123654, 3.73129, 0.653083, 6.65528)
 mass = 2.69
 physics_material_override = SubResource("PhysicsMaterial_icjm7")
 
@@ -164,7 +152,7 @@ material_override = ExtResource("1_qbkpu")
 mesh = SubResource("BoxMesh_kkcpk")
 
 [node name="RBPushTest2" type="RigidBody3D" parent="test_objs"]
-transform = Transform3D(0.926509, 0, 0.376273, 0, 1, 0, -0.376273, 0, 0.926509, 2.75439, 0.653083, 1.40488)
+transform = Transform3D(0.123654, 0, -0.992326, 0, 1, 0, 0.992326, 0, 0.123654, 1.77749, 0.653083, 6.13176)
 mass = 3.05
 physics_material_override = SubResource("PhysicsMaterial_lwgu3")
 
@@ -176,21 +164,31 @@ shape = SubResource("SphereShape3D_0sjrc")
 material_override = ExtResource("1_qbkpu")
 mesh = SubResource("SphereMesh_dxk2x")
 
-[node name="Enemy >x3" type="CharacterBody3D" parent="." groups=["Enemy"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4)
-script = ExtResource("5_euh7m")
+[node name="RBPushTest3" type="RigidBody3D" parent="test_objs"]
+transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, 1.77749, 1.65308, 6.13176)
+mass = 2.69
+physics_material_override = SubResource("PhysicsMaterial_icjm7")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy >x3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
-shape = SubResource("BoxShape3D_vf835")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="test_objs/RBPushTest3"]
+shape = SubResource("BoxShape3D_q6enk")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy >x3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
-mesh = SubResource("CapsuleMesh_5k02a")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="test_objs/RBPushTest3"]
+material_override = ExtResource("1_qbkpu")
+mesh = SubResource("BoxMesh_kkcpk")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Enemy >x3/MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.522649, -0.125961)
-mesh = SubResource("SphereMesh_omeaf")
-skeleton = NodePath("../..")
+[node name="RBPushTest4" type="RigidBody3D" parent="test_objs"]
+transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, 3.73129, 1.65308, 6.65528)
+mass = 3.05
+physics_material_override = SubResource("PhysicsMaterial_lwgu3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="test_objs/RBPushTest4"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
+shape = SubResource("SphereShape3D_0sjrc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="test_objs/RBPushTest4"]
+material_override = ExtResource("1_qbkpu")
+mesh = SubResource("SphereMesh_dxk2x")
+
+[node name="Enemy >x3" parent="." instance=ExtResource("6_838wa")]
 
 [connection signal="SwitchLightVisibility" from="test_objs/Lightswitch" to="test_objs/OmniLight3D" method="set_visible"]

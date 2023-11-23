@@ -6,14 +6,20 @@ public partial class Player : CharacterBody3D
 	[Export] public Camera3D PlayerCamera;
 	[Export] public float Sensitivity = 0.5f; 
 	[Export] private bool isNoclip = false;
+	[Export] private CollisionShape3D StandingCollisionShape, CrouchingCollisionShape;
+	[Export] private ShapeCast3D CrouchAboveCheck;
 
 	private Vector2 mouseMotion;
 	private float MovementAcceleration = 6f;
 	private float MovementFriction = 8f;
+	private float crouchDepth = -0.8f;
 
-	public const float Speed = 5.0f;
+	private float currentSpeed;
+	public const float WalkSpeed = 4f;
+	public const float SprintSpeed = 5.8f;
+	public const float CrouchSpeed = 2.3f;
 	public const float JumpVelocity = 1.2f;
-	public const float gravity = 16.8f;
+	private const float gravity = 16.8f;
 
 
     [Signal]
@@ -22,7 +28,8 @@ public partial class Player : CharacterBody3D
     public override void _Ready()
     {
 		Input.MouseMode = Input.MouseModeEnum.Captured;
-        base._Ready();
+
+		base._Ready();
     }
 
 
@@ -32,29 +39,61 @@ public partial class Player : CharacterBody3D
 		{
 			InputEventMouseMotion mouseMotionEvent = @event as InputEventMouseMotion;
 			mouseMotion.X -= mouseMotionEvent.Relative.Y * Sensitivity;
-			mouseMotion.X = Mathf.Clamp(mouseMotion.X, -90f, 90f);
+			mouseMotion.X = Mathf.Clamp(mouseMotion.X, -89.9f, 89.9f);
 			mouseMotion.Y -= mouseMotionEvent.Relative.X * Sensitivity; 
 		}
+
 		if (@event.IsActionPressed("use"))
 		{
 			InteractWithObject();
 		}
+
 		if (@event.IsActionPressed("jump"))
 		{
 			Jump();
 		}
+
 		if (@event.IsActionPressed("debug_noclip"))
 		{
 			isNoclip = !isNoclip;
 			GetNode<CollisionShape3D>("CollisionShape3D").Disabled = isNoclip;
 		}
-        base._Input(@event);
     }
 
 
     public override void _PhysicsProcess(double delta)
 	{
 		PlayerCamera.RotationDegrees = new Vector3(mouseMotion.X, mouseMotion.Y, PlayerCamera.RotationDegrees.Z);
+
+		if (Input.IsActionPressed("crouch"))
+		{
+			currentSpeed = CrouchSpeed;
+			PlayerCamera.Position = new Vector3(PlayerCamera.Position.X, Mathf.Lerp(PlayerCamera.Position.Y, 1.5f + crouchDepth, 7f * (float)delta), PlayerCamera.Position.Z);
+			if (StandingCollisionShape.Disabled == false)
+			{
+				StandingCollisionShape.Disabled = true;
+				CrouchingCollisionShape.Disabled = false;
+			}
+		}
+		
+		else if (!CrouchAboveCheck.IsColliding())
+		{
+			if (StandingCollisionShape.Disabled == true)
+			{
+				StandingCollisionShape.Disabled = false;
+				CrouchingCollisionShape.Disabled = true;
+			}
+
+			PlayerCamera.Position = new Vector3(PlayerCamera.Position.X, Mathf.Lerp(PlayerCamera.Position.Y, 1.5f, 7f * (float)delta), PlayerCamera.Position.Z);
+			if (Input.IsActionPressed("sprint"))
+			{
+				currentSpeed = SprintSpeed;
+			}
+			else
+			{
+				currentSpeed = WalkSpeed;
+			}
+		}
 		
 		if (isNoclip == true)
 		{
@@ -92,8 +131,8 @@ public partial class Player : CharacterBody3D
 		if (wishDir != Vector3.Zero)
 		{
 			MovementAcceleration = IsOnFloor() ? 9f : 1f;
-			velocity.X = Mathf.Lerp(velocity.X, wishDir.X * Speed, MovementAcceleration * (float)delta);
-			velocity.Z = Mathf.Lerp(velocity.Z, wishDir.Z * Speed, MovementAcceleration * (float)delta);
+			velocity.X = Mathf.Lerp(velocity.X, wishDir.X * currentSpeed, MovementAcceleration * (float)delta);
+			velocity.Z = Mathf.Lerp(velocity.Z, wishDir.Z * currentSpeed, MovementAcceleration * (float)delta);
 		}
 		else
 		{
@@ -114,7 +153,7 @@ public partial class Player : CharacterBody3D
 		Vector3 wishDir = (PlayerCamera.GlobalTransform.Basis.X * inputDir.X + -PlayerCamera.GlobalTransform.Basis.Z * -inputDir.Y).Normalized();
 
 		if (wishDir != Vector3.Zero)
-			velocity = velocity.Lerp(wishDir * Speed * 2f, 9f * (float)delta);
+			velocity = velocity.Lerp(wishDir * currentSpeed * 2f, 9f * (float)delta);
 		else
 			velocity = velocity.Lerp(Vector3.Zero, 12f * (float)delta);
 
@@ -144,4 +183,5 @@ public partial class Player : CharacterBody3D
 			}
 		}
 	}
+	
 }
