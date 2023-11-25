@@ -8,6 +8,8 @@ public partial class Player : CharacterBody3D
 	[Export] private bool isNoclip = false;
 	[Export] private CollisionShape3D StandingCollisionShape, CrouchingCollisionShape;
 	[Export] private ShapeCast3D CrouchAboveCheck;
+	[Export] private RayCast3D InteractionCheck;
+	[Export] private Node3D GrabbedObjectPositionMarker;
 
 	private Vector2 mouseMotion;
 	private float MovementAcceleration = 6f;
@@ -20,6 +22,9 @@ public partial class Player : CharacterBody3D
 	public const float CrouchSpeed = 2.3f;
 	public const float JumpVelocity = 1.2f;
 	private const float gravity = 16.8f;
+
+	private const float grabObjectPullPower = 22f;
+	private RigidBody3D grabbedObject;
 
 
     [Signal]
@@ -56,14 +61,73 @@ public partial class Player : CharacterBody3D
 		if (@event.IsActionPressed("debug_noclip"))
 		{
 			isNoclip = !isNoclip;
-			GetNode<CollisionShape3D>("CollisionShape3D").Disabled = isNoclip;
+			StandingCollisionShape.Disabled = isNoclip;
+			CrouchingCollisionShape.Disabled = isNoclip;
 		}
-    }
+    
+		// TODO: Change input action to something else
+		if (Input.IsActionJustPressed("use"))
+		{
+			if (grabbedObject == null)
+			{
+				GrabObject();
+			}
+			else
+			{
+				DropObject();
+			}
+		}
+	}
 
 
     public override void _PhysicsProcess(double delta)
 	{
 		PlayerCamera.RotationDegrees = new Vector3(mouseMotion.X, mouseMotion.Y, PlayerCamera.RotationDegrees.Z);
+		
+		if (isNoclip == true)
+		{
+			ProcessMovementNoclip(delta);
+		}
+		else
+		{
+			ProcessMovement(delta);
+		}
+
+		// Rotate grabObjectCameraOffset to match with the rotation of the camera
+		if (grabbedObject != null)
+		{
+			Vector3 objPosition = grabbedObject.GlobalPosition;
+			Vector3 targetPosition = GrabbedObjectPositionMarker.GlobalPosition;
+			
+			grabbedObject.LinearVelocity = (targetPosition - objPosition) * grabObjectPullPower;
+			grabbedObject.Rotation = PlayerCamera.Rotation;
+
+			if (InteractionCheck.GetCollider() != grabbedObject && InteractionCheck.GetCollider() != null)
+			{
+				DropObject();
+			}
+		}
+
+		PushRigidBodies(delta);
+		MoveAndSlide();
+	}
+
+
+	private void PushRigidBodies(double delta)
+	{
+		var collision = MoveAndCollide(Velocity * (float)delta, true);
+
+		if (collision != null && collision.GetCollider() is RigidBody3D rigidbody)
+		{
+			var pushVector = collision.GetNormal() * (Velocity.Length() * 2f / rigidbody.Mass);
+			rigidbody.ApplyImpulse(-pushVector, collision.GetPosition() - rigidbody.GlobalPosition);
+		}
+	}
+
+
+	private void ProcessMovement(double delta)
+	{
+		Vector3 velocity = Velocity;
 
 		if (Input.IsActionPressed("crouch"))
 		{
@@ -75,7 +139,7 @@ public partial class Player : CharacterBody3D
 				CrouchingCollisionShape.Disabled = false;
 			}
 		}
-		
+
 		else if (!CrouchAboveCheck.IsColliding())
 		{
 			if (StandingCollisionShape.Disabled == true)
@@ -94,32 +158,6 @@ public partial class Player : CharacterBody3D
 				currentSpeed = WalkSpeed;
 			}
 		}
-		
-		if (isNoclip == true)
-		{
-			ProcessMovementNoclip(delta);
-		}
-		else
-		{
-			ProcessMovement(delta);
-		}
-
-
-		var collision = MoveAndCollide(Velocity * (float)delta, true);
-
-		if (collision != null && collision.GetCollider() is RigidBody3D rigidbody)
-		{
-			var pushVector = collision.GetNormal() * (Velocity.Length() * 2f / rigidbody.Mass);
-			rigidbody.ApplyImpulse(-pushVector, collision.GetPosition() - rigidbody.GlobalPosition);
-		}
-
-		MoveAndSlide();
-	}
-
-
-	private void ProcessMovement(double delta)
-	{
-		Vector3 velocity = Velocity;
 
 		if (!IsOnFloor())
 			velocity.Y -= gravity * (float)delta;
@@ -173,10 +211,9 @@ public partial class Player : CharacterBody3D
 
 	private void InteractWithObject()
 	{
-		RayCast3D raycast = GetNodeOrNull<RayCast3D>("Camera3D/RayCast3D");
-		if (raycast != null && raycast.IsColliding())
+		if (InteractionCheck != null && InteractionCheck.IsColliding())
 		{
-			Node collidedObject = raycast.GetCollider() as Node;
+			Node collidedObject = InteractionCheck.GetCollider() as Node;
 			if (collidedObject != null && collidedObject is IInteractable)
 			{
 				((IInteractable)collidedObject).Interact(this);
@@ -184,4 +221,25 @@ public partial class Player : CharacterBody3D
 		}
 	}
 	
+
+	private void GrabObject()
+	{
+		if (InteractionCheck != null && InteractionCheck.IsColliding())
+		{
+			Node collidedObject = InteractionCheck.GetCollider() as Node;
+			if (collidedObject != null && collidedObject is RigidBody3D)
+			{
+				grabbedObject = collidedObject as RigidBody3D;
+			}
+		}
+	}
+
+	private void DropObject()
+	{
+		if (grabbedObject != null)
+		{
+			grabbedObject = null;
+		}
+	}
+
 }

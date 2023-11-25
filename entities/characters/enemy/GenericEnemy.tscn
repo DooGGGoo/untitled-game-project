@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bk8e1unhd8k4d"]
 
 [ext_resource type="Script" path="res://entities/characters/enemy/GenericEnemy.cs" id="1_hfcnd"]
-[ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="2_3muaj"]
+[ext_resource type="Material" uid="uid://byy0tf2266p3d" path="res://assets/materials/jerma.tres" id="2_oueth"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vf835"]
 size = Vector3(0.5, 1.8, 0.5)
@@ -25,15 +25,13 @@ height = 1.8
 radial_segments = 16
 rings = 3
 
-[sub_resource type="SphereMesh" id="SphereMesh_omeaf"]
-material = ExtResource("2_3muaj")
-radius = 0.37
-height = 0.53
-radial_segments = 8
-rings = 4
+[sub_resource type="QuadMesh" id="QuadMesh_u8egk"]
+material = ExtResource("2_oueth")
+size = Vector2(0.5, 0.725)
+center_offset = Vector3(0, -0.105, 0)
 
 [node name="Enemy >x3" type="CharacterBody3D" groups=["Enemy"]]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -14, 1, -5)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 1, 0)
 script = ExtResource("1_hfcnd")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -45,6 +43,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 mesh = SubResource("CapsuleMesh_5k02a")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.522649, -0.125961)
-mesh = SubResource("SphereMesh_omeaf")
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -1.0672e-08, 0.634239, -0.370108)
+material_override = ExtResource("2_oueth")
+mesh = SubResource("QuadMesh_u8egk")
 skeleton = NodePath("../..")

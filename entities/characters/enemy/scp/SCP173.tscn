@@ -1,0 +1,77 @@
+[gd_scene load_steps=10 format=3 uid="uid://df317tod58c0w"]
+
+[ext_resource type="Script" path="res://entities/characters/enemy/scp/SCP173.cs" id="1_wjdjg"]
+[ext_resource type="Material" uid="uid://byy0tf2266p3d" path="res://assets/materials/jerma.tres" id="2_b1rcb"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vf835"]
+size = Vector3(0.5, 1.8, 0.5)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0cupg"]
+load_path = "res://.godot/imported/dev_1.png-bd0d19e05387360765cf4c562407257e.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cxnxn"]
+albedo_color = Color(0.905882, 0.572549, 0.427451, 1)
+albedo_texture = SubResource("CompressedTexture2D_0cupg")
+metallic_specular = 0.0
+emission = Color(0.243137, 0, 0, 1)
+emission_energy_multiplier = 0.73
+uv1_triplanar = true
+texture_filter = 2
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_1n2a3"]
+material = SubResource("StandardMaterial3D_cxnxn")
+radius = 0.365
+height = 1.8
+radial_segments = 16
+rings = 3
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_xbfmc"]
+load_path = "res://.godot/imported/jerma.jpg-fd3e006b3dd32e27425c53ae8599a2de.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l5lun"]
+albedo_texture = SubResource("CompressedTexture2D_xbfmc")
+metallic_specular = 0.0
+uv1_scale = Vector3(0.69, 0.69, 0.69)
+uv1_offset = Vector3(-0.48, -0.51, -0.525)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 14.42
+texture_filter = 2
+
+[sub_resource type="QuadMesh" id="QuadMesh_73fbn"]
+material = SubResource("StandardMaterial3D_l5lun")
+size = Vector2(0.5, 0.725)
+center_offset = Vector3(0, -0.105, 0)
+
+[node name="173" type="CharacterBody3D" node_paths=PackedStringArray("navigationAgent", "onScreenNotifier", "cooldownTimer") groups=["Enemy"]]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 1, 0)
+script = ExtResource("1_wjdjg")
+navigationAgent = NodePath("NavigationAgent3D")
+onScreenNotifier = NodePath("VisibleOnScreenNotifier3D")
+cooldownTimer = NodePath("CooldownTimer")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("BoxShape3D_vf835")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+mesh = SubResource("CapsuleMesh_1n2a3")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -1.0672e-08, 0.634239, -0.370108)
+material_override = ExtResource("2_b1rcb")
+mesh = SubResource("QuadMesh_73fbn")
+skeleton = NodePath("../..")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 1.4
+target_desired_distance = 2.05
+debug_enabled = true
+debug_path_custom_color = Color(0.992157, 0.0156863, 0, 1)
+
+[node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="."]
+aabb = AABB(-0.38611, -0.965162, -0.393189, 0.77222, 1.75552, 0.786377)
+
+[node name="CooldownTimer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true

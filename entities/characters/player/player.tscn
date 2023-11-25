@@ -20,13 +20,15 @@ rings = 3
 margin = 0.0
 size = Vector3(0.45, 1.2, 0.45)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCamera", "StandingCollisionShape", "CrouchingCollisionShape", "CrouchAboveCheck")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCamera", "StandingCollisionShape", "CrouchingCollisionShape", "CrouchAboveCheck", "InteractionCheck", "GrabbedObjectPositionMarker")]
 collision_mask = 3
 script = ExtResource("1_l5jtm")
 PlayerCamera = NodePath("Camera3D")
 StandingCollisionShape = NodePath("CollisionShapeStanding")
 CrouchingCollisionShape = NodePath("CollisionShapeCrouching")
 CrouchAboveCheck = NodePath("CrouchAboveCheck")
+InteractionCheck = NodePath("Camera3D/RayCast3D")
+GrabbedObjectPositionMarker = NodePath("Camera3D/GrabbedObjectPosition")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -34,8 +36,10 @@ fov = 80.0
 near = 0.001
 
 [node name="RayCast3D" type="RayCast3D" parent="Camera3D"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-target_position = Vector3(0, -1.8, 0)
+target_position = Vector3(0, 0, -1.8)
+
+[node name="GrabbedObjectPosition" type="Marker3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
 
 [node name="CollisionShapeStanding" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -48,6 +52,7 @@ disabled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+cast_shadow = 0
 mesh = SubResource("CapsuleMesh_xs3u6")
 
 [node name="CrouchAboveCheck" type="ShapeCast3D" parent="."]
@@ -55,3 +60,48 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 shape = SubResource("BoxShape3D_2cu1u")
 target_position = Vector3(0, 0, 0)
 max_results = 7
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="UILayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="UILayer/Control"]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.5
+offset_top = -1.5
+offset_right = 1.5
+offset_bottom = 1.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.772549)
+
+[node name="MarginContainer" type="MarginContainer" parent="UILayer/Control"]
+layout_mode = 0
+offset_right = 187.0
+offset_bottom = 207.0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UILayer/Control/MarginContainer"]
+layout_mode = 2
+text = "[W,A,S,D] - Move
+[Space] - Jump
+[C] - Crouch
+[E] - Use
+[Alt + F4] - Quit"
+fit_content = true
+scroll_active = false

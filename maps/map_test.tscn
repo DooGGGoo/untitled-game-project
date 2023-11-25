@@ -1,11 +1,13 @@
-[gd_scene load_steps=20 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=23 format=3 uid="uid://dmv7hq177kus8"]
 
 [ext_resource type="PackedScene" uid="uid://c7xuvylsuwi2a" path="res://entities/characters/player/player.tscn" id="1_64nu0"]
 [ext_resource type="Texture2D" uid="uid://bd2datw4a75dw" path="res://assets/materials/textures/dev_1.png" id="1_gxu3p"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="1_qbkpu"]
 [ext_resource type="PackedScene" uid="uid://c8hufy0b7hp07" path="res://entities/tests/interactable_test.tscn" id="3_igorc"]
-[ext_resource type="Script" path="res://entities/Lightswitch.cs" id="4_maqg4"]
+[ext_resource type="Script" path="res://entities/Button.cs" id="4_24jn2"]
 [ext_resource type="PackedScene" uid="uid://bk8e1unhd8k4d" path="res://entities/characters/enemy/GenericEnemy.tscn" id="6_838wa"]
+[ext_resource type="Material" uid="uid://byy0tf2266p3d" path="res://assets/materials/jerma.tres" id="6_fwhoe"]
+[ext_resource type="PackedScene" uid="uid://df317tod58c0w" path="res://entities/characters/enemy/scp/SCP173.tscn" id="8_rae2q"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_eox80"]
 panorama = ExtResource("1_gxu3p")
@@ -18,8 +20,32 @@ sky_material = SubResource("PanoramaSkyMaterial_eox80")
 background_mode = 2
 background_energy_multiplier = 0.65
 sky = SubResource("Sky_gmltm")
+ambient_light_sky_contribution = 0.75
 tonemap_mode = 2
 ssao_enabled = true
+ssao_radius = 0.75
+ssao_intensity = 2.9
+ssao_power = 2.35375
+ssao_detail = 1.05
+glow_normalized = true
+glow_intensity = 0.1
+glow_strength = 0.93
+glow_bloom = 0.01
+glow_blend_mode = 0
+fog_light_color = Color(0.511355, 0.502337, 0.511351, 1)
+fog_sun_scatter = 0.25
+fog_aerial_perspective = 0.785
+volumetric_fog_anisotropy = 0.27
+volumetric_fog_length = 39.66
+volumetric_fog_detail_spread = 1.68179
+volumetric_fog_sky_affect = 0.575
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_iyj1d"]
+vertices = PackedVector3Array(-19.25, 0.30458, -3.5, -3.75, 0.30458, -3.5, -4, 0.30458, -6.5, -4, 0.30458, -6.5, -4, 0.30458, -19.25, -19.25, 0.30458, -19.25, -19.25, 0.30458, -3.5, -2.25, 1.30458, -2.75, -1.5, 1.30458, -2.75, -1.75, 0.55458, -6.5, -2.25, 0.55458, -6.5, -1.25, 0.55458, -7, 0, 0.30458, -19.25, -4, 0.30458, -19.25, -3.5, 0.30458, -7, -2.25, 0.55458, -6.5, -1.75, 0.55458, -6.5, -4, 0.30458, -19.25, -4, 0.30458, -6.5, -3.5, 0.30458, -7, -1.25, 0.55458, -7, 0, 0.30458, -6.5, 0, 0.30458, -19.25, 0, 0.30458, -4.25, 0.75, 0.30458, -4.25, 1.5, 0.30458, -5.25, 0, 0.30458, -6.5, 0, 0.30458, -19.25, 2.5, 0.30458, -5.25, 4.25, 0.30458, -3.25, 19.25, 0.30458, -3.25, 19.25, 0.30458, -19.25, 0, 0.30458, -6.5, 1.5, 0.30458, -5.25, 2.5, 0.30458, -5.25, 0, 0.30458, -19.25, 1.25, 0.30458, -1.25, 0.5, 0.30458, -1.75, -0.75, 0.30458, -0.75, 1.25, 0.30458, 3.5, 2.5, 0.30458, 19.25, 1.25, 0.30458, 3.5, -3.25, 0.30458, -1, -19.25, 0.30458, -3.5, -19.25, 0.30458, 19.25, 1.25, 0.30458, 3.5, -0.75, 0.30458, -0.75, -3.25, 0.30458, -1, -3.75, 0.30458, -1.5, -3.75, 0.30458, -3.5, -19.25, 0.30458, -3.5, 2.5, 0.30458, 19.25, 2.5, 0.30458, 4, 1.25, 0.30458, 3.5, -3.25, 0.30458, -1, -3.75, 0.30458, -1.5, -19.25, 0.30458, -3.5, 1.5, 2.80458, -3.25, 1.75, 2.80458, -2.5, 2.5, 2.80458, -2.75, 2.25, 2.80458, -3.5, 4.25, 0.30458, -2.5, 3.5, 0.30458, -2, 4, 0.30458, -1.5, 4.25, 0.30458, -2.5, 4, 0.30458, -1.5, 4, 0.30458, 2, 19.25, 0.30458, 2.25, 19.25, 0.30458, -3.25, 19.25, 0.30458, -3.25, 4.25, 0.30458, -3.25, 4.25, 0.30458, -2.5, 19.25, 0.30458, 2.25, 4, 0.30458, 2, 4, 0.30458, 3.5, 4, 0.30458, 3.5, 2.5, 0.30458, 4, 2.5, 0.30458, 19.25, 19.25, 0.30458, 19.25, 19.25, 0.30458, 2.25)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(4, 3, 5), PackedInt32Array(5, 3, 6), PackedInt32Array(10, 9, 7), PackedInt32Array(7, 9, 8), PackedInt32Array(16, 15, 11), PackedInt32Array(11, 15, 14), PackedInt32Array(11, 14, 13), PackedInt32Array(11, 13, 12), PackedInt32Array(19, 18, 17), PackedInt32Array(22, 21, 20), PackedInt32Array(24, 23, 25), PackedInt32Array(25, 23, 26), PackedInt32Array(28, 27, 29), PackedInt32Array(29, 27, 30), PackedInt32Array(30, 27, 31), PackedInt32Array(33, 32, 34), PackedInt32Array(34, 32, 35), PackedInt32Array(37, 36, 38), PackedInt32Array(38, 36, 39), PackedInt32Array(41, 40, 42), PackedInt32Array(42, 40, 44), PackedInt32Array(42, 44, 43), PackedInt32Array(47, 46, 45), PackedInt32Array(50, 49, 48), PackedInt32Array(53, 52, 51), PackedInt32Array(56, 55, 54), PackedInt32Array(60, 59, 57), PackedInt32Array(57, 59, 58), PackedInt32Array(63, 62, 61), PackedInt32Array(65, 64, 66), PackedInt32Array(66, 64, 67), PackedInt32Array(67, 64, 68), PackedInt32Array(71, 70, 69), PackedInt32Array(74, 73, 72), PackedInt32Array(76, 75, 77), PackedInt32Array(77, 75, 78), PackedInt32Array(78, 75, 79)]
+geometry_parsed_geometry_type = 1
+agent_height = 1.8
+agent_radius = 0.65
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8q72t"]
 load_path = "res://.godot/imported/dev_1.png-bd0d19e05387360765cf4c562407257e.s3tc.ctex"
@@ -71,124 +97,141 @@ directional_shadow_mode = 0
 directional_shadow_split_1 = 0.165
 directional_shadow_max_distance = 14.8
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_iyj1d")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="NavigationRegion3D"]
 use_collision = true
 
-[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 material_override = ExtResource("1_qbkpu")
 size = Vector3(40, 0.1, 40)
 material = ExtResource("1_qbkpu")
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, -3)
 material_override = ExtResource("1_qbkpu")
 size = Vector3(2, 1, 2)
 material = ExtResource("1_qbkpu")
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="CSGBox3D5" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 0.947356, 0.320183, 0, -0.320183, 0.947356, -2, -0.098704, -5.37179)
+material_override = ExtResource("1_qbkpu")
+size = Vector3(2, 1.2, 3.3)
+material = ExtResource("1_qbkpu")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D"]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 2, 1.89038, -3)
 material_override = ExtResource("1_qbkpu")
 size = Vector3(2, 0.900879, 2)
 material = ExtResource("1_qbkpu")
 
-[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="CSGBox3D4" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D"]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 2.5, 2.31, -0.6)
 material_override = ExtResource("1_qbkpu")
 material = ExtResource("1_qbkpu")
 
-[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D/CSGBox3D4"]
+[node name="CSGBox3D5" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D/CSGBox3D4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -0.25, 0)
 material_override = ExtResource("1_qbkpu")
 material = ExtResource("1_qbkpu")
 
-[node name="CSGBox3D6" type="CSGBox3D" parent="CSGCombiner3D/CSGBox3D4"]
+[node name="CSGBox3D6" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D/CSGBox3D4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.5, 0)
 material_override = ExtResource("1_qbkpu")
 material = ExtResource("1_qbkpu")
 
-[node name="CSGBox3D7" type="CSGBox3D" parent="CSGCombiner3D/CSGBox3D4"]
+[node name="CSGBox3D7" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D/CSGBox3D4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, -0.75, 0)
 material_override = ExtResource("1_qbkpu")
 material = ExtResource("1_qbkpu")
 
-[node name="Player" parent="." groups=["Player"] instance=ExtResource("1_64nu0")]
-Sensitivity = 0.2
+[node name="test_objs" type="Node" parent="NavigationRegion3D"]
 
-[node name="test_objs" type="Node" parent="."]
-
-[node name="InteractableTest" parent="test_objs" instance=ExtResource("3_igorc")]
+[node name="InteractableTest" parent="NavigationRegion3D/test_objs" instance=ExtResource("3_igorc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.298285, 0.679339, -3)
 
-[node name="Lightswitch" type="StaticBody3D" parent="test_objs"]
+[node name="Lightswitch" type="StaticBody3D" parent="NavigationRegion3D/test_objs"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.44082, 0.927259, -1.81021)
-script = ExtResource("4_maqg4")
-SwitchState = true
+script = ExtResource("4_24jn2")
+buttonType = 1
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="test_objs/Lightswitch"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/test_objs/Lightswitch"]
 mesh = SubResource("BoxMesh_lqqxr")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="test_objs/Lightswitch"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/test_objs/Lightswitch"]
 shape = SubResource("BoxShape3D_2b7y2")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="test_objs"]
+[node name="OmniLight3D" type="OmniLight3D" parent="NavigationRegion3D/test_objs"]
 transform = Transform3D(-0.999848, -0.0130307, 0.0116099, -6.19544e-10, 0.66523, 0.746638, -0.0174525, 0.746524, -0.665129, -2.48612, 0.535934, -1.83187)
+light_color = Color(0.0588235, 0.964706, 0, 1)
 light_energy = 1.19
 light_indirect_energy = 2.333
 light_specular = 0.69
-omni_range = 0.762
-omni_attenuation = 1.86607
+omni_range = 0.973
+omni_attenuation = 0.659754
 
-[node name="RBPushTest" type="RigidBody3D" parent="test_objs"]
+[node name="RBPushTest" type="RigidBody3D" parent="NavigationRegion3D/test_objs"]
 transform = Transform3D(0.123654, 0, -0.992326, 0, 1, 0, 0.992326, 0, 0.123654, 3.73129, 0.653083, 6.65528)
 mass = 2.69
 physics_material_override = SubResource("PhysicsMaterial_icjm7")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="test_objs/RBPushTest"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/test_objs/RBPushTest"]
 shape = SubResource("BoxShape3D_q6enk")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="test_objs/RBPushTest"]
-material_override = ExtResource("1_qbkpu")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/test_objs/RBPushTest"]
+material_override = ExtResource("6_fwhoe")
 mesh = SubResource("BoxMesh_kkcpk")
 
-[node name="RBPushTest2" type="RigidBody3D" parent="test_objs"]
+[node name="RBPushTest2" type="RigidBody3D" parent="NavigationRegion3D/test_objs"]
 transform = Transform3D(0.123654, 0, -0.992326, 0, 1, 0, 0.992326, 0, 0.123654, 1.77749, 0.653083, 6.13176)
 mass = 3.05
 physics_material_override = SubResource("PhysicsMaterial_lwgu3")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="test_objs/RBPushTest2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/test_objs/RBPushTest2"]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
 shape = SubResource("SphereShape3D_0sjrc")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="test_objs/RBPushTest2"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/test_objs/RBPushTest2"]
 material_override = ExtResource("1_qbkpu")
 mesh = SubResource("SphereMesh_dxk2x")
 
-[node name="RBPushTest3" type="RigidBody3D" parent="test_objs"]
+[node name="RBPushTest3" type="RigidBody3D" parent="NavigationRegion3D/test_objs"]
 transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, 1.77749, 1.65308, 6.13176)
 mass = 2.69
 physics_material_override = SubResource("PhysicsMaterial_icjm7")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="test_objs/RBPushTest3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/test_objs/RBPushTest3"]
 shape = SubResource("BoxShape3D_q6enk")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="test_objs/RBPushTest3"]
-material_override = ExtResource("1_qbkpu")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/test_objs/RBPushTest3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+material_override = ExtResource("6_fwhoe")
 mesh = SubResource("BoxMesh_kkcpk")
 
-[node name="RBPushTest4" type="RigidBody3D" parent="test_objs"]
+[node name="RBPushTest4" type="RigidBody3D" parent="NavigationRegion3D/test_objs"]
 transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, 3.73129, 1.65308, 6.65528)
 mass = 3.05
 physics_material_override = SubResource("PhysicsMaterial_lwgu3")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="test_objs/RBPushTest4"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/test_objs/RBPushTest4"]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
 shape = SubResource("SphereShape3D_0sjrc")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="test_objs/RBPushTest4"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/test_objs/RBPushTest4"]
 material_override = ExtResource("1_qbkpu")
 mesh = SubResource("SphereMesh_dxk2x")
 
-[node name="Enemy >x3" parent="." instance=ExtResource("6_838wa")]
+[node name="Player" parent="." groups=["Player"] instance=ExtResource("1_64nu0")]
+Sensitivity = 0.2
 
-[connection signal="SwitchLightVisibility" from="test_objs/Lightswitch" to="test_objs/OmniLight3D" method="set_visible"]
+[node name="173" parent="." instance=ExtResource("8_rae2q")]
+process_mode = 4
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, -14)
+
+[node name="Enemy >x3" parent="." instance=ExtResource("6_838wa")]
+process_mode = 4
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10, 1, -5.1)
+
+[connection signal="ButtonToggled" from="NavigationRegion3D/test_objs/Lightswitch" to="NavigationRegion3D/test_objs/OmniLight3D" method="set_visible"]
