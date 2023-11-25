@@ -14,7 +14,7 @@ public partial class Player : CharacterBody3D
 	private Vector2 mouseMotion;
 	private float MovementAcceleration = 6f;
 	private float MovementFriction = 8f;
-	private float crouchDepth = -0.8f;
+	private const float crouchDepth = -0.8f;
 
 	private float currentSpeed;
 	public const float WalkSpeed = 4f;
@@ -37,15 +37,21 @@ public partial class Player : CharacterBody3D
 		base._Ready();
     }
 
-
     public override void _Input(InputEvent @event)
     {
 		if (@event is InputEventMouseMotion)
 		{
 			InputEventMouseMotion mouseMotionEvent = @event as InputEventMouseMotion;
-			mouseMotion.X -= mouseMotionEvent.Relative.Y * Sensitivity;
-			mouseMotion.X = Mathf.Clamp(mouseMotion.X, -89.9f, 89.9f);
-			mouseMotion.Y -= mouseMotionEvent.Relative.X * Sensitivity; 
+			mouseMotion.X += -mouseMotionEvent.Relative.X * Sensitivity;
+			mouseMotion.Y += -mouseMotionEvent.Relative.Y * Sensitivity; 
+			mouseMotion.Y = Mathf.Clamp(mouseMotion.Y, -89.9f, 89.9f);
+
+			Transform3D transform = PlayerCamera.Transform;
+			transform.Basis = Basis.Identity;
+			PlayerCamera.Transform = transform;
+
+			PlayerCamera.RotateObjectLocal(Vector3.Up, Mathf.DegToRad(mouseMotion.X));
+			PlayerCamera.RotateObjectLocal(Vector3.Right, Mathf.DegToRad(mouseMotion.Y));
 		}
 
 		if (@event.IsActionPressed("use"))
@@ -65,7 +71,6 @@ public partial class Player : CharacterBody3D
 			CrouchingCollisionShape.Disabled = isNoclip;
 		}
     
-		// TODO: Change input action to something else
 		if (Input.IsActionJustPressed("use"))
 		{
 			if (grabbedObject == null)
@@ -81,9 +86,7 @@ public partial class Player : CharacterBody3D
 
 
     public override void _PhysicsProcess(double delta)
-	{
-		PlayerCamera.RotationDegrees = new Vector3(mouseMotion.X, mouseMotion.Y, PlayerCamera.RotationDegrees.Z);
-		
+	{		
 		if (isNoclip == true)
 		{
 			ProcessMovementNoclip(delta);
@@ -93,7 +96,6 @@ public partial class Player : CharacterBody3D
 			ProcessMovement(delta);
 		}
 
-		// Rotate grabObjectCameraOffset to match with the rotation of the camera
 		if (grabbedObject != null)
 		{
 			Vector3 objPosition = grabbedObject.GlobalPosition;
@@ -112,7 +114,6 @@ public partial class Player : CharacterBody3D
 		MoveAndSlide();
 	}
 
-
 	private void PushRigidBodies(double delta)
 	{
 		var collision = MoveAndCollide(Velocity * (float)delta, true);
@@ -123,7 +124,6 @@ public partial class Player : CharacterBody3D
 			rigidbody.ApplyImpulse(-pushVector, collision.GetPosition() - rigidbody.GlobalPosition);
 		}
 	}
-
 
 	private void ProcessMovement(double delta)
 	{
@@ -182,7 +182,6 @@ public partial class Player : CharacterBody3D
 		Velocity = velocity;
 	}
 
-
 	private void ProcessMovementNoclip(double delta)
 	{
 		Vector3 velocity = Velocity;
@@ -198,7 +197,6 @@ public partial class Player : CharacterBody3D
 		Velocity = velocity;
 	}
 
-
 	public void Jump()
 	{
 		if (!IsOnFloor()) return;
@@ -207,7 +205,6 @@ public partial class Player : CharacterBody3D
 		vel.Y += jMult;
 		Velocity = vel;
 	}
-
 
 	private void InteractWithObject()
 	{
@@ -221,7 +218,6 @@ public partial class Player : CharacterBody3D
 		}
 	}
 	
-
 	private void GrabObject()
 	{
 		if (InteractionCheck != null && InteractionCheck.IsColliding())

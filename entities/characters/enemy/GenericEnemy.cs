@@ -2,7 +2,6 @@ using Godot;
 using System;
 using System.Linq;
 
-
 public partial class GenericEnemy : CharacterBody3D, ILivingEntity, IInteractable
 {
 	private const float gravity = 16.8f;
@@ -81,12 +80,10 @@ public partial class GenericEnemy : CharacterBody3D, ILivingEntity, IInteractabl
 		MoveAndSlide();
 	}
 
-
 	public void Push(float force, Vector3 dir, float mass)
 	{
 		Velocity += force * dir / mass;
 	}
-
 
 	private void CalculateMoveDirection()
 	{

@@ -18,7 +18,6 @@ public partial class SCP173 : CharacterBody3D
 	{
 		player = GetTree().GetNodesInGroup("Player").OfType<Player>().OrderBy(p => p.GlobalPosition.DistanceTo(GlobalPosition)).FirstOrDefault();
 	}
-	
 
 	public override void _PhysicsProcess(double delta)
 	{
