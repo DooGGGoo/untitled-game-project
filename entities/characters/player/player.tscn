@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://c7xuvylsuwi2a"]
+[gd_scene load_steps=8 format=3 uid="uid://c7xuvylsuwi2a"]
 
 [ext_resource type="Script" path="res://entities/characters/player/Player.cs" id="1_l5jtm"]
-[ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="2_fqlud"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_66coo"]
 size = Vector3(0.5, 1.8, 0.5)
@@ -9,8 +8,19 @@ size = Vector3(0.5, 1.8, 0.5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_u0ac7"]
 size = Vector3(0.5, 0.8, 0.5)
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_54mv8"]
+load_path = "res://.godot/imported/dev_1.png-bd0d19e05387360765cf4c562407257e.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ys2yw"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.431373)
+albedo_texture = SubResource("CompressedTexture2D_54mv8")
+metallic_specular = 0.0
+uv1_triplanar = true
+texture_filter = 2
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xs3u6"]
-material = ExtResource("2_fqlud")
+material = SubResource("StandardMaterial3D_ys2yw")
 radius = 0.365
 height = 1.8
 radial_segments = 16

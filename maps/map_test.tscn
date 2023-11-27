@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=24 format=3 uid="uid://dmv7hq177kus8"]
 
 [ext_resource type="PackedScene" uid="uid://c7xuvylsuwi2a" path="res://entities/characters/player/player.tscn" id="1_64nu0"]
 [ext_resource type="Texture2D" uid="uid://bd2datw4a75dw" path="res://assets/materials/textures/dev_1.png" id="1_gxu3p"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bk8e1unhd8k4d" path="res://entities/characters/enemy/GenericEnemy.tscn" id="6_838wa"]
 [ext_resource type="Material" uid="uid://byy0tf2266p3d" path="res://assets/materials/jerma.tres" id="6_fwhoe"]
 [ext_resource type="PackedScene" uid="uid://df317tod58c0w" path="res://entities/characters/enemy/scp/SCP173.tscn" id="8_rae2q"]
+[ext_resource type="PackedScene" uid="uid://dx6nwpc4tly55" path="res://entities/props/player_pc/PlayerPC.tscn" id="9_jxfj6"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_eox80"]
 panorama = ExtResource("1_gxu3p")
@@ -206,7 +207,6 @@ physics_material_override = SubResource("PhysicsMaterial_icjm7")
 shape = SubResource("BoxShape3D_q6enk")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/test_objs/RBPushTest3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = ExtResource("6_fwhoe")
 mesh = SubResource("BoxMesh_kkcpk")
 
@@ -233,5 +233,8 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, 
 [node name="Enemy >x3" parent="." instance=ExtResource("6_838wa")]
 process_mode = 4
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10, 1, -5.1)
+
+[node name="PlayerPC" parent="." instance=ExtResource("9_jxfj6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 1, -2.6)
 
 [connection signal="ButtonToggled" from="NavigationRegion3D/test_objs/Lightswitch" to="NavigationRegion3D/test_objs/OmniLight3D" method="set_visible"]

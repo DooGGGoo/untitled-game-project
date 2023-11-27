@@ -4,7 +4,8 @@ using System;
 public partial class Player : CharacterBody3D
 {
 	[Export] public Camera3D PlayerCamera;
-	[Export] public float Sensitivity = 0.5f; 
+	[Export] public Node3D PlayerCameraTransformHint;
+	[Export] public float Sensitivity = 0.5f;
 	[Export] private bool isNoclip = false;
 	[Export] private CollisionShape3D StandingCollisionShape, CrouchingCollisionShape;
 	[Export] private ShapeCast3D CrouchAboveCheck;
@@ -26,10 +27,6 @@ public partial class Player : CharacterBody3D
 	private const float grabObjectPullPower = 22f;
 	private RigidBody3D grabbedObject;
 
-
-    [Signal]
-    public delegate void ObjectInteractedEventHandler();
-
     public override void _Ready()
     {
 		Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -39,24 +36,17 @@ public partial class Player : CharacterBody3D
 
     public override void _Input(InputEvent @event)
     {
-		if (@event is InputEventMouseMotion)
-		{
-			InputEventMouseMotion mouseMotionEvent = @event as InputEventMouseMotion;
-			mouseMotion.X += -mouseMotionEvent.Relative.X * Sensitivity;
-			mouseMotion.Y += -mouseMotionEvent.Relative.Y * Sensitivity; 
-			mouseMotion.Y = Mathf.Clamp(mouseMotion.Y, -89.9f, 89.9f);
-
-			Transform3D transform = PlayerCamera.Transform;
-			transform.Basis = Basis.Identity;
-			PlayerCamera.Transform = transform;
-
-			PlayerCamera.RotateObjectLocal(Vector3.Up, Mathf.DegToRad(mouseMotion.X));
-			PlayerCamera.RotateObjectLocal(Vector3.Right, Mathf.DegToRad(mouseMotion.Y));
-		}
-
 		if (@event.IsActionPressed("use"))
 		{
 			InteractWithObject();
+		}
+
+		if (@event is InputEventMouseMotion)
+		{
+			InputEventMouseMotion mouseMotionEvent = @event as InputEventMouseMotion;
+			mouseMotion.X -= mouseMotionEvent.Relative.Y * Sensitivity;
+			mouseMotion.X = Mathf.Clamp(mouseMotion.X, -89.9f, 89.9f);
+			mouseMotion.Y -= mouseMotionEvent.Relative.X * Sensitivity;
 		}
 
 		if (@event.IsActionPressed("jump"))
@@ -84,9 +74,10 @@ public partial class Player : CharacterBody3D
 		}
 	}
 
+	public override void _PhysicsProcess(double delta)
+	{
+		PlayerCamera.RotationDegrees = new Vector3(mouseMotion.X, mouseMotion.Y, PlayerCamera.RotationDegrees.Z);
 
-    public override void _PhysicsProcess(double delta)
-	{		
 		if (isNoclip == true)
 		{
 			ProcessMovementNoclip(delta);
@@ -237,5 +228,4 @@ public partial class Player : CharacterBody3D
 			grabbedObject = null;
 		}
 	}
-
 }
