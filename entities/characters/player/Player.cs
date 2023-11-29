@@ -4,26 +4,35 @@ using System;
 public partial class Player : CharacterBody3D
 {
 	[Export] public Camera3D PlayerCamera;
-	[Export] public Node3D PlayerCameraTransformHint;
 	[Export] public float Sensitivity = 0.5f;
 	[Export] private bool isNoclip = false;
 	[Export] private CollisionShape3D StandingCollisionShape, CrouchingCollisionShape;
 	[Export] private ShapeCast3D CrouchAboveCheck;
 	[Export] private RayCast3D InteractionCheck;
 	[Export] private Node3D GrabbedObjectPositionMarker;
+	[Export] private float Bob = 0.15f;
+	[Export] private float bobUp = 0.5f;
+	[Export] private float bobCycle = 0.8f;
 
-	private Vector2 mouseMotion;
+	// Movement
 	private float MovementAcceleration = 6f;
 	private float MovementFriction = 8f;
-	private const float crouchDepth = -0.8f;
-
 	private float currentSpeed;
+	private const float crouchDepth = -0.8f;
 	public const float WalkSpeed = 4f;
 	public const float SprintSpeed = 5.8f;
 	public const float CrouchSpeed = 2.3f;
 	public const float JumpVelocity = 1.2f;
 	private const float gravity = 16.8f;
+	private const float StepHeight = 0.25f;
 
+	// Camera
+	private Vector3 cameraTargetRotation;
+	[Export] private float cameraRollAngle = .5f;
+	[Export] private float cameraRollSpeed = 3f;
+	private float bobTime = 0f;
+	private float bobFinal;
+	// Grabbing
 	private const float grabObjectPullPower = 22f;
 	private RigidBody3D grabbedObject;
 
@@ -44,9 +53,9 @@ public partial class Player : CharacterBody3D
 		if (@event is InputEventMouseMotion)
 		{
 			InputEventMouseMotion mouseMotionEvent = @event as InputEventMouseMotion;
-			mouseMotion.X -= mouseMotionEvent.Relative.Y * Sensitivity;
-			mouseMotion.X = Mathf.Clamp(mouseMotion.X, -89.9f, 89.9f);
-			mouseMotion.Y -= mouseMotionEvent.Relative.X * Sensitivity;
+			cameraTargetRotation.X -= mouseMotionEvent.Relative.Y * Sensitivity;
+			cameraTargetRotation.X = Mathf.Clamp(cameraTargetRotation.X, -89.9f, 89.9f);
+			cameraTargetRotation.Y -= mouseMotionEvent.Relative.X * Sensitivity;
 		}
 
 		if (@event.IsActionPressed("jump"))
@@ -76,8 +85,6 @@ public partial class Player : CharacterBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		PlayerCamera.RotationDegrees = new Vector3(mouseMotion.X, mouseMotion.Y, PlayerCamera.RotationDegrees.Z);
-
 		if (isNoclip == true)
 		{
 			ProcessMovementNoclip(delta);
@@ -87,35 +94,83 @@ public partial class Player : CharacterBody3D
 			ProcessMovement(delta);
 		}
 
-		if (grabbedObject != null)
-		{
-			Vector3 objPosition = grabbedObject.GlobalPosition;
-			Vector3 targetPosition = GrabbedObjectPositionMarker.GlobalPosition;
-			
-			grabbedObject.LinearVelocity = (targetPosition - objPosition) * grabObjectPullPower;
-			grabbedObject.Rotation = PlayerCamera.Rotation;
+		ProcessCameraMovement(delta);
 
-			if (InteractionCheck.GetCollider() != grabbedObject && InteractionCheck.GetCollider() != null)
-			{
-				DropObject();
-			}
-		}
-
+		ProcessGrabbedObject();
 		PushRigidBodies(delta);
 		MoveAndSlide();
 	}
 
-	private void PushRigidBodies(double delta)
+	#region Camera
+	private void ProcessCameraMovement(double delta)
 	{
-		var collision = MoveAndCollide(Velocity * (float)delta, true);
+		// HACK
+		float cameraZRotation = cameraTargetRotation.Z;
+		// Camera roll
+		// ------------------------------------
+		float sign, side, angle;
 
-		if (collision != null && collision.GetCollider() is RigidBody3D rigidbody)
+		side = Velocity.Dot(-PlayerCamera.GlobalBasis.X);
+		sign = Mathf.Sign(side);
+		side = Mathf.Abs(side);
+		angle = cameraRollAngle;
+		if (side < cameraRollSpeed)
 		{
-			var pushVector = collision.GetNormal() * (Velocity.Length() * 2f / rigidbody.Mass);
-			rigidbody.ApplyImpulse(-pushVector, collision.GetPosition() - rigidbody.GlobalPosition);
+			side = side * angle / cameraRollSpeed;
 		}
+		else
+		{
+			side = angle;
+		}
+
+		cameraZRotation = side * sign;
+
+		// Camera bob
+		// ------------------------------------
+		if (Velocity.Length() <= 0.1f)
+		{
+			bobTime = 0f;
+		}
+		else
+		{
+			bobFinal = CalculateBob(1f, bobFinal, delta);
+		}
+		cameraZRotation += bobFinal * .8f;
+		cameraTargetRotation.Y -= bobFinal * .8f;
+		cameraTargetRotation.X += bobFinal * 1.2f;
+
+		// Apply all transformations, including mouse movement
+		// ------------------------------------
+		PlayerCamera.RotationDegrees = new Vector3(cameraTargetRotation.X, cameraTargetRotation.Y, cameraZRotation);
 	}
 
+	private float CalculateBob(float freq, float bob, double delta)
+	{
+		float cycle;
+
+		if (isNoclip) return 0f;
+
+		if (!IsOnFloor()) return bob;
+
+		bobTime += (float)delta * freq;
+		cycle = bobTime - (int)(bobTime / bobCycle) * bobCycle;
+		cycle /= bobCycle;
+
+		if (cycle < bobUp)
+			cycle = Mathf.Pi * cycle / bobUp;
+		else
+			cycle = Mathf.Pi + Mathf.Pi * (cycle - bobUp) / (1f - bobUp);
+
+		bob = Mathf.Sqrt(Velocity.X * Velocity.X + Velocity.Z * Velocity.Z) * Bob;
+		bob = bob * 0.3f + bob * 0.7f * Mathf.Cos(cycle);
+		bob = Mathf.Clamp(bob, -7f, 4f);
+
+		return bob;
+	}
+
+	#endregion
+
+	#region Movement
 	private void ProcessMovement(double delta)
 	{
 		Vector3 velocity = Velocity;
@@ -197,28 +252,41 @@ public partial class Player : CharacterBody3D
 		Velocity = vel;
 	}
 
+	private void PushRigidBodies(double delta)
+	{
+		var collision = MoveAndCollide(Velocity * (float)delta, true);
+
+		if (collision != null && collision.GetCollider() is RigidBody3D rigidbody)
+		{
+			var pushVector = collision.GetNormal() * (Velocity.Length() * 2f / rigidbody.Mass);
+			rigidbody.ApplyImpulse(-pushVector, collision.GetPosition() - rigidbody.GlobalPosition);
+		}
+	}
+	
+
+	#endregion
+
+	#region Object Interactions
 	private void InteractWithObject()
 	{
 		if (InteractionCheck != null && InteractionCheck.IsColliding())
 		{
-			Node collidedObject = InteractionCheck.GetCollider() as Node;
-			if (collidedObject != null && collidedObject is IInteractable)
-			{
-				((IInteractable)collidedObject).Interact(this);
-			}
-		}
+            if (InteractionCheck.GetCollider() is Node collidedObject && collidedObject is IInteractable interactable)
+            {
+                interactable.Interact(this);
+            }
+        }
 	}
 	
 	private void GrabObject()
 	{
 		if (InteractionCheck != null && InteractionCheck.IsColliding())
 		{
-			Node collidedObject = InteractionCheck.GetCollider() as Node;
-			if (collidedObject != null && collidedObject is RigidBody3D)
-			{
-				grabbedObject = collidedObject as RigidBody3D;
-			}
-		}
+            if (InteractionCheck.GetCollider() is Node collidedObject && collidedObject is RigidBody3D)
+            {
+                grabbedObject = collidedObject as RigidBody3D;
+            }
+        }
 	}
 
 	private void DropObject()
@@ -228,4 +296,22 @@ public partial class Player : CharacterBody3D
 			grabbedObject = null;
 		}
 	}
+
+	private void ProcessGrabbedObject()
+	{
+		if (grabbedObject != null)
+		{
+			Vector3 objPosition = grabbedObject.GlobalPosition;
+			Vector3 targetPosition = GrabbedObjectPositionMarker.GlobalPosition;
+
+			grabbedObject.LinearVelocity = (targetPosition - objPosition) * grabObjectPullPower;
+			grabbedObject.Rotation = PlayerCamera.Rotation;
+
+			if (InteractionCheck.GetCollider() != grabbedObject && InteractionCheck.GetCollider() != null)
+			{
+				DropObject();
+			}
+		}
+	}
+	#endregion
 }

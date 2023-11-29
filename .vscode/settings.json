@@ -1,6 +1,9 @@
 {
     "cSpell.words": [
         "Interactable",
-        "interactor"
+        "interactor",
+        "Lerp",
+        "Mathf",
+        "rigidbody"
     ]
 }
