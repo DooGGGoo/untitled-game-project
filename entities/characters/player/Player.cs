@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Runtime.CompilerServices;
 
 public partial class Player : CharacterBody3D
 {
@@ -24,7 +25,7 @@ public partial class Player : CharacterBody3D
 	public const float CrouchSpeed = 2.3f;
 	public const float JumpVelocity = 1.2f;
 	private const float gravity = 16.8f;
-	private const float StepHeight = 0.25f;
+	private const float StepHeight = 0.45f;
 
 	// Camera
 	private Vector3 cameraTargetRotation;
@@ -83,6 +84,7 @@ public partial class Player : CharacterBody3D
 		}
 	}
 
+	bool StartedProcessOnFloor = false;
 	public override void _PhysicsProcess(double delta)
 	{
 		if (isNoclip == true)
@@ -98,7 +100,8 @@ public partial class Player : CharacterBody3D
 
 		ProcessGrabbedObject();
 		PushRigidBodies(delta);
-		MoveAndSlide();
+		StartedProcessOnFloor = IsOnFloor();
+		MoveAndClimbStairs((float)delta, false);
 	}
 
 	#region Camera
@@ -171,6 +174,7 @@ public partial class Player : CharacterBody3D
 	#endregion
 
 	#region Movement
+
 	private void ProcessMovement(double delta)
 	{
 		Vector3 velocity = Velocity;
@@ -262,7 +266,133 @@ public partial class Player : CharacterBody3D
 			rigidbody.ApplyImpulse(-pushVector, collision.GetPosition() - rigidbody.GlobalPosition);
 		}
 	}
-	
+
+	#region Step handling code, Do not Touch, Breathe or Stare at
+	// Source: (https://github.com/wareya/GodotStairTester/blob/main/player/SimplePlayer.gd), Huge thanks! :3
+
+	bool foundStairs = false;
+	Vector3 wallTestTravel = Vector3.Zero;
+	Vector3 wallRemainder = Vector3.Zero;
+	Vector3 ceilingPosition = Vector3.Zero;
+	float ceilingTravelDistance = 0f;
+	KinematicCollision3D wallCollision = null;
+	KinematicCollision3D floorCollision = null;
+
+	private bool MoveAndClimbStairs(float delta, bool allowStairSnapping = true)
+	{
+		var startPosition = GlobalPosition;
+		var startVelocity = Velocity;
+
+		foundStairs = false;
+		wallTestTravel = Vector3.Zero;
+		wallRemainder = Vector3.Zero;
+		ceilingPosition = Vector3.Zero;
+		ceilingTravelDistance = 0f;
+		wallCollision = null;
+		floorCollision = null;
+
+		// do MoveAndSlide and check if we hit a wall
+		MoveAndSlide();
+		var slideVelocity = Velocity;
+		var slidePosition = GlobalPosition;
+		var hitWall = false;
+		var floorNormal = Mathf.Cos(FloorMaxAngle);
+		var maxSlide = GetSlideCollisionCount() - 1;
+		var accumulatedPosition = startPosition;
+		foreach (int slide in GD.Range(maxSlide + 1))
+		{
+			var collision = GetSlideCollision(slide);
+			var y = collision.GetNormal().Y;
+			if (y < floorNormal && y > -floorNormal)
+			{
+				hitWall = true;
+			}
+			accumulatedPosition += collision.GetTravel();
+		}
+		var slideSnapOffset = accumulatedPosition - GlobalPosition;
+
+		// if we hit a wall, check for simple stairs; three steps
+		if (hitWall && (startVelocity.X != 0f || startVelocity.Z != 0f))
+		{
+			GlobalPosition = startPosition;
+			Velocity = startVelocity;
+
+			// step 1: upwards trace
+			var upHeight = StepHeight;
+            //chaneged to true
+            KinematicCollision3D ceilingCollision = MoveAndCollide(upHeight * Vector3.Up);
+            ceilingTravelDistance = StepHeight;
+			if (ceilingCollision != null)
+				ceilingTravelDistance = Mathf.Abs(ceilingCollision.GetTravel().Y);
+			ceilingPosition = GlobalPosition;
+
+			// step 2: "check if there's a wall" trace
+			wallTestTravel = Velocity * delta;
+			var info = MoveAndCollideNTimes(Velocity, delta, 2);
+			Velocity = (Vector3)info[0];
+			wallRemainder = (Vector3)info[1];
+			wallCollision = (KinematicCollision3D)info[2];
+
+			// step 3: downwards trace
+			floorCollision = MoveAndCollide(Vector3.Down * (ceilingTravelDistance + (StartedProcessOnFloor ? StepHeight : 0f)));
+			if (floorCollision != null)
+			{
+				if (floorCollision.GetNormal(0).Y > floorNormal)
+					foundStairs = true;
+			}
+		}
+		// (this section is more complex than it needs to be, because of MoveAndSlide taking velocity and delta for granted)
+		// if we found stairs, climb up them
+		if (foundStairs)
+		{
+			Vector3 vel = Velocity;
+			bool StairsCauseFloorSnap = true;
+			if (allowStairSnapping && StairsCauseFloorSnap == true)
+				vel.Y = 0f;
+			Velocity = vel;
+			var oldvel = Velocity;
+			Velocity = wallRemainder / delta;
+			MoveAndSlide();
+			Velocity = oldvel;
+		}
+		// no stairs, do "normal" non-stairs movement
+		else
+		{
+			GlobalPosition = slidePosition;
+			Velocity = slideVelocity;
+		}
+		return foundStairs;
+	}
+
+	private object[] MoveAndCollideNTimes(Vector3 vector, float delta, int slideCount, bool skipRejectIfCeiling = true)
+	{
+		KinematicCollision3D collision = null;
+		Vector3 remainder = vector;
+		Vector3 adjustedVector = vector * delta;
+		float floorNormal = Mathf.Cos(FloorMaxAngle);
+		foreach (int i in GD.Range(slideCount))
+		{
+			KinematicCollision3D newCollision = MoveAndCollide(adjustedVector);
+			if (newCollision != null)
+			{
+				collision = newCollision;
+				remainder = collision.GetRemainder();
+				adjustedVector = remainder;
+				if (!skipRejectIfCeiling || collision.GetNormal().Y >= -floorNormal)
+				{
+					adjustedVector = adjustedVector.Slide(collision.GetNormal());
+					vector = vector.Slide(collision.GetNormal());
+				}
+			}
+			else 
+			{
+				remainder = Vector3.Zero;
+				break;
+			}
+		}
+		return new object[] { vector, remainder, collision };
+	}
+	#endregion
 
 	#endregion
 
@@ -271,13 +401,13 @@ public partial class Player : CharacterBody3D
 	{
 		if (InteractionCheck != null && InteractionCheck.IsColliding())
 		{
-            if (InteractionCheck.GetCollider() is Node collidedObject && collidedObject is IInteractable interactable)
-            {
-                interactable.Interact(this);
-            }
-        }
+			if (InteractionCheck.GetCollider() is Node collidedObject && collidedObject is IInteractable interactable)
+			{
+				interactable.Interact(this);
+			}
+		}
 	}
-	
+
 	private void GrabObject()
 	{
 		if (InteractionCheck != null && InteractionCheck.IsColliding())
