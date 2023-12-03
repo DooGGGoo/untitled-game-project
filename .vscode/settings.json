@@ -4,6 +4,7 @@
         "interactor",
         "Lerp",
         "Mathf",
+        "oldvel",
         "rigidbody"
     ]
 }

@@ -1,6 +1,4 @@
 using Godot;
-using System;
-using System.Runtime.CompilerServices;
 
 public partial class Player : CharacterBody3D
 {
@@ -11,9 +9,6 @@ public partial class Player : CharacterBody3D
 	[Export] private ShapeCast3D CrouchAboveCheck;
 	[Export] private RayCast3D InteractionCheck;
 	[Export] private Node3D GrabbedObjectPositionMarker;
-	[Export] private float Bob = 0.15f;
-	[Export] private float bobUp = 0.5f;
-	[Export] private float bobCycle = 0.8f;
 
 	// Movement
 	private float MovementAcceleration = 6f;
@@ -28,11 +23,16 @@ public partial class Player : CharacterBody3D
 	private const float StepHeight = 0.45f;
 
 	// Camera
-	private Vector3 cameraTargetRotation;
+	[Export] private float Bob = 0.121f;
+	[Export] private float bobUp = 0.523f;
+	[Export] private float bobCycle = 0.315f;
 	[Export] private float cameraRollAngle = .5f;
 	[Export] private float cameraRollSpeed = 3f;
-	private float bobTime = 0f;
-	private float bobFinal;
+	[Export] private float idleScale = 0.5f;
+	private Vector3 cameraTargetRotation;
+	private Vector3 oldPosition;
+	private float bobTime;
+	private Vector2 bobFinal;
 	// Grabbing
 	private const float grabObjectPullPower = 22f;
 	private RigidBody3D grabbedObject;
@@ -55,7 +55,6 @@ public partial class Player : CharacterBody3D
 		{
 			InputEventMouseMotion mouseMotionEvent = @event as InputEventMouseMotion;
 			cameraTargetRotation.X -= mouseMotionEvent.Relative.Y * Sensitivity;
-			cameraTargetRotation.X = Mathf.Clamp(cameraTargetRotation.X, -89.9f, 89.9f);
 			cameraTargetRotation.Y -= mouseMotionEvent.Relative.X * Sensitivity;
 		}
 
@@ -96,54 +95,73 @@ public partial class Player : CharacterBody3D
 			ProcessMovement(delta);
 		}
 
-		ProcessCameraMovement(delta);
+		oldPosition = PlayerCamera.GlobalPosition;
 
 		ProcessGrabbedObject();
 		PushRigidBodies(delta);
 		StartedProcessOnFloor = IsOnFloor();
 		MoveAndClimbStairs((float)delta, false);
+		ProcessCameraMovement(delta);
 	}
 
 	#region Camera
 	private void ProcessCameraMovement(double delta)
 	{
-		// HACK
-		float cameraZRotation = cameraTargetRotation.Z;
+		// Smooth camera when moving up stairs
+		if (IsOnFloor() && PlayerCamera.GlobalPosition.Y - oldPosition.Y > 0)
+		{
+			float stepTime = (float)delta;
+
+			oldPosition.Y += stepTime * 0.5f;
+
+			if (oldPosition.Y > PlayerCamera.GlobalPosition.Y)
+				oldPosition.Y = PlayerCamera.GlobalPosition.Y;
+
+			if (PlayerCamera.GlobalPosition.Y - oldPosition.Y > 0.14f)
+				oldPosition.Y = PlayerCamera.GlobalPosition.Y - 0.14f;
+			
+			Vector3 pos = PlayerCamera.GlobalPosition;
+			pos.Y += oldPosition.Y - PlayerCamera.GlobalPosition.Y;
+			PlayerCamera.GlobalPosition = pos;
+		}
+		else
+			oldPosition.Y = PlayerCamera.GlobalPosition.Y;
+
+
 		// Camera roll
-		// ------------------------------------
 		float sign, side, angle;
 
 		side = Velocity.Dot(-PlayerCamera.GlobalBasis.X);
 		sign = Mathf.Sign(side);
 		side = Mathf.Abs(side);
 		angle = cameraRollAngle;
+
 		if (side < cameraRollSpeed)
-		{
 			side = side * angle / cameraRollSpeed;
-		}
 		else
-		{
 			side = angle;
-		}
 
-		cameraZRotation = side * sign;
+        float cameraZRotation = side * sign;
 
-		// Camera bob
-		// ------------------------------------
-		if (Velocity.Length() <= 0.1f)
-		{
+
+        // Camera bob
+        if (Velocity.Length() <= 0.1f)
 			bobTime = 0f;
-		}
 		else
-		{
-			bobFinal = CalculateBob(1f, bobFinal, delta);
-		}
-		cameraZRotation += bobFinal * .8f;
-		cameraTargetRotation.Y -= bobFinal * .8f;
-		cameraTargetRotation.X += bobFinal * 1.2f;
+			bobFinal.Y = CalculateBob(1.5f, bobFinal.Y, delta);
+			bobFinal.X = CalculateBob(0.75f, bobFinal.X, delta);
 
-		// Apply all transformations, including mouse movement
-		// ------------------------------------
+
+		if (IsOnFloor())
+		{
+			// cameraZRotation += bobFinal * 0.8f;
+			cameraTargetRotation.Y -= bobFinal.Y * 0.8f;
+			cameraTargetRotation.X += bobFinal.X * 1.2f;
+		}
+
+
+		// Apply all rotation changes
+		cameraTargetRotation.X = Mathf.Clamp(cameraTargetRotation.X, -89.9f, 89.9f);
 		PlayerCamera.RotationDegrees = new Vector3(cameraTargetRotation.X, cameraTargetRotation.Y, cameraZRotation);
 	}
 
@@ -165,7 +183,7 @@ public partial class Player : CharacterBody3D
 			cycle = Mathf.Pi + Mathf.Pi * (cycle - bobUp) / (1f - bobUp);
 
 		bob = Mathf.Sqrt(Velocity.X * Velocity.X + Velocity.Z * Velocity.Z) * Bob;
-		bob = bob * 0.3f + bob * 0.7f * Mathf.Cos(cycle);
+		bob = bob * 0.3f + bob * 0.7f * Mathf.Sin(cycle);
 		bob = Mathf.Clamp(bob, -7f, 4f);
 
 		return bob;
@@ -258,11 +276,11 @@ public partial class Player : CharacterBody3D
 
 	private void PushRigidBodies(double delta)
 	{
-		var collision = MoveAndCollide(Velocity * (float)delta, true);
+		KinematicCollision3D collision = MoveAndCollide(Velocity * (float)delta, true);
 
 		if (collision != null && collision.GetCollider() is RigidBody3D rigidbody)
 		{
-			var pushVector = collision.GetNormal() * (Velocity.Length() * 2f / rigidbody.Mass);
+			Vector3 pushVector = collision.GetNormal() * (Velocity.Length() * 2f / rigidbody.Mass);
 			rigidbody.ApplyImpulse(-pushVector, collision.GetPosition() - rigidbody.GlobalPosition);
 		}
 	}
@@ -280,8 +298,8 @@ public partial class Player : CharacterBody3D
 
 	private bool MoveAndClimbStairs(float delta, bool allowStairSnapping = true)
 	{
-		var startPosition = GlobalPosition;
-		var startVelocity = Velocity;
+		Vector3 startPosition = GlobalPosition;
+		Vector3 startVelocity = Velocity;
 
 		foundStairs = false;
 		wallTestTravel = Vector3.Zero;
@@ -293,23 +311,23 @@ public partial class Player : CharacterBody3D
 
 		// do MoveAndSlide and check if we hit a wall
 		MoveAndSlide();
-		var slideVelocity = Velocity;
-		var slidePosition = GlobalPosition;
-		var hitWall = false;
-		var floorNormal = Mathf.Cos(FloorMaxAngle);
-		var maxSlide = GetSlideCollisionCount() - 1;
-		var accumulatedPosition = startPosition;
+		Vector3 slideVelocity = Velocity;
+		Vector3 slidePosition = GlobalPosition;
+		bool hitWall = false;
+		float floorNormal = Mathf.Cos(FloorMaxAngle);
+		int maxSlide = GetSlideCollisionCount() - 1;
+		Vector3 accumulatedPosition = startPosition;
 		foreach (int slide in GD.Range(maxSlide + 1))
 		{
-			var collision = GetSlideCollision(slide);
-			var y = collision.GetNormal().Y;
+			KinematicCollision3D collision = GetSlideCollision(slide);
+			float y = collision.GetNormal().Y;
 			if (y < floorNormal && y > -floorNormal)
 			{
 				hitWall = true;
 			}
 			accumulatedPosition += collision.GetTravel();
 		}
-		var slideSnapOffset = accumulatedPosition - GlobalPosition;
+		Vector3 slideSnapOffset = accumulatedPosition - GlobalPosition;
 
 		// if we hit a wall, check for simple stairs; three steps
 		if (hitWall && (startVelocity.X != 0f || startVelocity.Z != 0f))
@@ -318,7 +336,7 @@ public partial class Player : CharacterBody3D
 			Velocity = startVelocity;
 
 			// step 1: upwards trace
-			var upHeight = StepHeight;
+			float upHeight = StepHeight;
             //chaneged to true
             KinematicCollision3D ceilingCollision = MoveAndCollide(upHeight * Vector3.Up);
             ceilingTravelDistance = StepHeight;
@@ -328,7 +346,7 @@ public partial class Player : CharacterBody3D
 
 			// step 2: "check if there's a wall" trace
 			wallTestTravel = Velocity * delta;
-			var info = MoveAndCollideNTimes(Velocity, delta, 2);
+			object[] info = MoveAndCollideNTimes(Velocity, delta, 2);
 			Velocity = (Vector3)info[0];
 			wallRemainder = (Vector3)info[1];
 			wallCollision = (KinematicCollision3D)info[2];
@@ -350,7 +368,7 @@ public partial class Player : CharacterBody3D
 			if (allowStairSnapping && StairsCauseFloorSnap == true)
 				vel.Y = 0f;
 			Velocity = vel;
-			var oldvel = Velocity;
+			Vector3 oldvel = Velocity;
 			Velocity = wallRemainder / delta;
 			MoveAndSlide();
 			Velocity = oldvel;
