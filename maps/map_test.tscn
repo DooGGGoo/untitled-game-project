@@ -261,10 +261,8 @@ mesh = SubResource("SphereMesh_dxk2x")
 
 [node name="Player" parent="." groups=["Player"] instance=ExtResource("1_64nu0")]
 Sensitivity = 0.26
-Bob = 0.22
-bobUp = 0.93
-bobCycle = 0.15
 cameraRollSpeed = 4.0
+headbobScale = 0.5
 
 [node name="173" parent="." instance=ExtResource("8_rae2q")]
 process_mode = 4

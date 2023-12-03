@@ -39,9 +39,6 @@ CrouchingCollisionShape = NodePath("CollisionShapeCrouching")
 CrouchAboveCheck = NodePath("CrouchAboveCheck")
 InteractionCheck = NodePath("Camera3D/RayCast3D")
 GrabbedObjectPositionMarker = NodePath("Camera3D/GrabbedObjectPosition")
-Bob = 0.02
-bobUp = 0.6
-bobCycle = 0.5
 cameraRollAngle = 0.8
 
 [node name="Camera3D" type="Camera3D" parent="."]

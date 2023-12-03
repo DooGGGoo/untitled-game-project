@@ -23,16 +23,16 @@ public partial class Player : CharacterBody3D
 	private const float StepHeight = 0.45f;
 
 	// Camera
-	[Export] private float Bob = 0.121f;
-	[Export] private float bobUp = 0.523f;
-	[Export] private float bobCycle = 0.315f;
 	[Export] private float cameraRollAngle = .5f;
 	[Export] private float cameraRollSpeed = 3f;
 	[Export] private float idleScale = 0.5f;
+	[Export] public bool enableHeadbob = true;
+	[Export] private float headbobTimer = 10f;  // Speed
+	[Export] private float headbobScale = 0.1f; // Magnitude
+	private float timer;
 	private Vector3 cameraTargetRotation;
 	private Vector3 oldPosition;
-	private float bobTime;
-	private Vector2 bobFinal;
+
 	// Grabbing
 	private const float grabObjectPullPower = 22f;
 	private RigidBody3D grabbedObject;
@@ -145,48 +145,20 @@ public partial class Player : CharacterBody3D
 
 
         // Camera bob
-        if (Velocity.Length() <= 0.1f)
-			bobTime = 0f;
-		else
-			bobFinal.Y = CalculateBob(1.5f, bobFinal.Y, delta);
-			bobFinal.X = CalculateBob(0.75f, bobFinal.X, delta);
-
-
-		if (IsOnFloor())
+		if (enableHeadbob == true && IsOnFloor() && Mathf.Abs(Velocity.Length()) >= 0.45f)
 		{
-			// cameraZRotation += bobFinal * 0.8f;
-			cameraTargetRotation.Y -= bobFinal.Y * 0.8f;
-			cameraTargetRotation.X += bobFinal.X * 1.2f;
+			Vector2 offset;
+			timer += (float)delta;
+			offset.X = Mathf.Sin(timer * headbobTimer * Mathf.Abs(Velocity.Length()) * headbobScale) / 15f;
+			offset.Y = Mathf.Cos(2f * timer * headbobTimer * Mathf.Abs(Velocity.Length()) * headbobScale) / 60f;
+			cameraTargetRotation.X += offset.Y;
+			cameraTargetRotation.Y += offset.X;
 		}
 
 
 		// Apply all rotation changes
 		cameraTargetRotation.X = Mathf.Clamp(cameraTargetRotation.X, -89.9f, 89.9f);
 		PlayerCamera.RotationDegrees = new Vector3(cameraTargetRotation.X, cameraTargetRotation.Y, cameraZRotation);
-	}
-
-	private float CalculateBob(float freq, float bob, double delta)
-	{
-		float cycle;
-
-		if (isNoclip) return 0f;
-
-		if (!IsOnFloor()) return bob;
-
-		bobTime += (float)delta * freq;
-		cycle = bobTime - (int)(bobTime / bobCycle) * bobCycle;
-		cycle /= bobCycle;
-
-		if (cycle < bobUp)
-			cycle = Mathf.Pi * cycle / bobUp;
-		else
-			cycle = Mathf.Pi + Mathf.Pi * (cycle - bobUp) / (1f - bobUp);
-
-		bob = Mathf.Sqrt(Velocity.X * Velocity.X + Velocity.Z * Velocity.Z) * Bob;
-		bob = bob * 0.3f + bob * 0.7f * Mathf.Sin(cycle);
-		bob = Mathf.Clamp(bob, -7f, 4f);
-
-		return bob;
 	}
 
 	#endregion
