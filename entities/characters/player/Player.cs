@@ -25,11 +25,10 @@ public partial class Player : CharacterBody3D
 	// Camera
 	[Export] private float cameraRollAngle = .5f;
 	[Export] private float cameraRollSpeed = 3f;
-	[Export] private float idleScale = 0.5f;
 	[Export] public bool enableHeadbob = true;
 	[Export] private float headbobTimer = 10f;  // Speed
 	[Export] private float headbobScale = 0.1f; // Magnitude
-	private float timer;
+	private float time;
 	private Vector3 cameraTargetRotation;
 	private Vector3 oldPosition;
 
@@ -86,6 +85,8 @@ public partial class Player : CharacterBody3D
 	bool StartedProcessOnFloor = false;
 	public override void _PhysicsProcess(double delta)
 	{
+		time += (float)delta;
+
 		if (isNoclip == true)
 		{
 			ProcessMovementNoclip(delta);
@@ -143,18 +144,17 @@ public partial class Player : CharacterBody3D
 
         float cameraZRotation = side * sign;
 
-
-        // Camera bob
-		if (enableHeadbob == true && IsOnFloor() && Mathf.Abs(Velocity.Length()) >= 0.45f)
+		// Camera bob
+		if (enableHeadbob == true && IsOnFloor())
 		{
 			Vector2 offset;
-			timer += (float)delta;
-			offset.X = Mathf.Sin(timer * headbobTimer * Mathf.Abs(Velocity.Length()) * headbobScale) / 15f;
-			offset.Y = Mathf.Cos(2f * timer * headbobTimer * Mathf.Abs(Velocity.Length()) * headbobScale) / 60f;
-			cameraTargetRotation.X += offset.Y;
-			cameraTargetRotation.Y += offset.X;
-		}
 
+			offset.Y = Mathf.Sin(time * headbobTimer) * Mathf.Abs(Velocity.Length()) * headbobScale / 10f;
+			offset.X = Mathf.Cos(2f * time * headbobTimer) * Mathf.Abs(Velocity.Length()) * headbobScale / 40f;
+
+			cameraTargetRotation.Y += offset.Y;
+			cameraTargetRotation.X += offset.X;
+		}
 
 		// Apply all rotation changes
 		cameraTargetRotation.X = Mathf.Clamp(cameraTargetRotation.X, -89.9f, 89.9f);
