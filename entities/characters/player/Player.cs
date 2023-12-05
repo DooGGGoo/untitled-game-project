@@ -22,7 +22,7 @@ public partial class Player : CharacterBody3D
 	private const float gravity = 16.8f;
 	private const float StepHeight = 0.45f;
 
-	// Camera
+	[ExportGroup("Camera")]
 	[Export] private float cameraRollAngle = .5f;
 	[Export] private float cameraRollSpeed = 3f;
 	[Export] public bool enableHeadbob = true;
@@ -32,8 +32,12 @@ public partial class Player : CharacterBody3D
 	private Vector3 cameraTargetRotation;
 	private Vector3 oldPosition;
 
-	// Grabbing
+	[ExportGroup("Object interactions")]
+	[Export] private Generic6DofJoint3D grabJoint;
+	[Export] private StaticBody3D grabStaticBody;
 	private const float grabObjectPullPower = 22f;
+	private const float grabRotationPower = 0.5f;
+	private bool grabMouseLock;
 	private RigidBody3D grabbedObject;
 
     public override void _Ready()
@@ -50,7 +54,7 @@ public partial class Player : CharacterBody3D
 			InteractWithObject();
 		}
 
-		if (@event is InputEventMouseMotion)
+		if (@event is InputEventMouseMotion && !grabMouseLock)
 		{
 			InputEventMouseMotion mouseMotionEvent = @event as InputEventMouseMotion;
 			cameraTargetRotation.X -= mouseMotionEvent.Relative.Y * Sensitivity;
@@ -80,6 +84,26 @@ public partial class Player : CharacterBody3D
 				DropObject();
 			}
 		}
+
+		if (Input.IsActionPressed("left_click"))
+		{
+			grabMouseLock = true;
+			RotateObject(@event);
+		}
+		if (Input.IsActionJustReleased("left_click"))
+		{
+			grabMouseLock = false;
+		}
+
+		if (Input.IsActionJustPressed("right_click"))
+		{
+			if (grabbedObject != null)
+			{
+				Vector3 knockback = grabbedObject.GlobalPosition - GlobalPosition;
+				grabbedObject.ApplyCentralImpulse(knockback * 10f);
+				DropObject();
+			}
+		}
 	}
 
 	bool StartedProcessOnFloor = false;
@@ -103,6 +127,7 @@ public partial class Player : CharacterBody3D
 		StartedProcessOnFloor = IsOnFloor();
 		MoveAndClimbStairs((float)delta, false);
 		ProcessCameraMovement(delta);
+		ProcessViewmodel();
 	}
 
 	#region Camera
@@ -159,6 +184,13 @@ public partial class Player : CharacterBody3D
 		// Apply all rotation changes
 		cameraTargetRotation.X = Mathf.Clamp(cameraTargetRotation.X, -89.9f, 89.9f);
 		PlayerCamera.RotationDegrees = new Vector3(cameraTargetRotation.X, cameraTargetRotation.Y, cameraZRotation);
+	}
+
+	private void ProcessViewmodel()
+	{
+		Node3D viewmodel = GetNode<Node3D>("%Viewmodel");
+
+
 	}
 
 	#endregion
@@ -405,6 +437,7 @@ public partial class Player : CharacterBody3D
             if (InteractionCheck.GetCollider() is Node collidedObject && collidedObject is RigidBody3D)
             {
                 grabbedObject = collidedObject as RigidBody3D;
+				grabJoint.NodeB = grabbedObject.GetPath();
             }
         }
 	}
@@ -414,6 +447,16 @@ public partial class Player : CharacterBody3D
 		if (grabbedObject != null)
 		{
 			grabbedObject = null;
+			grabJoint.NodeB = grabJoint.GetPath();
+		}
+	}
+
+	private void RotateObject(InputEvent @event)
+	{
+		if (grabbedObject != null && @event is InputEventMouseMotion mouseEvent)
+		{
+			grabStaticBody.RotateY(Mathf.DegToRad(mouseEvent.Relative.X * grabRotationPower));
+			grabStaticBody.RotateX(Mathf.DegToRad(mouseEvent.Relative.Y * grabRotationPower));
 		}
 	}
 
@@ -425,12 +468,6 @@ public partial class Player : CharacterBody3D
 			Vector3 targetPosition = GrabbedObjectPositionMarker.GlobalPosition;
 
 			grabbedObject.LinearVelocity = (targetPosition - objPosition) * grabObjectPullPower;
-			grabbedObject.Rotation = PlayerCamera.Rotation;
-
-			if (InteractionCheck.GetCollider() != grabbedObject && InteractionCheck.GetCollider() != null)
-			{
-				DropObject();
-			}
 		}
 	}
 	#endregion

@@ -1,6 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://c7xuvylsuwi2a"]
+[gd_scene load_steps=9 format=3 uid="uid://c7xuvylsuwi2a"]
 
 [ext_resource type="Script" path="res://entities/characters/player/Player.cs" id="1_l5jtm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4bwl5"]
+size = Vector3(0.1, 0.1, 0.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_66coo"]
 size = Vector3(0.5, 1.8, 0.5)
@@ -30,7 +33,7 @@ rings = 3
 margin = 0.0
 size = Vector3(0.45, 1.2, 0.45)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCamera", "StandingCollisionShape", "CrouchingCollisionShape", "CrouchAboveCheck", "InteractionCheck", "GrabbedObjectPositionMarker")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCamera", "StandingCollisionShape", "CrouchingCollisionShape", "CrouchAboveCheck", "InteractionCheck", "GrabbedObjectPositionMarker", "grabJoint", "grabStaticBody")]
 collision_mask = 3
 script = ExtResource("1_l5jtm")
 PlayerCamera = NodePath("Camera3D")
@@ -39,17 +42,35 @@ CrouchingCollisionShape = NodePath("CollisionShapeCrouching")
 CrouchAboveCheck = NodePath("CrouchAboveCheck")
 InteractionCheck = NodePath("Camera3D/RayCast3D")
 GrabbedObjectPositionMarker = NodePath("Camera3D/GrabbedObjectPosition")
+cameraRollAngle = 3.0
+grabJoint = NodePath("Camera3D/Generic6DOFJoint3D")
+grabStaticBody = NodePath("Camera3D/GrabbedObjectPosition/GrabStaticBody")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 fov = 80.0
 near = 0.001
 
+[node name="Viewmodel" type="Marker3D" parent="Camera3D"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.095, -0.11, -0.12)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Camera3D/Viewmodel"]
+mesh = SubResource("BoxMesh_4bwl5")
+
 [node name="RayCast3D" type="RayCast3D" parent="Camera3D"]
 target_position = Vector3(0, 0, -1.8)
 
 [node name="GrabbedObjectPosition" type="Marker3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
+
+[node name="GrabStaticBody" type="StaticBody3D" parent="Camera3D/GrabbedObjectPosition"]
+
+[node name="Generic6DOFJoint3D" type="Generic6DOFJoint3D" parent="Camera3D"]
+node_a = NodePath("../GrabbedObjectPosition/GrabStaticBody")
+linear_limit_x/enabled = false
+linear_limit_y/enabled = false
+linear_limit_z/enabled = false
 
 [node name="CollisionShapeStanding" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
