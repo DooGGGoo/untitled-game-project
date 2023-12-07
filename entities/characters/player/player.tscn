@@ -37,12 +37,13 @@ size = Vector3(0.45, 1.2, 0.45)
 collision_mask = 3
 script = ExtResource("1_l5jtm")
 PlayerCamera = NodePath("Camera3D")
+Sensitivity = 0.25
 StandingCollisionShape = NodePath("CollisionShapeStanding")
 CrouchingCollisionShape = NodePath("CollisionShapeCrouching")
 CrouchAboveCheck = NodePath("CrouchAboveCheck")
 InteractionCheck = NodePath("Camera3D/RayCast3D")
 GrabbedObjectPositionMarker = NodePath("Camera3D/GrabbedObjectPosition")
-cameraRollAngle = 3.0
+cameraRollAngle = 1.25
 grabJoint = NodePath("Camera3D/Generic6DOFJoint3D")
 grabStaticBody = NodePath("Camera3D/GrabbedObjectPosition/GrabStaticBody")
 

@@ -3,7 +3,7 @@ using Godot;
 public partial class Player : CharacterBody3D
 {
 	[Export] public Camera3D PlayerCamera;
-	[Export] public float Sensitivity = 0.5f;
+	[Export] public float Sensitivity = 0.25f;
 	[Export] private bool isNoclip = false;
 	[Export] private CollisionShape3D StandingCollisionShape, CrouchingCollisionShape;
 	[Export] private ShapeCast3D CrouchAboveCheck;
@@ -43,8 +43,7 @@ public partial class Player : CharacterBody3D
     public override void _Ready()
     {
 		Input.MouseMode = Input.MouseModeEnum.Captured;
-
-		base._Ready();
+		PlayerCamera.MakeCurrent();
     }
 
     public override void _Input(InputEvent @event)
