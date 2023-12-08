@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=27 format=3 uid="uid://dmv7hq177kus8"]
 
 [ext_resource type="PackedScene" uid="uid://c7xuvylsuwi2a" path="res://entities/characters/player/player.tscn" id="1_64nu0"]
 [ext_resource type="Script" path="res://Level.cs" id="1_dwwee"]
@@ -10,6 +10,8 @@
 [ext_resource type="Material" uid="uid://byy0tf2266p3d" path="res://assets/materials/jerma.tres" id="6_fwhoe"]
 [ext_resource type="PackedScene" uid="uid://df317tod58c0w" path="res://entities/characters/enemy/scp/SCP173.tscn" id="8_rae2q"]
 [ext_resource type="PackedScene" uid="uid://dx6nwpc4tly55" path="res://entities/props/player_pc/PlayerPC.tscn" id="9_jxfj6"]
+[ext_resource type="PackedScene" uid="uid://vlqgl00phyvr" path="res://entities/level/LevelObjective.tscn" id="11_luee5"]
+[ext_resource type="Script" path="res://entities/level/Indicator.cs" id="12_xatvq"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_eox80"]
 panorama = ExtResource("1_gxu3p")
@@ -279,4 +281,18 @@ transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 
 [node name="PlayerSpawn" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 
+[node name="ObjectiveTest" parent="." instance=ExtResource("3_igorc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.1, 0.5, -3.3)
+script = ExtResource("4_24jn2")
+ToggleState = false
+buttonType = 0
+
+[node name="LevelObjective" parent="ObjectiveTest" instance=ExtResource("11_luee5")]
+
+[node name="InteractableTest" parent="ObjectiveTest/LevelObjective" instance=ExtResource("3_igorc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, -3.4)
+script = ExtResource("12_xatvq")
+
 [connection signal="ButtonToggled" from="NavigationRegion3D/test_objs/Lightswitch" to="NavigationRegion3D/test_objs/OmniLight3D" method="set_visible"]
+[connection signal="ButtonPressed" from="ObjectiveTest" to="ObjectiveTest/LevelObjective" method="CompleteObjective"]
+[connection signal="ObjectiveCompleted" from="ObjectiveTest/LevelObjective" to="ObjectiveTest/LevelObjective/InteractableTest" method="ChangeColor"]
