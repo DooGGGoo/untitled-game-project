@@ -1,9 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://c7xuvylsuwi2a"]
 
 [ext_resource type="Script" path="res://entities/characters/player/Player.cs" id="1_l5jtm"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_4bwl5"]
-size = Vector3(0.1, 0.1, 0.1)
+[ext_resource type="PackedScene" uid="uid://cpeptpsgeknxy" path="res://entities/tests/weapon_test.tscn" id="2_108s5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_66coo"]
 size = Vector3(0.5, 1.8, 0.5)
@@ -37,7 +35,6 @@ size = Vector3(0.45, 1.2, 0.45)
 collision_mask = 3
 script = ExtResource("1_l5jtm")
 PlayerCamera = NodePath("Camera3D")
-Sensitivity = 0.25
 StandingCollisionShape = NodePath("CollisionShapeStanding")
 CrouchingCollisionShape = NodePath("CollisionShapeCrouching")
 CrouchAboveCheck = NodePath("CrouchAboveCheck")
@@ -56,8 +53,7 @@ near = 0.001
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.095, -0.11, -0.12)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Camera3D/Viewmodel"]
-mesh = SubResource("BoxMesh_4bwl5")
+[node name="weapon_test" parent="Camera3D/Viewmodel" instance=ExtResource("2_108s5")]
 
 [node name="RayCast3D" type="RayCast3D" parent="Camera3D"]
 target_position = Vector3(0, 0, -1.8)
@@ -137,3 +133,5 @@ text = "[W,A,S,D] - Move
 [Alt + F4] - Quit"
 fit_content = true
 scroll_active = false
+
+[connection signal="AttackPrimary" from="." to="Camera3D/Viewmodel/weapon_test" method="PrimaryAttack"]

@@ -35,6 +35,7 @@ public partial class GenericEnemy : CharacterBody3D, ILivingEntity, IInteractabl
 	{
 		Health -= damage;
 		GD.Print("Taking damage: " + damage + " | Health: " + Health);
+		Push(damage + 2, GlobalTransform.Basis.Z + Vector3.Up, 3);
 		if (Health <= 0)
 			Kill();
 	}
