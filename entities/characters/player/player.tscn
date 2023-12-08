@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://c7xuvylsuwi2a"]
+[gd_scene load_steps=10 format=3 uid="uid://c7xuvylsuwi2a"]
 
 [ext_resource type="Script" path="res://entities/characters/player/Player.cs" id="1_l5jtm"]
 [ext_resource type="PackedScene" uid="uid://cpeptpsgeknxy" path="res://entities/tests/weapon_test.tscn" id="2_108s5"]
+[ext_resource type="Script" path="res://scripts/Viewmodel.cs" id="2_af83p"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_66coo"]
 size = Vector3(0.5, 1.8, 0.5)
@@ -52,6 +53,9 @@ near = 0.001
 [node name="Viewmodel" type="Marker3D" parent="Camera3D"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.095, -0.11, -0.12)
+script = ExtResource("2_af83p")
+swayStrength = 4.0
+swaySmoothing = 1.0
 
 [node name="weapon_test" parent="Camera3D/Viewmodel" instance=ExtResource("2_108s5")]
 
