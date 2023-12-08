@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://cpeptpsgeknxy"]
+
+[ext_resource type="Script" path="res://scripts/Weapon.cs" id="1_xbny8"]
+[ext_resource type="Script" path="res://scripts/WeaponData.cs" id="2_on6i7"]
+
+[sub_resource type="Curve" id="Curve_wem6x"]
+_data = [Vector2(0, 0.766497), 0.0, 2.33991, 0, 0, Vector2(0.146433, 0.944162), 0.699282, 0.699282, 0, 0, Vector2(0.446808, 0.550761), -0.579405, -0.579405, 0, 0, Vector2(1, 0.461929), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Resource" id="Resource_ngp6f"]
+script = ExtResource("2_on6i7")
+Damage = 5
+MaxAmmo = 1000
+FireRate = 0.5
+ReloadTime = 1.0
+RecoilCurve = SubResource("Curve_wem6x")
+
+[sub_resource type="BoxMesh" id="BoxMesh_bea5n"]
+size = Vector3(0.1, 0.1, 0.3)
+
+[node name="weapon_test" type="Node3D" node_paths=PackedStringArray("RayCast")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2)
+script = ExtResource("1_xbny8")
+WeaponData = SubResource("Resource_ngp6f")
+RayCast = NodePath("RayCast3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+mesh = SubResource("BoxMesh_bea5n")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -100)

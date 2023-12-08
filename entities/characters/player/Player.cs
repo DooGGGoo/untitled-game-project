@@ -40,10 +40,13 @@ public partial class Player : CharacterBody3D
 	private bool grabMouseLock;
 	private RigidBody3D grabbedObject;
 
+	[Signal] public delegate void AttackPrimaryEventHandler(); 
+
     public override void _Ready()
     {
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		PlayerCamera.MakeCurrent();
+		AddToGroup("Player");
     }
 
     public override void _Input(InputEvent @event)
@@ -86,9 +89,17 @@ public partial class Player : CharacterBody3D
 
 		if (Input.IsActionPressed("left_click"))
 		{
-			grabMouseLock = true;
-			RotateObject(@event);
+			if (grabbedObject != null)
+			{
+				grabMouseLock = true;
+				RotateObject(@event);
+			}
+			else
+			{
+				EmitSignal(SignalName.AttackPrimary);
+			}
 		}
+
 		if (Input.IsActionJustReleased("left_click"))
 		{
 			grabMouseLock = false;
