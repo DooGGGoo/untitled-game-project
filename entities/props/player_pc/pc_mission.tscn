@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3 uid="uid://bu5smm751lw2s"]
+
+[ext_resource type="Script" path="res://entities/props/player_pc/PCMission.cs" id="1_40nyx"]
+[ext_resource type="PackedScene" uid="uid://c5t48y3ps4vcw" path="res://maps/map_objective_test.tscn" id="2_d7etc"]
+[ext_resource type="Script" path="res://entities/props/player_pc/PCMissionData.cs" id="3_jv7gv"]
+
+[sub_resource type="Resource" id="Resource_5nu5c"]
+script = ExtResource("3_jv7gv")
+Name = "Test Mission sexo sexo"
+Scene = ExtResource("2_d7etc")
+
+[node name="Mission" type="Panel" node_paths=PackedStringArray("NameLabel")]
+custom_minimum_size = Vector2(0, 64)
+size_flags_vertical = 2
+script = ExtResource("1_40nyx")
+MissionData = SubResource("Resource_5nu5c")
+NameLabel = NodePath("MarginContainer/HBoxContainer/Label")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 27
+text = "Test mission"
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Start"
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Button" to="." method="StartMission"]

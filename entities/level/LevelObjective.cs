@@ -2,7 +2,8 @@ using Godot;
 
 public partial class LevelObjective : Node
 {
-    Global global = Global.Instance();
+    [Export] public bool IsCompleted;
+    private Global global = Global.Instance();
     private Level currentLevel;
 
     [Signal] public delegate void ObjectiveCompletedEventHandler();
@@ -14,6 +15,10 @@ public partial class LevelObjective : Node
 
     public void CompleteObjective()
     {
-        EmitSignal(SignalName.ObjectiveCompleted);
+        if (!IsCompleted)
+        {
+            IsCompleted = true;
+            EmitSignal(SignalName.ObjectiveCompleted);
+        }
     }
 }

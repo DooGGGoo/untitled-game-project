@@ -8,4 +8,12 @@ public partial class WeaponData : Resource
     [Export] public float FireRate = 0.5f;
     [Export] public float ReloadTime = 1.0f;
     [Export] public Curve RecoilCurve;
+    [Export] public WeaponType Type = WeaponType.Primary;
+
+    public enum WeaponType
+    {
+        Melee,
+        Primary,
+        Secondary
+    }
 }

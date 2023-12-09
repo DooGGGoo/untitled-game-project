@@ -22,7 +22,6 @@ config/icon="res://icon.svg"
 
 window/size/viewport_width=864
 window/size/viewport_height=486
-window/vsync/vsync_mode=2
 
 [dotnet]
 
@@ -33,12 +32,17 @@ project/assembly_name="scp-game"
 movie_writer/movie_file="D:/gamedev_devlog/unnamed.avi"
 movie_writer/disable_vsync=true
 
+[editor_plugins]
+
+enabled=PackedStringArray()
+
 [file_customization]
 
 folder_colors={
 "res://assets/": "blue",
 "res://entities/": "red",
-"res://maps/": "orange"
+"res://maps/": "orange",
+"res://scripts/": "gray"
 }
 
 [input]

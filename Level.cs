@@ -5,12 +5,17 @@ public partial class Level : Node
 {
 	[Export] public Node3D[] PlayerSpawn;
 	[Export] public PackedScene PlayerScene;
+	[Export(PropertyHint.File, "*.tscn")] public string ReturnToScene;
 
 	[Signal] public delegate void PlayerSpawnedEventHandler(Player player);
 
 	public override void _Ready()
 	{
+		Global.Instance().CurrentLevel = this;
+
 		SpawnPlayer();
+
+		GD.Print(ReturnToScene);
 
 		PlayerSpawned += (Player player) => GD.Print("Player spawned" + player.GlobalPosition);
 	}
@@ -40,5 +45,15 @@ public partial class Level : Node
 		EmitSignal(SignalName.PlayerSpawned, player);
 
 		return player;
+	}
+
+	public void ReturnToBase()
+	{
+		GetTree().ChangeSceneToFile(ReturnToScene);
+	}
+
+	public void ChangeLevel(PackedScene level)
+	{
+		GetTree().ChangeSceneToPacked(level);
 	}
 }

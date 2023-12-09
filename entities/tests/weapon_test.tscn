@@ -14,6 +14,7 @@ MaxAmmo = 1000
 FireRate = 0.5
 ReloadTime = 1.0
 RecoilCurve = SubResource("Curve_wem6x")
+Type = 1
 
 [sub_resource type="BoxMesh" id="BoxMesh_bea5n"]
 size = Vector3(0.1, 0.1, 0.3)

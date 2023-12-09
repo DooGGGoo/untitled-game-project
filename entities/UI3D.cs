@@ -59,6 +59,8 @@ public partial class UI3D : Node3D
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
+		if (!IsInsideTree()) return;
+
 		bool isMouseEvent = false;
 
 		if (@event is InputEventMouse || @event is InputEventMouseButton || @event is InputEventMouseMotion)
@@ -78,6 +80,8 @@ public partial class UI3D : Node3D
 
 	private void HandleMouse(InputEventMouse @event)
 	{
+		if (!IsInsideTree()) return;
+
 		isMouseInside = FindMouse(@event.GlobalPosition, out Vector3 position);
 
 		HandleMouseInPosition(@event, position);

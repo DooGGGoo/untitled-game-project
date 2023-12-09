@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://dx6nwpc4tly55"]
+[gd_scene load_steps=13 format=3 uid="uid://dx6nwpc4tly55"]
 
 [ext_resource type="Script" path="res://entities/props/player_pc/PlayerPC.cs" id="1_pfv4b"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="2_d1ke7"]
-[ext_resource type="PackedScene" uid="uid://bqq3lrdx6uy6n" path="res://entities/tests/3DUI_test.tscn" id="3_kjj4p"]
+[ext_resource type="Script" path="res://entities/UI3D.cs" id="3_bt3v1"]
+[ext_resource type="PackedScene" uid="uid://c5ni083ldn3u" path="res://entities/props/player_pc/pc_ui.tscn" id="4_tgnk0"]
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_qs1oh"]
 data = PackedVector3Array(-0.125, 0.4, 0.5, 0.125, 0.4, 0.5, -0.125, -0.4, 0.5, 0.125, 0.4, 0.5, 0.125, -0.4, 0.5, -0.125, -0.4, 0.5, 0.125, 0.4, -0.5, -0.125, 0.4, -0.5, 0.125, -0.4, -0.5, -0.125, 0.4, -0.5, -0.125, -0.4, -0.5, 0.125, -0.4, -0.5, 0.125, 0.4, 0.5, 0.125, 0.4, -0.5, 0.125, -0.4, 0.5, 0.125, 0.4, -0.5, 0.125, -0.4, -0.5, 0.125, -0.4, 0.5, -0.125, 0.4, -0.5, -0.125, 0.4, 0.5, -0.125, -0.4, -0.5, -0.125, 0.4, 0.5, -0.125, -0.4, 0.5, -0.125, -0.4, -0.5, 0.125, 0.4, 0.5, -0.125, 0.4, 0.5, 0.125, 0.4, -0.5, -0.125, 0.4, 0.5, -0.125, 0.4, -0.5, 0.125, 0.4, -0.5, -0.125, -0.4, 0.5, 0.125, -0.4, 0.5, -0.125, -0.4, -0.5, 0.125, -0.4, 0.5, 0.125, -0.4, -0.5, -0.125, -0.4, -0.5)
@@ -17,6 +18,28 @@ data = PackedVector3Array(-0.425, 0.4, 0.2, 0.425, 0.4, 0.2, -0.425, -0.4, 0.2, 
 [sub_resource type="BoxMesh" id="BoxMesh_1n7c7"]
 material = ExtResource("2_d1ke7")
 size = Vector3(0.85, 0.8, 0.4)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_7id85"]
+viewport_path = NodePath("3DUI/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t3kad"]
+resource_local_to_scene = true
+render_priority = 1
+shading_mode = 0
+specular_mode = 2
+disable_ambient_light = true
+albedo_texture = SubResource("ViewportTexture_7id85")
+texture_filter = 0
+distance_fade_min_distance = 3.0
+distance_fade_max_distance = 0.95
+
+[sub_resource type="QuadMesh" id="QuadMesh_4ll00"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_t3kad")
+size = Vector2(1.28, 0.72)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5tcmx"]
+size = Vector3(1.067, 0.6, 0.0548218)
 
 [node name="PlayerPC" type="StaticBody3D" node_paths=PackedStringArray("PCCamera")]
 script = ExtResource("1_pfv4b")
@@ -40,8 +63,31 @@ skeleton = NodePath("../..")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.6, 0.9)
-fov = 65.0
+fov = 61.0
 near = 0.001
 
-[node name="3DUI" parent="." instance=ExtResource("3_kjj4p")]
+[node name="3DUI" type="Node3D" parent="." node_paths=PackedStringArray("subViewport", "quad", "area", "shape")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.6, 0.2)
+script = ExtResource("3_bt3v1")
+subViewport = NodePath("SubViewport")
+quad = NodePath("MeshInstance3D")
+area = NodePath("MeshInstance3D/Area3D")
+shape = NodePath("MeshInstance3D/Area3D/CollisionShape3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="3DUI"]
+cast_shadow = 0
+mesh = SubResource("QuadMesh_4ll00")
+
+[node name="Area3D" type="Area3D" parent="3DUI/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="3DUI/MeshInstance3D/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0100891)
+shape = SubResource("BoxShape3D_5tcmx")
+
+[node name="SubViewport" type="SubViewport" parent="3DUI"]
+disable_3d = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(1280, 720)
+
+[node name="pc_ui" parent="3DUI/SubViewport" instance=ExtResource("4_tgnk0")]
+texture_filter = 3

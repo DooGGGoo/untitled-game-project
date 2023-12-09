@@ -17,13 +17,13 @@
 panorama = ExtResource("1_gxu3p")
 filter = false
 
-[sub_resource type="Sky" id="Sky_gmltm"]
+[sub_resource type="Sky" id="Sky_r63i6"]
 sky_material = SubResource("PanoramaSkyMaterial_eox80")
 
 [sub_resource type="Environment" id="Environment_174wc"]
 background_mode = 2
 background_energy_multiplier = 0.65
-sky = SubResource("Sky_gmltm")
+sky = SubResource("Sky_r63i6")
 ambient_light_sky_contribution = 0.75
 tonemap_mode = 2
 ssao_enabled = true
@@ -92,6 +92,7 @@ rings = 4
 script = ExtResource("1_dwwee")
 PlayerSpawn = [NodePath("PlayerSpawn")]
 PlayerScene = ExtResource("1_64nu0")
+ReturnToScene = "res://maps/map_test.tscn"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_174wc")
