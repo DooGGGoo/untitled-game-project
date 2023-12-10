@@ -2,22 +2,81 @@ using Godot;
 using System;
 using System.Linq;
 
-public partial class GenericEnemy : CharacterBody3D, ILivingEntity, IInteractable
+public partial class GenericEnemy : GroundCharacter, ILivingEntity, IInteractable
 {
-	private const float gravity = 16.8f;
-	public const float Speed = 3f;
-
-    public int Health { get; set; }
-    public int MaxHealth { get; set; } = 50;
-
-	private Vector3 wishDir;
+	[Export] private NavigationAgent3D navigationAgent;
+    [Export] public int MaxHealth { get; set; } = 50;
+    
+	public int Health { get; set; }
+	private Player player;
+	private Vector3 avoidedVelocity;
 
 	public override void _Ready()
 	{
 		Health = MaxHealth;
+
+		navigationAgent.VelocityComputed += (Vector3 velocity) => 
+		{
+			if (velocity != Vector3.Zero) 
+			{
+				Velocity = velocity;
+			}
+		};
 	}
 
-    public void Interact(CharacterBody3D interactor)
+	public override void _PhysicsProcess(double delta)
+	{
+		CalculateMoveDirection();
+		GetNodeOrNull<MeshInstance3D>("MeshInstance3D").LookAt(new Vector3(player.GlobalPosition.X, GlobalPosition.Y, player.GlobalPosition.Z));
+		base._PhysicsProcess(delta);
+	}
+
+	protected override void ProcessMovement(double delta)
+    {
+		Vector3 velocity = Velocity;
+
+        if (!IsOnFloor())
+            velocity.Y -= gravity * (float)delta;
+
+        if (wishDir != Vector3.Zero && !navigationAgent.IsTargetReached())
+        {
+            MovementAcceleration = IsOnFloor() ? 9f : 1f;
+            velocity.X = Mathf.Lerp(velocity.X, wishDir.X * currentSpeed, MovementAcceleration * (float)delta);
+            velocity.Z = Mathf.Lerp(velocity.Z, wishDir.Z * currentSpeed, MovementAcceleration * (float)delta);
+        }
+        else
+        {
+            MovementFriction = IsOnFloor() ? 12f : 1f;
+            velocity.X = Mathf.Lerp(velocity.X, 0f, MovementFriction * (float)delta);
+            velocity.Z = Mathf.Lerp(velocity.Z, 0f, MovementFriction * (float)delta);
+        }
+
+		Velocity = velocity;
+		navigationAgent.Velocity = Velocity;
+    }
+
+	public void CalculateMoveDirection()
+	{
+		if (player == null)
+		{
+			player = GetTree().GetNodesInGroup("Player").OfType<Player>().OrderBy(p => p.GlobalPosition.DistanceTo(GlobalPosition)).FirstOrDefault();
+			return;
+		}
+
+		navigationAgent.TargetPosition = new Vector3(
+			(player.GlobalPosition - -(GlobalPosition - player.GlobalPosition).Normalized() * 1.75f).X,
+			player.GlobalPosition.Y,
+			(player.GlobalPosition - -(GlobalPosition - player.GlobalPosition).Normalized() * 1.75f).Z
+			);
+
+		Vector3 targetPosition = navigationAgent.GetNextPathPosition();
+		Vector3 navDirection = targetPosition - GlobalPosition;
+		wishDir = navDirection.Normalized();
+	}
+
+	#region Interactions
+
+	public void Interact(CharacterBody3D interactor)
     {
         int damage = Random.Shared.Next(1, 10);
 		TakeDamage(damage);
@@ -46,61 +105,11 @@ public partial class GenericEnemy : CharacterBody3D, ILivingEntity, IInteractabl
         QueueFree();
     }
 
-	public override void _PhysicsProcess(double delta)
-	{
-		Vector3 velocity = Velocity;
-
-		if (!IsOnFloor())
-			velocity.Y -= gravity * (float)delta;
-
-		CalculateMoveDirection();
-
-		if (wishDir != Vector3.Zero)
-		{
-			float MovementAcceleration = IsOnFloor() ? 9f : 1f;
-			velocity.X = Mathf.Lerp(velocity.X, wishDir.X * Speed, MovementAcceleration * (float)delta);
-			velocity.Z = Mathf.Lerp(velocity.Z, wishDir.Z * Speed, MovementAcceleration * (float)delta);
-		}
-		else
-		{
-			float MovementFriction = IsOnFloor() ? 12f : 1f;
-			velocity.X = Mathf.Lerp(velocity.X, 0f, MovementFriction * (float)delta);
-			velocity.Z = Mathf.Lerp(velocity.Z, 0f, MovementFriction * (float)delta);
-		}
-
-		Velocity = velocity;
-
-		var collision = MoveAndCollide(Velocity * (float)delta, true);
-
-		if (collision != null && collision.GetCollider() is RigidBody3D rigidbody)
-		{
-			var pushVector = collision.GetNormal() * (Velocity.Length() * 2f / rigidbody.Mass);
-			rigidbody.ApplyImpulse(-pushVector, collision.GetPosition() - rigidbody.GlobalPosition);
-		}
-
-		MoveAndSlide();
-	}
+	#endregion
 
 	public void Push(float force, Vector3 dir, float mass)
 	{
 		Velocity += force * dir / mass;
 	}
 
-	private void CalculateMoveDirection()
-	{
-		// Calculate Direction to nearest player and move towards them, until distance is close enough
-		Player player = GetTree().GetNodesInGroup("Player").OfType<Player>().OrderBy(p => p.GlobalPosition.DistanceTo(GlobalPosition)).FirstOrDefault();
-		if (player != null)
-		{
-			Vector3 navDestination = player.GlobalPosition;
-			Vector3 navDirection = navDestination - GlobalPosition;
-			wishDir = navDirection.Normalized();
-		
-
-			if (navDirection.Length() < 2f)
-				wishDir = Vector3.Zero;
-			else
-				LookAt(new Vector3(navDestination.X, GlobalPosition.Y, navDestination.Z));
-		}
-	} 
 }

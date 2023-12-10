@@ -18,6 +18,7 @@ public partial class GroundCharacter : CharacterBody3D
     bool StartedProcessOnFloor = false;
     public override void _PhysicsProcess(double delta)
     {
+        currentSpeed = WalkSpeed;
         ProcessMovement(delta);
 
         PushRigidBodies(delta);
@@ -30,8 +31,6 @@ public partial class GroundCharacter : CharacterBody3D
     protected virtual void ProcessMovement(double delta)
     {
         Vector3 velocity = Velocity;
-
-        currentSpeed = WalkSpeed;
 
         if (!IsOnFloor())
             velocity.Y -= gravity * (float)delta;

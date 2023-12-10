@@ -27,7 +27,6 @@ public partial class Player : GroundCharacter
 	[ExportGroup("Object interactions")]
 	[Export] private Generic6DofJoint3D grabJoint;
 	[Export] private StaticBody3D grabStaticBody;
-	private const float grabObjectPullPower = 22f;
 	private const float grabRotationPower = 0.5f;
 	private bool grabMouseLock;
 	private RigidBody3D grabbedObject;
@@ -126,6 +125,8 @@ public partial class Player : GroundCharacter
 			ProcessMovement(delta);
 		}
 
+		ProcessCrouchingAndSprint(delta);
+		
 		oldPosition = PlayerCamera.GlobalPosition;
 
 		ProcessGrabbedObject();
@@ -203,10 +204,8 @@ public partial class Player : GroundCharacter
 
 	#region Movement
 
-	protected override void ProcessMovement(double delta)
+	private void ProcessCrouchingAndSprint(double delta)
 	{
-		Vector3 velocity = Velocity;
-
 		if (Input.IsActionPressed("crouch"))
 		{
 			currentSpeed = CrouchSpeed;
@@ -227,6 +226,7 @@ public partial class Player : GroundCharacter
 			}
 
 			PlayerCamera.Position = new Vector3(PlayerCamera.Position.X, Mathf.Lerp(PlayerCamera.Position.Y, 1.5f, 7f * (float)delta), PlayerCamera.Position.Z);
+			
 			if (Input.IsActionPressed("sprint"))
 			{
 				currentSpeed = SprintSpeed;
@@ -236,26 +236,7 @@ public partial class Player : GroundCharacter
 				currentSpeed = WalkSpeed;
 			}
 		}
-
-		if (!IsOnFloor())
-			velocity.Y -= gravity * (float)delta;
-
-
-		if (wishDir != Vector3.Zero)
-		{
-			MovementAcceleration = IsOnFloor() ? 9f : 1f;
-			velocity.X = Mathf.Lerp(velocity.X, wishDir.X * currentSpeed, MovementAcceleration * (float)delta);
-			velocity.Z = Mathf.Lerp(velocity.Z, wishDir.Z * currentSpeed, MovementAcceleration * (float)delta);
-		}
-		else
-		{
-			MovementFriction = IsOnFloor() ? 12f : 1f;
-			velocity.X = Mathf.Lerp(velocity.X, 0f, MovementFriction * (float)delta);
-			velocity.Z = Mathf.Lerp(velocity.Z, 0f, MovementFriction * (float)delta);
-		}
-
-		Velocity = velocity;
-	}
+	} 
 
 	private void ProcessMovementNoclip(double delta)
 	{
@@ -318,13 +299,11 @@ public partial class Player : GroundCharacter
 	{
 		if (grabbedObject != null)
 		{
-			// if gabbed object collides with the player drop it
-
-			// lower the Stiffness of the joint, the further the hand is from the held object
-			float stiffness = Mathf.Lerp(30f, 0.1f, (GlobalPosition - grabbedObject.GlobalPosition).Length() / 2f);
-			grabJoint.SetParamX(Generic6DofJoint3D.Param.LinearSpringStiffness, stiffness);
-			grabJoint.SetParamY(Generic6DofJoint3D.Param.LinearSpringStiffness, stiffness);
-			grabJoint.SetParamZ(Generic6DofJoint3D.Param.LinearSpringStiffness, stiffness);
+			// if object is too far - drop it
+			if (grabbedObject.GlobalPosition.DistanceTo(grabStaticBody.GlobalPosition) > 4f)
+			{
+				DropObject();
+			}
 		}
 	}
 	#endregion
