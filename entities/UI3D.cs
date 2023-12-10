@@ -42,7 +42,9 @@ public partial class UI3D : Node3D
 
 		mesh.Material = material;
 
-		mesh.Size = new Vector2(subViewport.Size.X / 1024f, subViewport.Size.Y / 1024f);
+		const float scaleModifier = 1024f;
+
+		mesh.Size = new Vector2(subViewport.Size.X / scaleModifier, subViewport.Size.Y / scaleModifier);
 
 		(shape.Shape as BoxShape3D).Size = new Vector3(mesh.Size.X, mesh.Size.Y, .1f);
 	}

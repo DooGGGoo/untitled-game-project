@@ -7,8 +7,8 @@ public partial class PlayerPC : StaticBody3D, IInteractable
 	private Camera3D playerCamera;
 	private bool isActive = false;
 
-    public override void _Input(InputEvent @event)
-    {
+	public override void _Input(InputEvent @event)
+	{
 		if (@event.IsActionPressed("esc"))
 		{
 			if (PCCamera.Current)
@@ -21,8 +21,8 @@ public partial class PlayerPC : StaticBody3D, IInteractable
 
 	}
 
-    public void Interact(CharacterBody3D interactor)
-    {
+	public void Interact(CharacterBody3D interactor)
+	{
 		if (interactor is not Player player) return;
 
 		this.player = player;

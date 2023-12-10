@@ -42,15 +42,15 @@ public partial class Player : CharacterBody3D
 
 	[Signal] public delegate void AttackPrimaryEventHandler(); 
 
-    public override void _Ready()
-    {
+	public override void _Ready()
+	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		PlayerCamera.MakeCurrent();
 		AddToGroup("Player");
-    }
+	}
 
-    public override void _Input(InputEvent @event)
-    {
+	public override void _Input(InputEvent @event)
+	{
 		if (@event.IsActionPressed("use"))
 		{
 			InteractWithObject();
@@ -74,7 +74,7 @@ public partial class Player : CharacterBody3D
 			StandingCollisionShape.Disabled = isNoclip;
 			CrouchingCollisionShape.Disabled = isNoclip;
 		}
-    
+	
 		if (Input.IsActionJustPressed("use"))
 		{
 			if (grabbedObject == null)
@@ -177,7 +177,7 @@ public partial class Player : CharacterBody3D
 		else
 			side = angle;
 
-        float cameraZRotation = side * sign;
+		float cameraZRotation = side * sign;
 
 		// Camera bob
 		if (enableHeadbob == true && IsOnFloor())
@@ -351,9 +351,9 @@ public partial class Player : CharacterBody3D
 
 			// step 1: upwards trace
 			float upHeight = StepHeight;
-            //chaneged to true
-            KinematicCollision3D ceilingCollision = MoveAndCollide(upHeight * Vector3.Up);
-            ceilingTravelDistance = StepHeight;
+			//chaneged to true
+			KinematicCollision3D ceilingCollision = MoveAndCollide(upHeight * Vector3.Up);
+			ceilingTravelDistance = StepHeight;
 			if (ceilingCollision != null)
 				ceilingTravelDistance = Mathf.Abs(ceilingCollision.GetTravel().Y);
 			ceilingPosition = GlobalPosition;
@@ -444,12 +444,13 @@ public partial class Player : CharacterBody3D
 	{
 		if (InteractionCheck != null && InteractionCheck.IsColliding())
 		{
-            if (InteractionCheck.GetCollider() is Node collidedObject && collidedObject is RigidBody3D)
-            {
-                grabbedObject = collidedObject as RigidBody3D;
+			if (InteractionCheck.GetCollider() is Node collidedObject && collidedObject is RigidBody3D)
+			{
+				grabbedObject = collidedObject as RigidBody3D;
+				grabbedObject.GlobalPosition = grabStaticBody.GlobalPosition;
 				grabJoint.NodeB = grabbedObject.GetPath();
-            }
-        }
+			}
+		}
 	}
 
 	private void DropObject()
@@ -474,10 +475,13 @@ public partial class Player : CharacterBody3D
 	{
 		if (grabbedObject != null)
 		{
-			Vector3 objPosition = grabbedObject.GlobalPosition;
-			Vector3 targetPosition = GrabbedObjectPositionMarker.GlobalPosition;
+			// if gabbed object collides with the player drop it
 
-			grabbedObject.LinearVelocity = (targetPosition - objPosition) * grabObjectPullPower;
+			// lower the Stiffness of the joint, the further the hand is from the held object
+			float stiffness = Mathf.Lerp(30f, 0.1f, (GlobalPosition - grabbedObject.GlobalPosition).Length() / 2f);
+			grabJoint.SetParamX(Generic6DofJoint3D.Param.LinearSpringStiffness, stiffness);
+			grabJoint.SetParamY(Generic6DofJoint3D.Param.LinearSpringStiffness, stiffness);
+			grabJoint.SetParamZ(Generic6DofJoint3D.Param.LinearSpringStiffness, stiffness);
 		}
 	}
 	#endregion

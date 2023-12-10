@@ -40,7 +40,7 @@ CrouchingCollisionShape = NodePath("CollisionShapeCrouching")
 CrouchAboveCheck = NodePath("CrouchAboveCheck")
 InteractionCheck = NodePath("Camera3D/RayCast3D")
 GrabbedObjectPositionMarker = NodePath("Camera3D/RayCast3D/GrabbedObjectPosition")
-cameraRollAngle = 1.25
+cameraRollAngle = 2.0
 grabJoint = NodePath("Camera3D/RayCast3D/Generic6DOFJoint3D")
 grabStaticBody = NodePath("Camera3D/RayCast3D/GrabbedObjectPosition/GrabStaticBody")
 
@@ -66,9 +66,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
 
 [node name="Generic6DOFJoint3D" type="Generic6DOFJoint3D" parent="Camera3D/RayCast3D"]
 node_a = NodePath("../GrabbedObjectPosition/GrabStaticBody")
-linear_limit_x/enabled = false
-linear_limit_y/enabled = false
-linear_limit_z/enabled = false
+linear_limit_x/restitution = 0.3
+linear_limit_y/restitution = 0.3
+linear_limit_z/restitution = 0.3
+linear_spring_x/enabled = true
+linear_spring_x/stiffness = 30.0
+linear_spring_x/damping = 0.1
+linear_spring_y/enabled = true
+linear_spring_y/stiffness = 30.0
+linear_spring_z/enabled = true
+linear_spring_z/stiffness = 30.0
+angular_limit_x/damping = 3.0
+angular_limit_y/damping = 3.0
+angular_limit_z/damping = 3.0
 
 [node name="CollisionShapeStanding" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -126,6 +136,7 @@ theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 4
 
 [node name="RichTextLabel" type="RichTextLabel" parent="UILayer/Control/MarginContainer"]
+visible = false
 layout_mode = 2
 text = "[W,A,S,D] - Move
 [Space] - Jump

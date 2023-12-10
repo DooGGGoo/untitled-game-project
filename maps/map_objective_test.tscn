@@ -1,13 +1,13 @@
 [gd_scene load_steps=16 format=3 uid="uid://c5t48y3ps4vcw"]
 
-[ext_resource type="Script" path="res://Level.cs" id="1_q6rp7"]
+[ext_resource type="Script" path="res://entities/level/Level.cs" id="1_hbx3n"]
 [ext_resource type="PackedScene" uid="uid://c7xuvylsuwi2a" path="res://entities/characters/player/player.tscn" id="2_xroyl"]
 [ext_resource type="Script" path="res://entities/level/LevelExtractionArea.cs" id="3_0oony"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="3_w5hq0"]
 [ext_resource type="PackedScene" uid="uid://vlqgl00phyvr" path="res://entities/level/LevelObjective.tscn" id="4_e0b3r"]
 [ext_resource type="PackedScene" uid="uid://clmdui4kep3fn" path="res://entities/tests/button_test.tscn" id="5_o6h01"]
 [ext_resource type="Script" path="res://entities/level/Indicator.cs" id="6_55h47"]
-[ext_resource type="Texture2D" uid="uid://bd2datw4a75dw" path="res://assets/materials/textures/dev_1.png" id="8_6yfb4"]
+[ext_resource type="Texture2D" uid="uid://bsr0sn6cb0asv" path="res://assets/materials/textures/jerma.jpg" id="8_f7ld5"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_gtobf"]
 
@@ -25,7 +25,7 @@ material = SubResource("StandardMaterial3D_f0vs8")
 size = Vector3(6, 3, 2)
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_ogruv"]
-panorama = ExtResource("8_6yfb4")
+panorama = ExtResource("8_f7ld5")
 filter = false
 
 [sub_resource type="Sky" id="Sky_gmltm"]
@@ -56,7 +56,7 @@ volumetric_fog_detail_spread = 1.68179
 volumetric_fog_sky_affect = 0.575
 
 [node name="map_objective_test" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
-script = ExtResource("1_q6rp7")
+script = ExtResource("1_hbx3n")
 PlayerSpawn = [NodePath("Spawn")]
 PlayerScene = ExtResource("2_xroyl")
 ReturnToScene = "res://maps/map_test.tscn"
