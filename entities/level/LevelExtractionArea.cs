@@ -5,9 +5,12 @@ using System;
 public partial class LevelExtractionArea : Area3D
 {
 	[Export] private float extractionTime = 3f;
+	[Export] private int neededObjectives = 1;
+
+	private static int completedObjectives = 0;
+	private float timer;
 	private bool canExtract = false;
 	private bool isCurrentlyExtracting = false;
-	private float timer;
 
 	[Signal] public delegate void ExtractFromLevelEventHandler();
 
@@ -50,8 +53,20 @@ public partial class LevelExtractionArea : Area3D
 		}
 	}
 
+	public void OnObjectiveCompleted()
+	{
+		completedObjectives++;
+
+		if (completedObjectives >= neededObjectives)
+		{
+			CanExtract();
+		}
+	}
+
+
 	public void CanExtract()
 	{
 		canExtract = true;
+		GD.Print("Can extract now!");
 	}
 }

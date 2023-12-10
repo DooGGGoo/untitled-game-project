@@ -1,5 +1,6 @@
 using Godot;
 
+[GlobalClass]
 public partial class LevelObjective : Node
 {
     [Export] public bool IsCompleted;

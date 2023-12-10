@@ -1,7 +1,6 @@
-[gd_scene load_steps=16 format=3 uid="uid://c5t48y3ps4vcw"]
+[gd_scene load_steps=15 format=3 uid="uid://c5t48y3ps4vcw"]
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_hbx3n"]
-[ext_resource type="PackedScene" uid="uid://c7xuvylsuwi2a" path="res://entities/characters/player/player.tscn" id="2_xroyl"]
 [ext_resource type="Script" path="res://entities/level/LevelExtractionArea.cs" id="3_0oony"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="3_w5hq0"]
 [ext_resource type="PackedScene" uid="uid://vlqgl00phyvr" path="res://entities/level/LevelObjective.tscn" id="4_e0b3r"]
@@ -14,14 +13,14 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_5mqd1"]
 size = Vector3(6, 3, 2)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f0vs8"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j3ccc"]
 transparency = 1
 cull_mode = 2
 shading_mode = 0
 albedo_color = Color(0.772549, 0.772549, 0, 0.301961)
 
 [sub_resource type="BoxMesh" id="BoxMesh_2icr6"]
-material = SubResource("StandardMaterial3D_f0vs8")
+material = SubResource("StandardMaterial3D_j3ccc")
 size = Vector3(6, 3, 2)
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_ogruv"]
@@ -58,8 +57,6 @@ volumetric_fog_sky_affect = 0.575
 [node name="map_objective_test" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
 script = ExtResource("1_hbx3n")
 PlayerSpawn = [NodePath("Spawn")]
-PlayerScene = ExtResource("2_xroyl")
-ReturnToScene = "res://maps/map_test.tscn"
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_gtobf")

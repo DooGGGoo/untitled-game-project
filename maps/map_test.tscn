@@ -1,6 +1,5 @@
-[gd_scene load_steps=27 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=26 format=3 uid="uid://dmv7hq177kus8"]
 
-[ext_resource type="PackedScene" uid="uid://c7xuvylsuwi2a" path="res://entities/characters/player/player.tscn" id="1_64nu0"]
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_dwwee"]
 [ext_resource type="Texture2D" uid="uid://bd2datw4a75dw" path="res://assets/materials/textures/dev_1.png" id="1_gxu3p"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="1_qbkpu"]
@@ -17,13 +16,13 @@
 panorama = ExtResource("1_gxu3p")
 filter = false
 
-[sub_resource type="Sky" id="Sky_r63i6"]
+[sub_resource type="Sky" id="Sky_mj68o"]
 sky_material = SubResource("PanoramaSkyMaterial_eox80")
 
 [sub_resource type="Environment" id="Environment_174wc"]
 background_mode = 2
 background_energy_multiplier = 0.65
-sky = SubResource("Sky_r63i6")
+sky = SubResource("Sky_mj68o")
 ambient_light_sky_contribution = 0.75
 tonemap_mode = 2
 ssao_enabled = true
@@ -92,8 +91,6 @@ rings = 4
 [node name="map_test" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
 script = ExtResource("1_dwwee")
 PlayerSpawn = [NodePath("Map/NavigationRegion3D/PlayerSpawn")]
-PlayerScene = ExtResource("1_64nu0")
-ReturnToScene = "res://maps/map_test.tscn"
 
 [node name="Environment" type="Node" parent="."]
 
@@ -333,9 +330,11 @@ process_mode = 4
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, -14)
 
 [node name="GenericEnemy" parent="Enemies" instance=ExtResource("6_838wa")]
+process_mode = 4
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -11, 1, -8.1)
 
 [node name="GenericEnemy2" parent="Enemies" instance=ExtResource("6_838wa")]
+process_mode = 4
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -15, 1, -7.1)
 
 [connection signal="ButtonToggled" from="Map/NavigationRegion3D/test_objs/Lightswitch" to="Map/NavigationRegion3D/test_objs/OmniLight3D" method="set_visible"]

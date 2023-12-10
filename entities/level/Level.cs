@@ -1,11 +1,12 @@
 using Godot;
 using System;
 
+[GlobalClass]
 public partial class Level : Node
 {
 	[Export] public Node3D[] PlayerSpawn;
-	[Export] public PackedScene PlayerScene;
-	[Export(PropertyHint.File, "*.tscn")] public string ReturnToScene;
+	[Export(PropertyHint.File, "*.tscn")] public string PlayerScene = "res://entities/characters/player/player.tscn";
+	[Export(PropertyHint.File, "*.tscn")] public string ReturnToScene = "res://maps/map_test.tscn";
 
 	[Signal] public delegate void PlayerSpawnedEventHandler(Player player);
 
@@ -38,7 +39,9 @@ public partial class Level : Node
 		{
 			spawn = GD.RandRange(0, PlayerSpawn.Length);
 		}
-		Player player = PlayerScene.InstantiateOrNull<Player>();
+		
+		PackedScene scene = ResourceLoader.Load<PackedScene>(PlayerScene);
+		Player player = scene.InstantiateOrNull<Player>();
 		AddChild(player);
 		player.GlobalPosition = PlayerSpawn[spawn].GlobalPosition;
 

@@ -19,17 +19,17 @@ data = PackedVector3Array(-0.425, 0.4, 0.2, 0.425, 0.4, 0.2, -0.425, -0.4, 0.2, 
 material = ExtResource("2_d1ke7")
 size = Vector3(0.85, 0.8, 0.4)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_7ckxh"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_qgaft"]
 viewport_path = NodePath("3DUI/SubViewport")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_psa7p"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3gi15"]
 resource_local_to_scene = true
-albedo_texture = SubResource("ViewportTexture_7ckxh")
+albedo_texture = SubResource("ViewportTexture_qgaft")
 texture_filter = 2
 disable_receive_shadows = true
 
-[sub_resource type="QuadMesh" id="QuadMesh_kqdr8"]
-material = SubResource("StandardMaterial3D_psa7p")
+[sub_resource type="QuadMesh" id="QuadMesh_vc5av"]
+material = SubResource("StandardMaterial3D_3gi15")
 size = Vector2(1.067, 0.6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5tcmx"]
@@ -71,7 +71,7 @@ shape = NodePath("MeshInstance3D/Area3D/CollisionShape3D")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="3DUI"]
 cast_shadow = 0
-mesh = SubResource("QuadMesh_kqdr8")
+mesh = SubResource("QuadMesh_vc5av")
 
 [node name="Area3D" type="Area3D" parent="3DUI/MeshInstance3D"]
 

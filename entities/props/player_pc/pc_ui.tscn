@@ -1,7 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://c5ni083ldn3u"]
+[gd_scene load_steps=9 format=3 uid="uid://c5ni083ldn3u"]
 
 [ext_resource type="Theme" uid="uid://qi0vrfqld3ej" path="res://assets/ui/MenuTheme.tres" id="1_hax00"]
 [ext_resource type="PackedScene" uid="uid://bu5smm751lw2s" path="res://entities/props/player_pc/pc_mission.tscn" id="2_kcjwm"]
+[ext_resource type="PackedScene" uid="uid://c5t48y3ps4vcw" path="res://maps/map_objective_test.tscn" id="3_j7f3x"]
+[ext_resource type="Script" path="res://entities/props/player_pc/PCMissionData.cs" id="4_rjfo0"]
+[ext_resource type="PackedScene" uid="uid://gji1allj60r0" path="res://maps/map_test_combat.tscn" id="5_6s2yp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cveb1"]
 content_margin_left = 0.0
@@ -10,6 +13,18 @@ content_margin_right = 0.0
 content_margin_bottom = 0.0
 bg_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
 corner_detail = 5
+
+[sub_resource type="Resource" id="Resource_qk6rw"]
+resource_local_to_scene = true
+script = ExtResource("4_rjfo0")
+Name = "Test Mission 1 (sexo sexo)"
+Scene = ExtResource("3_j7f3x")
+
+[sub_resource type="Resource" id="Resource_w7c3w"]
+resource_local_to_scene = true
+script = ExtResource("4_rjfo0")
+Name = "Test mission 2"
+Scene = ExtResource("5_6s2yp")
 
 [node name="pc_ui" type="Control"]
 layout_mode = 3
@@ -65,14 +80,8 @@ size_flags_vertical = 0
 
 [node name="Mission" parent="Panel/MarginContainer/MissionSelect/MarginContainer/MissionList" instance=ExtResource("2_kcjwm")]
 layout_mode = 2
+MissionData = SubResource("Resource_qk6rw")
 
 [node name="Mission2" parent="Panel/MarginContainer/MissionSelect/MarginContainer/MissionList" instance=ExtResource("2_kcjwm")]
 layout_mode = 2
-
-[node name="Mission3" parent="Panel/MarginContainer/MissionSelect/MarginContainer/MissionList" instance=ExtResource("2_kcjwm")]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="Panel/MarginContainer/MissionSelect/MarginContainer/MissionList"]
-layout_mode = 2
-text = "Testo testo
-"
+MissionData = SubResource("Resource_w7c3w")
