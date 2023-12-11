@@ -41,7 +41,7 @@ public partial class Weapon : Node3D
             return;
         }
 
-        if (target is ILivingEntity entity)
+        if (target is IDamageableEntity entity)
         {
             entity.TakeDamage(WeaponData.Damage);
         }

@@ -32,7 +32,6 @@ margin = 0.0
 size = Vector3(0.45, 1.2, 0.45)
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCamera", "StandingCollisionShape", "CrouchingCollisionShape", "CrouchAboveCheck", "InteractionCheck", "GrabbedObjectPositionMarker", "grabJoint", "grabStaticBody")]
-collision_mask = 3
 script = ExtResource("1_l5jtm")
 PlayerCamera = NodePath("Camera3D")
 StandingCollisionShape = NodePath("CollisionShapeStanding")

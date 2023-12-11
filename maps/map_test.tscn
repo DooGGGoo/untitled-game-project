@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=30 format=3 uid="uid://dmv7hq177kus8"]
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_dwwee"]
 [ext_resource type="Texture2D" uid="uid://bd2datw4a75dw" path="res://assets/materials/textures/dev_1.png" id="1_gxu3p"]
@@ -10,7 +10,10 @@
 [ext_resource type="PackedScene" uid="uid://df317tod58c0w" path="res://entities/characters/enemy/scp/SCP173.tscn" id="8_rae2q"]
 [ext_resource type="PackedScene" uid="uid://dx6nwpc4tly55" path="res://entities/props/player_pc/PlayerPC.tscn" id="9_jxfj6"]
 [ext_resource type="PackedScene" uid="uid://vlqgl00phyvr" path="res://entities/level/LevelObjective.tscn" id="11_luee5"]
+[ext_resource type="Script" path="res://entities/props/PhysicsProp.cs" id="12_dhpw0"]
 [ext_resource type="Script" path="res://entities/level/Indicator.cs" id="12_xatvq"]
+[ext_resource type="Script" path="res://entities/props/BreakableProp.cs" id="13_xgew7"]
+[ext_resource type="Script" path="res://entities/props/PropData.cs" id="14_fabfa"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_eox80"]
 panorama = ExtResource("1_gxu3p")
@@ -88,6 +91,14 @@ bounce = 0.1
 radial_segments = 8
 rings = 4
 
+[sub_resource type="Resource" id="Resource_xfxk3"]
+script = ExtResource("14_fabfa")
+MaterialType = 0
+ImpactTriggerVelocity = 0.4
+GibsCount = 0
+ExplosiveDamage = 0
+ExplosiveRadius = 0.0
+
 [node name="map_test" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
 script = ExtResource("1_dwwee")
 PlayerSpawn = [NodePath("Map/NavigationRegion3D/PlayerSpawn")]
@@ -109,85 +120,6 @@ directional_shadow_max_distance = 14.8
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="Map"]
 navigation_mesh = SubResource("NavigationMesh_iyj1d")
-
-[node name="AvoidanceTest" type="NavigationObstacle3D" parent="Map/NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5, 0, 8)
-vertices = PackedVector3Array(-0.684938, 0, -0.666188, 1.91584, 0, -0.830707, 3.57536, 0, 2.43542)
-
-[node name="test_objs" type="Node" parent="Map/NavigationRegion3D"]
-
-[node name="InteractableTest" parent="Map/NavigationRegion3D/test_objs" instance=ExtResource("3_igorc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.298285, 0.679339, -3)
-
-[node name="Lightswitch" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.44082, 0.927259, -1.81021)
-script = ExtResource("4_24jn2")
-buttonType = 1
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/Lightswitch"]
-mesh = SubResource("BoxMesh_lqqxr")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/Lightswitch"]
-shape = SubResource("BoxShape3D_2b7y2")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="Map/NavigationRegion3D/test_objs"]
-transform = Transform3D(-0.999848, -0.0130307, 0.0116099, -6.19544e-10, 0.66523, 0.746638, -0.0174525, 0.746524, -0.665129, -2.48612, 0.535934, -1.83187)
-light_color = Color(0.0588235, 0.964706, 0, 1)
-light_energy = 1.19
-light_indirect_energy = 2.333
-light_specular = 0.69
-omni_range = 0.973
-omni_attenuation = 0.659754
-
-[node name="RBPushTest" type="RigidBody3D" parent="Map/NavigationRegion3D/test_objs"]
-transform = Transform3D(0.123654, 0, -0.992326, 0, 1, 0, 0.992326, 0, 0.123654, -0.26871, 0.653083, 6.65528)
-mass = 2.69
-physics_material_override = SubResource("PhysicsMaterial_icjm7")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest"]
-shape = SubResource("BoxShape3D_q6enk")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest"]
-material_override = ExtResource("6_fwhoe")
-mesh = SubResource("BoxMesh_kkcpk")
-
-[node name="RBPushTest2" type="RigidBody3D" parent="Map/NavigationRegion3D/test_objs"]
-transform = Transform3D(0.123654, 0, -0.992326, 0, 1, 0, 0.992326, 0, 0.123654, -2.22251, 0.653083, 6.13176)
-mass = 3.05
-physics_material_override = SubResource("PhysicsMaterial_lwgu3")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest2"]
-transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
-shape = SubResource("SphereShape3D_0sjrc")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest2"]
-material_override = ExtResource("1_qbkpu")
-mesh = SubResource("SphereMesh_dxk2x")
-
-[node name="RBPushTest3" type="RigidBody3D" parent="Map/NavigationRegion3D/test_objs"]
-transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, -2.22251, 1.65308, 6.13176)
-mass = 2.69
-physics_material_override = SubResource("PhysicsMaterial_icjm7")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest3"]
-shape = SubResource("BoxShape3D_q6enk")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest3"]
-material_override = ExtResource("6_fwhoe")
-mesh = SubResource("BoxMesh_kkcpk")
-
-[node name="RBPushTest4" type="RigidBody3D" parent="Map/NavigationRegion3D/test_objs"]
-transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, -0.26871, 1.65308, 6.65528)
-mass = 3.05
-physics_material_override = SubResource("PhysicsMaterial_lwgu3")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest4"]
-transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
-shape = SubResource("SphereShape3D_0sjrc")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest4"]
-material_override = ExtResource("1_qbkpu")
-mesh = SubResource("SphereMesh_dxk2x")
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="Map/NavigationRegion3D"]
 use_collision = true
@@ -323,6 +255,56 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 1, -2.6)
 [node name="SpotLight3D" type="SpotLight3D" parent="Map/NavigationRegion3D/PlayerPC"]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -0.5, 0.3, 1.5)
 
+[node name="test_objs" type="Node" parent="Map/NavigationRegion3D"]
+
+[node name="InteractableTest" parent="Map/NavigationRegion3D/test_objs" instance=ExtResource("3_igorc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.298285, 0.679339, -3)
+
+[node name="Lightswitch" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.44082, 0.927259, -1.81021)
+script = ExtResource("4_24jn2")
+buttonType = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/Lightswitch"]
+mesh = SubResource("BoxMesh_lqqxr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/Lightswitch"]
+shape = SubResource("BoxShape3D_2b7y2")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Map/NavigationRegion3D/test_objs"]
+transform = Transform3D(-0.999848, -0.0130307, 0.0116099, -6.19544e-10, 0.66523, 0.746638, -0.0174525, 0.746524, -0.665129, -2.48612, 0.535934, -1.83187)
+light_color = Color(0.0588235, 0.964706, 0, 1)
+light_energy = 1.19
+light_indirect_energy = 2.333
+light_specular = 0.69
+omni_range = 0.973
+omni_attenuation = 0.659754
+
+[node name="RBPushTest" type="RigidBody3D" parent="Map/NavigationRegion3D/test_objs"]
+transform = Transform3D(0.123654, 0, -0.992326, 0, 1, 0, 0.992326, 0, 0.123654, -0.26871, 0.653083, 6.65528)
+mass = 2.69
+physics_material_override = SubResource("PhysicsMaterial_icjm7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest"]
+shape = SubResource("BoxShape3D_q6enk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest"]
+material_override = ExtResource("6_fwhoe")
+mesh = SubResource("BoxMesh_kkcpk")
+
+[node name="RBPushTest2" type="RigidBody3D" parent="Map/NavigationRegion3D/test_objs"]
+transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, -0.26871, 1.65308, 6.65528)
+mass = 3.05
+physics_material_override = SubResource("PhysicsMaterial_lwgu3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest2"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
+shape = SubResource("SphereShape3D_0sjrc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest2"]
+material_override = ExtResource("1_qbkpu")
+mesh = SubResource("SphereMesh_dxk2x")
+
 [node name="Enemies" type="Node" parent="."]
 
 [node name="173" parent="Enemies" instance=ExtResource("8_rae2q")]
@@ -337,6 +319,33 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -11, 1
 process_mode = 4
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -15, 1, -7.1)
 
-[connection signal="ButtonToggled" from="Map/NavigationRegion3D/test_objs/Lightswitch" to="Map/NavigationRegion3D/test_objs/OmniLight3D" method="set_visible"]
+[node name="PropPhysics" type="RigidBody3D" parent="."]
+transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, -4.62251, 0.55308, 6.13176)
+mass = 2.0
+physics_material_override = SubResource("PhysicsMaterial_icjm7")
+script = ExtResource("12_dhpw0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PropPhysics"]
+shape = SubResource("BoxShape3D_q6enk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PropPhysics"]
+material_override = ExtResource("6_fwhoe")
+mesh = SubResource("BoxMesh_kkcpk")
+
+[node name="BreakableProp" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 0.6, 6)
+mass = 2.0
+script = ExtResource("13_xgew7")
+MaxHealth = 25
+propData = SubResource("Resource_xfxk3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BreakableProp"]
+shape = SubResource("BoxShape3D_q6enk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BreakableProp"]
+material_override = ExtResource("6_fwhoe")
+mesh = SubResource("BoxMesh_kkcpk")
+
 [connection signal="ButtonPressed" from="Map/NavigationRegion3D/ObjectiveTest" to="Map/NavigationRegion3D/ObjectiveTest/LevelObjective" method="CompleteObjective"]
 [connection signal="ObjectiveCompleted" from="Map/NavigationRegion3D/ObjectiveTest/LevelObjective" to="Map/NavigationRegion3D/ObjectiveTest/LevelObjective/InteractableTest" method="ChangeColor"]
+[connection signal="ButtonToggled" from="Map/NavigationRegion3D/test_objs/Lightswitch" to="Map/NavigationRegion3D/test_objs/OmniLight3D" method="set_visible"]

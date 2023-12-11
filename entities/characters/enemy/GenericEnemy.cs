@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Linq;
 
-public partial class GenericEnemy : GroundCharacter, ILivingEntity, IInteractable
+public partial class GenericEnemy : GroundCharacter, IDamageableEntity, IInteractable
 {
 	[Export] private NavigationAgent3D navigationAgent;
     [Export] public int MaxHealth { get; set; } = 50;

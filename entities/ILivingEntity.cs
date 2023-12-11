@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 
-public interface ILivingEntity
+public interface IDamageableEntity
 {
     public int Health { get; set; }
     public int MaxHealth { get; set; }

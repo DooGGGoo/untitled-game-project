@@ -279,7 +279,7 @@ public partial class Player : GroundCharacter
 
 	private void DropObject()
 	{
-		if (grabbedObject != null)
+		if (grabbedObject != null || !IsInstanceValid(grabbedObject))
 		{
 			grabbedObject = null;
 			grabJoint.NodeB = grabJoint.GetPath();
@@ -297,7 +297,7 @@ public partial class Player : GroundCharacter
 
 	private void ProcessGrabbedObject()
 	{
-		if (grabbedObject != null)
+		if (grabbedObject != null && IsInstanceValid(grabbedObject))
 		{
 			// if object is too far - drop it
 			if (grabbedObject.GlobalPosition.DistanceTo(grabStaticBody.GlobalPosition) > 4f)
@@ -305,6 +305,8 @@ public partial class Player : GroundCharacter
 				DropObject();
 			}
 		}
+		else 
+			grabbedObject = null;
 	}
 	#endregion
 }
