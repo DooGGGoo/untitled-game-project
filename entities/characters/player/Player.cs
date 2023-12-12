@@ -23,6 +23,12 @@ public partial class Player : GroundCharacter
 	private float time;
 	private Vector3 cameraTargetRotation;
 	private Vector3 oldPosition;
+	[ExportSubgroup("Viewmodel")]
+	[Export] private Node3D viewmodel;
+	[Export] private float bobCycle;
+	[Export] private float bobUp;
+	[Export] private float bobAmount;
+	private Vector3 bobTimes, bobOffsets;
 
 	[ExportGroup("Object interactions")]
 	[Export] private Generic6DofJoint3D grabJoint;
@@ -193,13 +199,66 @@ public partial class Player : GroundCharacter
 		PlayerCamera.RotationDegrees = new Vector3(cameraTargetRotation.X, cameraTargetRotation.Y, cameraZRotation);
 	}
 
-	private void ProcessViewmodel()
+	public void ViewPunch(Vector3 angle, bool? useSmoothing = false)
 	{
-		Node3D viewmodel = GetNode<Node3D>("%Viewmodel");
-
-
+		if (useSmoothing == true)
+		{
+			cameraTargetRotation = cameraTargetRotation.Lerp(angle, 0.5f * (float)GetProcessDeltaTime());
+		}
+		else
+		{
+			cameraTargetRotation += angle;
+		}
 	}
 
+	// TODO
+	#region Viewmodel
+	private void ProcessViewmodel()
+	{
+		CalculateBob(0.75f, ref bobTimes.X, ref bobOffsets.X);
+		CalculateBob(1.5f, ref bobTimes.Y, ref bobOffsets.Y);
+		CalculateBob(1f, ref bobTimes.Z, ref bobOffsets.Z);
+
+		Vector3 viewmodelPosition = viewmodel.Position;
+
+		viewmodelPosition.X -= bobOffsets.X * 0.33f;
+		viewmodelPosition.Y += bobOffsets.Y * 0.17f;
+		// viewmodelPosition.Z += bobOffsets.Z * 0.4f;
+
+		viewmodelPosition.X -= bobOffsets.X;
+
+		viewmodel.Position = viewmodelPosition;
+	}
+
+
+	public void CalculateBob(float freqMult, ref float bobTime, ref float bob)
+	{
+		if (!IsOnFloor()) return;
+		
+		float delta = (float)GetProcessDeltaTime();
+	
+		bobTime += delta * freqMult;
+		
+		float cycle = bobTime - (int)(bobTime / bobCycle) * bobCycle;
+		cycle /= bobCycle;
+
+		if (cycle < bobUp)
+		{
+			cycle = Mathf.Pi * cycle / bobUp;
+		}
+		else
+		{
+			cycle = Mathf.Pi + Mathf.Pi * (cycle - bobUp) / (1f - bobUp);
+		}
+
+		bob = Mathf.Sqrt(Velocity.X * Velocity.X + Velocity.Z * Velocity.Z) * bobAmount;
+		bob = bob * 0.3f + bob * 0.7f * Mathf.Sin(cycle);
+		GD.Print(bob + "|" + bobTime);
+		bob = Mathf.Clamp(bob, -7f, 4f);
+	}
+
+	#endregion
+	
 	#endregion
 
 	#region Movement

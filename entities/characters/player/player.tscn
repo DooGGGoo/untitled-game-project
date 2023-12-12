@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://c7xuvylsuwi2a"]
 
-[ext_resource type="Script" path="res://entities/characters/player/Player.cs" id="1_l5jtm"]
-[ext_resource type="Script" path="res://scripts/Viewmodel.cs" id="2_af83p"]
+[ext_resource type="Script" path="res://entities/characters/player/Player.cs" id="1_xom2y"]
+[ext_resource type="PackedScene" uid="uid://cpeptpsgeknxy" path="res://entities/tests/weapon_test.tscn" id="2_x13si"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_66coo"]
 size = Vector3(0.5, 1.8, 0.5)
@@ -31,15 +31,18 @@ rings = 3
 margin = 0.0
 size = Vector3(0.45, 1.2, 0.45)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCamera", "StandingCollisionShape", "CrouchingCollisionShape", "CrouchAboveCheck", "InteractionCheck", "GrabbedObjectPositionMarker", "grabJoint", "grabStaticBody")]
-script = ExtResource("1_l5jtm")
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCamera", "StandingCollisionShape", "CrouchingCollisionShape", "CrouchAboveCheck", "InteractionCheck", "GrabbedObjectPositionMarker", "viewmodel", "grabJoint", "grabStaticBody")]
+script = ExtResource("1_xom2y")
 PlayerCamera = NodePath("Camera3D")
 StandingCollisionShape = NodePath("CollisionShapeStanding")
 CrouchingCollisionShape = NodePath("CollisionShapeCrouching")
 CrouchAboveCheck = NodePath("CrouchAboveCheck")
 InteractionCheck = NodePath("Camera3D/RayCast3D")
 GrabbedObjectPositionMarker = NodePath("Camera3D/RayCast3D/GrabbedObjectPosition")
-cameraRollAngle = 2.0
+viewmodel = NodePath("Camera3D/Viewmodel")
+bobCycle = 0.8
+bobUp = 0.5
+bobAmount = 0.15
 grabJoint = NodePath("Camera3D/RayCast3D/Generic6DOFJoint3D")
 grabStaticBody = NodePath("Camera3D/RayCast3D/GrabbedObjectPosition/GrabStaticBody")
 
@@ -51,9 +54,8 @@ near = 0.001
 [node name="Viewmodel" type="Marker3D" parent="Camera3D"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.095, -0.11, -0.12)
-script = ExtResource("2_af83p")
-swayStrength = 4.0
-swaySmoothing = 1.0
+
+[node name="weapon_test" parent="Camera3D/Viewmodel" instance=ExtResource("2_x13si")]
 
 [node name="RayCast3D" type="RayCast3D" parent="Camera3D"]
 target_position = Vector3(0, 0, -1.8)

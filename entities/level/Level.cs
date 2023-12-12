@@ -41,8 +41,9 @@ public partial class Level : Node
 		}
 		
 		PackedScene scene = ResourceLoader.Load<PackedScene>(PlayerScene);
-		Player player = scene.InstantiateOrNull<Player>();
+		Player player = scene.Instantiate<Player>();
 		AddChild(player);
+		GD.Print(scene, player, PlayerSpawn);
 		player.GlobalPosition = PlayerSpawn[spawn].GlobalPosition;
 
 		EmitSignal(SignalName.PlayerSpawned, player);
