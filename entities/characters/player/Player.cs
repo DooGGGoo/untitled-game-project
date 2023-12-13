@@ -2,27 +2,29 @@ using Godot;
 
 public partial class Player : GroundCharacter
 {
-	[Export] public Camera3D PlayerCamera;
-	[Export] public float Sensitivity = 0.25f;
+	[ExportGroup("Movement")]
 	[Export] private bool isNoclip = false;
 	[Export] private CollisionShape3D StandingCollisionShape, CrouchingCollisionShape;
 	[Export] private ShapeCast3D CrouchAboveCheck;
-	[Export] private RayCast3D InteractionCheck;
-	[Export] private Node3D GrabbedObjectPositionMarker;
-
-	[ExportGroup("Movement")]
 	[Export] private float crouchDepth = -0.8f;
 	private Vector3 wishDirRaw;
 
 	[ExportGroup("Camera")]
+	[Export] public Camera3D PlayerCamera;
+	[Export] public float Sensitivity = 0.25f;
 	[Export] private float cameraRollAngle = .5f;
 	[Export] private float cameraRollSpeed = 3f;
 	[Export] public bool enableHeadbob = true;
 	[Export] private float headbobTimer = 10f;  // Speed
 	[Export] private float headbobScale = 0.1f; // Magnitude
+	[Export] private float cameraShakeReductionRate = 1f;
+	[Export] private FastNoiseLite noise = new();
+	[Export] private float noiseSpeed = 50f;
+	[Export] private Vector3 maxShakeRotation;
+	private float cameraShake;
 	private float time;
-	private Vector3 cameraTargetRotation;
-	private Vector3 oldPosition;
+	private Vector3 cameraTargetRotation, oldPosition;
+
 	[ExportSubgroup("Viewmodel")]
 	[Export] private Node3D viewmodel;
 	[Export] private float bobCycle;
@@ -31,6 +33,8 @@ public partial class Player : GroundCharacter
 	private Vector3 bobTimes, bobOffsets;
 
 	[ExportGroup("Object interactions")]
+	[Export] private RayCast3D InteractionCheck;
+	[Export] private Node3D GrabbedObjectPositionMarker;
 	[Export] private Generic6DofJoint3D grabJoint;
 	[Export] private StaticBody3D grabStaticBody;
 	private const float grabRotationPower = 0.5f;
@@ -140,7 +144,7 @@ public partial class Player : GroundCharacter
 		StartedProcessOnFloor = IsOnFloor();
 		MoveAndClimbStairs((float)delta, false);
 		ProcessCameraMovement(delta);
-		ProcessViewmodel();
+		// ProcessViewmodel();
 	}
 
 	#region Camera
@@ -194,9 +198,29 @@ public partial class Player : GroundCharacter
 			cameraTargetRotation.X += offset.X;
 		}
 
+		// Camera shake
+		cameraShake = Mathf.Max(cameraShake - (float)delta * cameraShakeReductionRate, 0f);
+
+		// cameraTargetRotation is the same as Camera.RotationDegrees in the current context
+		Vector3 cameraShakeInitialRotation = cameraTargetRotation;
+
+		cameraTargetRotation.X = cameraShakeInitialRotation.X + maxShakeRotation.X * GetCameraShakeIntensity() * GetNoiseFromSeed(0);
+		cameraTargetRotation.Y = cameraShakeInitialRotation.Y + maxShakeRotation.Y * GetCameraShakeIntensity() * GetNoiseFromSeed(1);
+		cameraTargetRotation.Z = cameraShakeInitialRotation.Z + maxShakeRotation.Z * GetCameraShakeIntensity() * GetNoiseFromSeed(2);
+
 		// Apply all rotation changes
 		cameraTargetRotation.X = Mathf.Clamp(cameraTargetRotation.X, -89.9f, 89.9f);
 		PlayerCamera.RotationDegrees = new Vector3(cameraTargetRotation.X, cameraTargetRotation.Y, cameraZRotation);
+	}
+
+	public void AddCameraShake(float amount)
+	{
+		cameraShake = Mathf.Clamp(cameraShake + amount, 0f, 1f);
+	}
+
+	private float GetCameraShakeIntensity()
+	{
+		return cameraShake * cameraShake;
 	}
 
 	public void ViewPunch(Vector3 angle, bool? useSmoothing = false)
@@ -209,6 +233,12 @@ public partial class Player : GroundCharacter
 		{
 			cameraTargetRotation += angle;
 		}
+	}
+
+	private float GetNoiseFromSeed(int seed)
+	{
+		noise.Seed = seed;
+		return noise.GetNoise1D(time);
 	}
 
 	// TODO

@@ -31,18 +31,19 @@ rings = 3
 margin = 0.0
 size = Vector3(0.45, 1.2, 0.45)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("PlayerCamera", "StandingCollisionShape", "CrouchingCollisionShape", "CrouchAboveCheck", "InteractionCheck", "GrabbedObjectPositionMarker", "viewmodel", "grabJoint", "grabStaticBody")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StandingCollisionShape", "CrouchingCollisionShape", "CrouchAboveCheck", "PlayerCamera", "viewmodel", "InteractionCheck", "GrabbedObjectPositionMarker", "grabJoint", "grabStaticBody")]
 script = ExtResource("1_xom2y")
-PlayerCamera = NodePath("Camera3D")
 StandingCollisionShape = NodePath("CollisionShapeStanding")
 CrouchingCollisionShape = NodePath("CollisionShapeCrouching")
 CrouchAboveCheck = NodePath("CrouchAboveCheck")
-InteractionCheck = NodePath("Camera3D/RayCast3D")
-GrabbedObjectPositionMarker = NodePath("Camera3D/RayCast3D/GrabbedObjectPosition")
+PlayerCamera = NodePath("Camera3D")
+maxShakeRotation = Vector3(10, 10, 5)
 viewmodel = NodePath("Camera3D/Viewmodel")
 bobCycle = 0.8
 bobUp = 0.5
 bobAmount = 0.15
+InteractionCheck = NodePath("Camera3D/RayCast3D")
+GrabbedObjectPositionMarker = NodePath("Camera3D/RayCast3D/GrabbedObjectPosition")
 grabJoint = NodePath("Camera3D/RayCast3D/Generic6DOFJoint3D")
 grabStaticBody = NodePath("Camera3D/RayCast3D/GrabbedObjectPosition/GrabStaticBody")
 
