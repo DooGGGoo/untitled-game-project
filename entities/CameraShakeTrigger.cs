@@ -5,6 +5,15 @@ using Godot;
 public partial class CameraShakeTrigger : Area3D
 {
     [Export] public float ShakeAmount = 0.1f;
+    [Export] public bool AlwaysProcess = false;
+
+    public override void _PhysicsProcess(double delta)
+    {
+        if (AlwaysProcess)
+        {
+            AddShake();
+        }
+    }
 
     public void AddShake()
     {

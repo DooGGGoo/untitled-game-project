@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=34 format=3 uid="uid://dmv7hq177kus8"]
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_dwwee"]
 [ext_resource type="Texture2D" uid="uid://bd2datw4a75dw" path="res://assets/materials/textures/dev_1.png" id="1_gxu3p"]
@@ -14,7 +14,6 @@
 [ext_resource type="Script" path="res://entities/level/Indicator.cs" id="12_xatvq"]
 [ext_resource type="Script" path="res://entities/props/BreakableProp.cs" id="13_xgew7"]
 [ext_resource type="Script" path="res://entities/props/PropData.cs" id="14_fabfa"]
-[ext_resource type="PackedScene" uid="uid://clmdui4kep3fn" path="res://entities/tests/button_test.tscn" id="15_q4gia"]
 [ext_resource type="Script" path="res://entities/CameraShakeTrigger.cs" id="16_uk6tj"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_eox80"]
@@ -103,6 +102,19 @@ ExplosiveRadius = 0.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_e8nub"]
 radius = 4.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0dyjt"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.772549, 0.772549, 0, 0.301961)
+
+[sub_resource type="SphereMesh" id="SphereMesh_veo4k"]
+material = SubResource("StandardMaterial3D_0dyjt")
+radius = 4.0
+height = 8.0
+radial_segments = 16
+rings = 8
 
 [node name="map_test" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
 script = ExtResource("1_dwwee")
@@ -353,16 +365,17 @@ mesh = SubResource("BoxMesh_kkcpk")
 
 [node name="Spawn" type="Node3D" parent="."]
 
-[node name="Button" parent="." instance=ExtResource("15_q4gia")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.1, 0.3, -0.9)
-
-[node name="CameraShakeTrigger" type="Area3D" parent="Button"]
+[node name="CameraShakeTrigger" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.4, 0.3, 6)
 script = ExtResource("16_uk6tj")
+AlwaysProcess = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Button/CameraShakeTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CameraShakeTrigger"]
 shape = SubResource("SphereShape3D_e8nub")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CameraShakeTrigger"]
+mesh = SubResource("SphereMesh_veo4k")
 
 [connection signal="ButtonPressed" from="Map/NavigationRegion3D/ObjectiveTest" to="Map/NavigationRegion3D/ObjectiveTest/LevelObjective" method="CompleteObjective"]
 [connection signal="ObjectiveCompleted" from="Map/NavigationRegion3D/ObjectiveTest/LevelObjective" to="Map/NavigationRegion3D/ObjectiveTest/LevelObjective/InteractableTest" method="ChangeColor"]
 [connection signal="ButtonToggled" from="Map/NavigationRegion3D/test_objs/Lightswitch" to="Map/NavigationRegion3D/test_objs/OmniLight3D" method="set_visible"]
-[connection signal="ButtonPressed" from="Button" to="Button/CameraShakeTrigger" method="AddShake"]

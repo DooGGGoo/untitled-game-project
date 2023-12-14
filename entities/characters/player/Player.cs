@@ -23,7 +23,7 @@ public partial class Player : GroundCharacter
 	[Export] private Vector3 maxShakeRotation;
 	private float cameraShake;
 	private float time;
-	private Vector3 cameraTargetRotation, oldPosition;
+	private Vector3 cameraTargetRotation, shakeInitialRotation, oldPosition;
 
 	[ExportSubgroup("Viewmodel")]
 	[Export] private Node3D viewmodel;
@@ -47,6 +47,7 @@ public partial class Player : GroundCharacter
 	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		PlayerCamera.MakeCurrent();
+		shakeInitialRotation = PlayerCamera.RotationDegrees;
 		AddToGroup("Player");
 	}
 
@@ -74,6 +75,11 @@ public partial class Player : GroundCharacter
 			isNoclip = !isNoclip;
 			StandingCollisionShape.Disabled = isNoclip;
 			CrouchingCollisionShape.Disabled = isNoclip;
+		}
+
+		if (@event.IsAction("debug_1"))
+		{
+			AddCameraShake(0.5f);
 		}
 	
 		if (Input.IsActionJustPressed("use"))
@@ -198,19 +204,20 @@ public partial class Player : GroundCharacter
 			cameraTargetRotation.X += offset.X;
 		}
 
-		// Camera shake
-		cameraShake = Mathf.Max(cameraShake - (float)delta * cameraShakeReductionRate, 0f);
-
-		// cameraTargetRotation is the same as Camera.RotationDegrees in the current context
-		Vector3 cameraShakeInitialRotation = cameraTargetRotation;
-
-		cameraTargetRotation.X = cameraShakeInitialRotation.X + maxShakeRotation.X * GetCameraShakeIntensity() * GetNoiseFromSeed(0);
-		cameraTargetRotation.Y = cameraShakeInitialRotation.Y + maxShakeRotation.Y * GetCameraShakeIntensity() * GetNoiseFromSeed(1);
-		cameraTargetRotation.Z = cameraShakeInitialRotation.Z + maxShakeRotation.Z * GetCameraShakeIntensity() * GetNoiseFromSeed(2);
+		ProcessCameraShake(delta);
 
 		// Apply all rotation changes
 		cameraTargetRotation.X = Mathf.Clamp(cameraTargetRotation.X, -89.9f, 89.9f);
 		PlayerCamera.RotationDegrees = new Vector3(cameraTargetRotation.X, cameraTargetRotation.Y, cameraZRotation);
+	}
+
+	private void ProcessCameraShake(double delta)
+	{
+		cameraShake = Mathf.Max(cameraShake - (float)delta * cameraShakeReductionRate, 0f);
+
+		cameraTargetRotation.X += shakeInitialRotation.X + maxShakeRotation.X * GetCameraShakeIntensity() * GetNoiseFromSeed(0);
+		cameraTargetRotation.Y += shakeInitialRotation.Y + maxShakeRotation.Y * GetCameraShakeIntensity() * GetNoiseFromSeed(1);
+		cameraTargetRotation.Z += shakeInitialRotation.Z + maxShakeRotation.Z * GetCameraShakeIntensity() * GetNoiseFromSeed(2);
 	}
 
 	public void AddCameraShake(float amount)
@@ -223,6 +230,12 @@ public partial class Player : GroundCharacter
 		return cameraShake * cameraShake;
 	}
 
+	private float GetNoiseFromSeed(int seed)
+	{
+		noise.Seed = seed;
+		return noise.GetNoise1D(time * noiseSpeed);
+	}
+
 	public void ViewPunch(Vector3 angle, bool? useSmoothing = false)
 	{
 		if (useSmoothing == true)
@@ -233,12 +246,6 @@ public partial class Player : GroundCharacter
 		{
 			cameraTargetRotation += angle;
 		}
-	}
-
-	private float GetNoiseFromSeed(int seed)
-	{
-		noise.Seed = seed;
-		return noise.GetNoise1D(time);
 	}
 
 	// TODO
