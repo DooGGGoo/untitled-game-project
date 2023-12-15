@@ -42,6 +42,10 @@ public partial class Player : GroundCharacter
 	private bool grabMouseLock;
 	private RigidBody3D grabbedObject;
 
+	[ExportGroup("Sounds")]
+	private float footstepsTimer;
+	private bool footstepCanPlay;
+
 	[Signal] public delegate void AttackPrimaryEventHandler(); 
 
 	public override void _Ready()
@@ -136,6 +140,7 @@ public partial class Player : GroundCharacter
 	public override void _PhysicsProcess(double delta)
 	{
 		time += (float)delta;
+		footstepsTimer += (float)delta * Velocity.Length() * (IsOnFloor() ? 1 : 0f);
 
 		Vector2 inputDir = Input.GetVector("left", "right", "forward", "backward");
 		wishDirRaw = (PlayerCamera.GlobalTransform.Basis.X * inputDir.X + -PlayerCamera.GlobalTransform.Basis.Z * -inputDir.Y).Normalized();
@@ -160,6 +165,7 @@ public partial class Player : GroundCharacter
 		MoveAndClimbStairs((float)delta, false);
 		ProcessCameraMovement(delta);
 		ProcessViewmodel();
+		CalculateFootsteps();
 	}
 
 	#region Camera
@@ -388,6 +394,41 @@ public partial class Player : GroundCharacter
 		}
 		else 
 			grabbedObject = null;
+	}
+	#endregion
+
+	#region Sounds
+
+	[Signal]
+	public delegate void PlayFootstepSoundEventHandler();
+
+	public virtual void CalculateFootsteps()
+	{
+		const float freq = 5.85f;
+		const float amp = 0.08f;
+		float pos;
+		float lowPos = amp - 0.05f;
+
+		pos = Mathf.Sin(footstepsTimer * freq) * amp;
+		if (pos > -lowPos)
+		{
+			footstepCanPlay = true;
+		}
+
+		if (pos < -lowPos && footstepCanPlay)
+		{
+			footstepCanPlay = false;
+			
+			
+			if (Mathf.Abs(Velocity.X) > WalkSpeed || Mathf.Abs(Velocity.Z) > WalkSpeed)
+			{
+				EmitSignal(SignalName.PlayFootstepSound);
+			}
+			else
+			{
+				EmitSignal(SignalName.PlayFootstepSound);
+			}
+		}
 	}
 	#endregion
 }

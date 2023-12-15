@@ -1,7 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://c7xuvylsuwi2a"]
+[gd_scene load_steps=16 format=3 uid="uid://c7xuvylsuwi2a"]
 
 [ext_resource type="Script" path="res://entities/characters/player/Player.cs" id="1_xom2y"]
 [ext_resource type="PackedScene" uid="uid://cpeptpsgeknxy" path="res://entities/tests/weapon_test.tscn" id="2_x13si"]
+[ext_resource type="Script" path="res://entities/audio/SoundQueue.cs" id="3_1jge1"]
+[ext_resource type="AudioStream" uid="uid://d4m830oi76afq" path="res://assets/audio/footsteps/footstep_concrete_01.wav" id="4_6mr4j"]
+[ext_resource type="AudioStream" uid="uid://bl22easo48uxl" path="res://assets/audio/footsteps/footstep_concrete_02.wav" id="5_m758e"]
+[ext_resource type="AudioStream" uid="uid://dc0r6h0wpsyrg" path="res://assets/audio/footsteps/footstep_concrete_03.wav" id="6_ju16h"]
+[ext_resource type="AudioStream" uid="uid://blyssx0l6k746" path="res://assets/audio/footsteps/footstep_concrete_04.wav" id="7_0nk3b"]
+[ext_resource type="AudioStream" uid="uid://cjk7ncep5ph8k" path="res://assets/audio/footsteps/footstep_concrete_05.wav" id="8_l4qxf"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_66coo"]
 size = Vector3(0.5, 1.8, 0.5)
@@ -30,6 +36,19 @@ rings = 3
 [sub_resource type="BoxShape3D" id="BoxShape3D_2cu1u"]
 margin = 0.0
 size = Vector3(0.45, 1.2, 0.45)
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_pwfu8"]
+streams_count = 5
+stream_0/stream = ExtResource("4_6mr4j")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("5_m758e")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("6_ju16h")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("7_0nk3b")
+stream_3/weight = 1.0
+stream_4/stream = ExtResource("8_l4qxf")
+stream_4/weight = 1.0
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StandingCollisionShape", "CrouchingCollisionShape", "CrouchAboveCheck", "PlayerCamera", "viewmodel", "InteractionCheck", "GrabbedObjectPositionMarker", "grabJoint", "grabStaticBody")]
 script = ExtResource("1_xom2y")
@@ -152,3 +171,13 @@ text = "[W,A,S,D] - Move
 [Alt + F4] - Quit"
 fit_content = true
 scroll_active = false
+
+[node name="SoundQueue" type="Node3D" parent="."]
+script = ExtResource("3_1jge1")
+AudioStream = SubResource("AudioStreamRandomizer_pwfu8")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SoundQueue"]
+volume_db = 10.091
+max_polyphony = 2
+
+[connection signal="PlayFootstepSound" from="." to="SoundQueue" method="PlaySound"]
