@@ -23,7 +23,8 @@ public partial class Player : GroundCharacter
 	[Export] private Vector3 maxShakeRotation;
 	private float cameraShake;
 	private float time;
-	private Vector3 cameraTargetRotation, shakeInitialRotation, oldPosition;
+	private Vector3 cameraTargetRotation, shakeInitialRotation, viewmodelInitialPosition, oldPosition;
+	private Vector2 mouseInput;
 
 	[ExportSubgroup("Viewmodel")]
 	[Export] private Node3D viewmodel;
@@ -47,7 +48,13 @@ public partial class Player : GroundCharacter
 	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		PlayerCamera.MakeCurrent();
+
 		shakeInitialRotation = PlayerCamera.RotationDegrees;
+		viewmodelInitialPosition = viewmodel.Position;
+
+		// We disabling that to fix "jumping" values at low framerate for example in Lerp function
+		Input.UseAccumulatedInput = false;
+
 		AddToGroup("Player");
 	}
 
@@ -63,6 +70,8 @@ public partial class Player : GroundCharacter
 			InputEventMouseMotion mouseMotionEvent = @event as InputEventMouseMotion;
 			cameraTargetRotation.X -= mouseMotionEvent.Relative.Y * Sensitivity;
 			cameraTargetRotation.Y -= mouseMotionEvent.Relative.X * Sensitivity;
+
+			mouseInput = -mouseMotionEvent.Relative;
 		}
 
 		if (@event.IsActionPressed("jump"))
@@ -150,7 +159,7 @@ public partial class Player : GroundCharacter
 		StartedProcessOnFloor = IsOnFloor();
 		MoveAndClimbStairs((float)delta, false);
 		ProcessCameraMovement(delta);
-		// ProcessViewmodel();
+		ProcessViewmodel();
 	}
 
 	#region Camera
@@ -198,10 +207,8 @@ public partial class Player : GroundCharacter
 			Vector2 offset;
 
 			offset.Y = Mathf.Sin(time * headbobTimer) * Mathf.Abs(Velocity.Length()) * headbobScale / 10f;
-			offset.X = Mathf.Cos(2f * time * headbobTimer) * Mathf.Abs(Velocity.Length()) * headbobScale / 40f;
 
 			cameraTargetRotation.Y += offset.Y;
-			cameraTargetRotation.X += offset.X;
 		}
 
 		ProcessCameraShake(delta);
@@ -252,46 +259,24 @@ public partial class Player : GroundCharacter
 	#region Viewmodel
 	private void ProcessViewmodel()
 	{
-		CalculateBob(0.75f, ref bobTimes.X, ref bobOffsets.X);
-		CalculateBob(1.5f, ref bobTimes.Y, ref bobOffsets.Y);
-		CalculateBob(1f, ref bobTimes.Z, ref bobOffsets.Z);
+		Vector3 offset = new()
+        {
+            Y = Mathf.Sin(time * headbobTimer) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
+            X = Mathf.Cos(time * headbobTimer / 2f) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
+        };
 
-		Vector3 viewmodelPosition = viewmodel.Position;
+        viewmodel.Position += offset;
+		viewmodel.Position = viewmodel.Position.Lerp(viewmodelInitialPosition, 0.125f);
 
-		viewmodelPosition.X -= bobOffsets.X * 0.33f;
-		viewmodelPosition.Y += bobOffsets.Y * 0.17f;
-		// viewmodelPosition.Z += bobOffsets.Z * 0.4f;
+		Vector3 viewmodelRotation = viewmodel.RotationDegrees;
 
-		viewmodelPosition.X -= bobOffsets.X;
+		viewmodelRotation.X = Mathf.Lerp(viewmodel.Rotation.X, mouseInput.Y * .9f, 0.125f);
+		viewmodelRotation.Y = Mathf.Lerp(viewmodel.Rotation.Y, mouseInput.X * .9f, 0.125f);
 
-		viewmodel.Position = viewmodelPosition;
-	}
+		viewmodel.RotationDegrees += viewmodelRotation;
 
-
-	public void CalculateBob(float freqMult, ref float bobTime, ref float bob)
-	{
-		if (!IsOnFloor()) return;
-		
-		float delta = (float)GetProcessDeltaTime();
-	
-		bobTime += delta * freqMult;
-		
-		float cycle = bobTime - (int)(bobTime / bobCycle) * bobCycle;
-		cycle /= bobCycle;
-
-		if (cycle < bobUp)
-		{
-			cycle = Mathf.Pi * cycle / bobUp;
-		}
-		else
-		{
-			cycle = Mathf.Pi + Mathf.Pi * (cycle - bobUp) / (1f - bobUp);
-		}
-
-		bob = Mathf.Sqrt(Velocity.X * Velocity.X + Velocity.Z * Velocity.Z) * bobAmount;
-		bob = bob * 0.3f + bob * 0.7f * Mathf.Sin(cycle);
-		GD.Print(bob + "|" + bobTime);
-		bob = Mathf.Clamp(bob, -7f, 4f);
+		viewmodel.RotationDegrees = viewmodel.RotationDegrees.Clamp(new Vector3(-6f, -6f, -6f), new Vector3(6f, 6f, 6f));
+		viewmodel.RotationDegrees = viewmodel.RotationDegrees.Lerp(Vector3.Zero, 0.125f);
 	}
 
 	#endregion
