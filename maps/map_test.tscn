@@ -221,6 +221,18 @@ material_override = ExtResource("1_qbkpu")
 size = Vector3(2, 1.6, 0.5)
 material = ExtResource("1_qbkpu")
 
+[node name="CSGBox3D7" type="CSGBox3D" parent="Map/NavigationRegion3D/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.5, 12.25)
+material_override = ExtResource("1_qbkpu")
+size = Vector3(4, 3, 0.5)
+material = ExtResource("1_qbkpu")
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="Map/NavigationRegion3D/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.05, 7.75)
+material_override = ExtResource("1_qbkpu")
+size = Vector3(1.5, 0.1, 1.5)
+material = ExtResource("1_qbkpu")
+
 [node name="CSGBox3D10" type="CSGBox3D" parent="Map/NavigationRegion3D/CSGCombiner3D"]
 transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 3.3, 0.1, 8.45)
 material_override = ExtResource("1_qbkpu")
@@ -298,7 +310,7 @@ omni_range = 0.973
 omni_attenuation = 0.659754
 
 [node name="RBPushTest" type="RigidBody3D" parent="Map/NavigationRegion3D/test_objs"]
-transform = Transform3D(0.123654, 0, -0.992326, 0, 1, 0, 0.992326, 0, 0.123654, -0.26871, 0.653083, 6.65528)
+transform = Transform3D(0.123654, 0, -0.992326, 0, 1, 0, 0.992326, 0, 0.123654, -6.96871, 0.653083, 8.55528)
 mass = 2.69
 physics_material_override = SubResource("PhysicsMaterial_icjm7")
 
@@ -310,7 +322,7 @@ material_override = ExtResource("6_fwhoe")
 mesh = SubResource("BoxMesh_kkcpk")
 
 [node name="RBPushTest2" type="RigidBody3D" parent="Map/NavigationRegion3D/test_objs"]
-transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, -0.26871, 1.65308, 6.65528)
+transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, -6.96871, 1.65308, 8.55528)
 mass = 3.05
 physics_material_override = SubResource("PhysicsMaterial_lwgu3")
 
@@ -337,12 +349,13 @@ process_mode = 4
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -15, 1, -7.1)
 
 [node name="PropPhysics" type="RigidBody3D" parent="."]
-transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, -4.62251, 0.55308, 6.13176)
+transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, -7.12251, 0.55308, 4.63176)
 mass = 2.0
 physics_material_override = SubResource("PhysicsMaterial_icjm7")
 script = ExtResource("12_dhpw0")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PropPhysics"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("BoxShape3D_q6enk")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PropPhysics"]

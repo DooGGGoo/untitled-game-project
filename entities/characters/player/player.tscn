@@ -58,7 +58,7 @@ CrouchAboveCheck = NodePath("CrouchAboveCheck")
 PlayerCamera = NodePath("Camera3D")
 Sensitivity = 0.2
 cameraRollAngle = 1.0
-headbobScale = 0.25
+headbobScale = 0.15
 cameraShakeReductionRate = 1.25
 noiseSpeed = 1250.0
 maxShakeRotation = Vector3(1.5, 1.5, 0.6)
@@ -70,6 +70,10 @@ InteractionCheck = NodePath("Camera3D/RayCast3D")
 GrabbedObjectPositionMarker = NodePath("Camera3D/RayCast3D/GrabbedObjectPosition")
 grabJoint = NodePath("Camera3D/RayCast3D/Generic6DOFJoint3D")
 grabStaticBody = NodePath("Camera3D/RayCast3D/GrabbedObjectPosition/GrabStaticBody")
+MovementAcceleration = 2.8
+MovementFriction = 6.0
+WalkSpeed = 3.35
+SprintSpeed = 5.3
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)

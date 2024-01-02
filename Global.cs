@@ -13,4 +13,6 @@ public sealed partial class Global : Node
     }
 
     public Level CurrentLevel;
+
+    public FastNoiseLite GlobalNoise = new();
 }
