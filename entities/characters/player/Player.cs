@@ -76,6 +76,7 @@ public partial class Player : GroundCharacter
 			cameraTargetRotation.X -= mouseMotionEvent.Relative.Y * Sensitivity;
 			cameraTargetRotation.Y -= mouseMotionEvent.Relative.X * Sensitivity;
 
+			mouseInput = Vector2.Zero;
 			mouseInput = -mouseMotionEvent.Relative;
 		}
 
@@ -254,7 +255,7 @@ public partial class Player : GroundCharacter
 	{
 		if (useSmoothing == true)
 		{
-			cameraTargetRotation = cameraTargetRotation.Slerp(angle, 0.5f * (float)GetProcessDeltaTime());
+			cameraTargetRotation = cameraTargetRotation.Slerp(cameraTargetRotation + angle, 0.25f);
 		}
 		else
 		{

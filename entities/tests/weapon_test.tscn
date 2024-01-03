@@ -1,10 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cpeptpsgeknxy"]
+[gd_scene load_steps=7 format=3 uid="uid://cpeptpsgeknxy"]
 
 [ext_resource type="Script" path="res://scripts/Weapon.cs" id="1_xbny8"]
 [ext_resource type="Script" path="res://scripts/WeaponData.cs" id="2_on6i7"]
 
 [sub_resource type="Curve" id="Curve_4p6nq"]
-_data = [Vector2(0, 0.802198), 0.0, 1.78249, 0, 0, Vector2(0.418367, 1), 0.0742705, 0.0742705, 0, 0, Vector2(1, 0.553114), -0.43807, 1.4, 0, 0]
+_data = [Vector2(0, 0.699634), 0.0, 2.48019, 0, 0, Vector2(0.221088, 0.904762), 0.0, 0.0, 0, 0, Vector2(1, 0.260073), -0.177028, 1.4, 0, 0]
 point_count = 3
 
 [sub_resource type="Resource" id="Resource_ngp6f"]
@@ -15,16 +15,22 @@ FireRate = 0.09
 ReloadTime = 1.0
 Type = 1
 RecoilCurve = SubResource("Curve_4p6nq")
-RecoilReturnRate = 0.43
-RecoilHarshness = 0.16
-RecoilAmount = Vector3(0.5, 0.05, 0.1)
-RecoilCurveSpeed = 0.16
-RecoilDecreaseSpeed = 0.4
-AimOffsetY = -0.07
-AimOffsetZ = -0.1
+RecoilForceUp = 0.4
+RecoilForceBack = 0.085
+RecoilDispersion = 0.29
+CameraRecoil = 0.25
+RecoilReturnRate = 0.46
+RecoilHarshness = 0.25
+RecoilCurveSpeed = 0.075
+RecoilDecreaseSpeed = 0.3
+AimOffsetY = -0.02
+AimOffsetZ = -0.085
 
 [sub_resource type="BoxMesh" id="BoxMesh_bea5n"]
-size = Vector3(0.1, 0.1, 0.3)
+size = Vector3(0.025, 0.025, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_j3k2e"]
+size = Vector3(0.02, 0.01, 0.01)
 
 [node name="weapon_test" type="Node3D" node_paths=PackedStringArray("RayCast")]
 script = ExtResource("1_xbny8")
@@ -34,6 +40,10 @@ RayCast = NodePath("RayCast3D")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
 mesh = SubResource("BoxMesh_bea5n")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0215809, 0, -0.1)
+mesh = SubResource("BoxMesh_j3k2e")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2)

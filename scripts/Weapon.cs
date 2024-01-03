@@ -156,18 +156,17 @@ public partial class Weapon : Node3D
     {
         recoilMagnitude = Mathf.Clamp(recoilMagnitude + amount, 0f, 1f);
 
-        Vector3 recoilDirection = new Vector3(
-            WeaponData.RecoilAmount.X * recoilCurveValue + (float)GD.RandRange(-WeaponData.RecoilAmount.X / 8f, WeaponData.RecoilAmount.X / 8f),
-            (float)GD.RandRange(-WeaponData.RecoilAmount.Y, WeaponData.RecoilAmount.Y),
-            (float)GD.RandRange(-WeaponData.RecoilAmount.Z, WeaponData.RecoilAmount.Z)
-            );
+        float recoilUp = WeaponData.RecoilForceUp * recoilCurveValue + (float)GD.RandRange(-WeaponData.RecoilForceUp / 8f, WeaponData.RecoilForceUp / 8f);
+        float recoilSide = (float)GD.RandRange(-WeaponData.RecoilDispersion, WeaponData.RecoilDispersion) * (1 - recoilCurveValue);
+
+        Vector3 recoilDirection = new(recoilUp, recoilSide, 0f);
 
         recoilTargetRotation += recoilDirection;
-        recoilTargetPosition.Z += recoilDirection.X * 0.125f;
+        recoilTargetPosition.Z += WeaponData.RecoilForceBack;
 
 
         Global.Instance().CurrentLevel.CurrentPlayer.AddCameraShake(0.1f);
-        Global.Instance().CurrentLevel.CurrentPlayer.ViewPunch(recoilDirection * recoilCurveValue * 2f);
+        Global.Instance().CurrentLevel.CurrentPlayer.ViewPunch(recoilDirection * 8f, true);
 
         GD.Print(recoilMagnitude, recoilCurveValue);
     }
