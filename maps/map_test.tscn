@@ -355,7 +355,6 @@ physics_material_override = SubResource("PhysicsMaterial_icjm7")
 script = ExtResource("12_dhpw0")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PropPhysics"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("BoxShape3D_q6enk")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PropPhysics"]

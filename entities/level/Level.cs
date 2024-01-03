@@ -7,6 +7,7 @@ public partial class Level : Node
 	[Export] public Node3D[] PlayerSpawn;
 	[Export(PropertyHint.File, "*.tscn")] public string PlayerScene = "res://entities/characters/player/player.tscn";
 	[Export(PropertyHint.File, "*.tscn")] public string ReturnToScene = "res://maps/map_test.tscn";
+	public Player CurrentPlayer;
 
 	[Signal] public delegate void PlayerSpawnedEventHandler(Player player);
 
@@ -14,7 +15,7 @@ public partial class Level : Node
 	{
 		Global.Instance().CurrentLevel = this;
 
-		SpawnPlayer();
+		CurrentPlayer = SpawnPlayer();
 
 		GD.Print(ReturnToScene);
 

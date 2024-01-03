@@ -12,6 +12,7 @@ public partial class Player : GroundCharacter
 	[ExportGroup("Camera")]
 	[Export] public Camera3D PlayerCamera;
 	[Export] public float Sensitivity = 0.25f;
+	[Export] public float CameraRotationLimit = 0.25f;
 	[Export] private float cameraRollAngle = .5f;
 	[Export] private float cameraRollSpeed = 3f;
 	[Export] public bool enableHeadbob = true;
@@ -253,7 +254,7 @@ public partial class Player : GroundCharacter
 	{
 		if (useSmoothing == true)
 		{
-			cameraTargetRotation = cameraTargetRotation.Lerp(angle, 0.5f * (float)GetProcessDeltaTime());
+			cameraTargetRotation = cameraTargetRotation.Slerp(angle, 0.5f * (float)GetProcessDeltaTime());
 		}
 		else
 		{

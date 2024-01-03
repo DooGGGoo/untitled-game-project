@@ -8,7 +8,8 @@ public partial class Weapon : Node3D
     [Export] public FireMode WeaponFireMode;
 
     private float recoilCurvePosition = 0f;
-    private Vector3 currentRotation, recoilTargetRotation;
+    private Vector3 currentRotation, currentPosition;
+    private Vector3 recoilTargetRotation, recoilTargetPosition; 
 
     public int CurrentAmmo;
     private float timeSinceLastShot;
@@ -128,9 +129,11 @@ public partial class Weapon : Node3D
         //
         // This is NOT the final value of the rotation, it's calculated value that rotation (currentRotation) will lerp to
         recoilTargetRotation = recoilTargetRotation.Lerp(Vector3.Zero, WeaponData.RecoilReturnRate);
+        recoilTargetPosition = recoilTargetPosition.Lerp(Vector3.Zero, WeaponData.RecoilReturnRate);
 
         // Apply recoil to final rotation
-        currentRotation = currentRotation.Lerp(recoilTargetRotation, WeaponData.RecoilHarshness);
+        currentRotation = currentRotation.Slerp(recoilTargetRotation, WeaponData.RecoilHarshness);
+        currentPosition = currentPosition.Lerp(recoilTargetPosition, WeaponData.RecoilHarshness);
 
         Rotation = currentRotation;
     }
@@ -139,11 +142,19 @@ public partial class Weapon : Node3D
     {
         recoilMagnitude = Mathf.Clamp(recoilMagnitude + amount, 0f, 1f);
 
-        recoilTargetRotation += new Vector3(
-            WeaponData.RecoilAmount.X  * recoilCurveValue + (float)GD.RandRange(-WeaponData.RecoilAmount.X / 8f, WeaponData.RecoilAmount.X / 8f),
+        Vector3 recoilDirection = new Vector3(
+            WeaponData.RecoilAmount.X * recoilCurveValue + (float)GD.RandRange(-WeaponData.RecoilAmount.X / 8f, WeaponData.RecoilAmount.X / 8f),
             (float)GD.RandRange(-WeaponData.RecoilAmount.Y, WeaponData.RecoilAmount.Y),
             (float)GD.RandRange(-WeaponData.RecoilAmount.Z, WeaponData.RecoilAmount.Z)
-        );
+            );
+
+        recoilTargetRotation += recoilDirection;
+        recoilTargetPosition += recoilDirection / 2f;
+
+
+        Global.Instance().CurrentLevel.CurrentPlayer.AddCameraShake(0.09f);
+        Global.Instance().CurrentLevel.CurrentPlayer.ViewPunch(recoilDirection * recoilCurveValue);
+
         GD.Print(recoilMagnitude, recoilCurveValue);
     }
 
