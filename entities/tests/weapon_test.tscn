@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/WeaponData.cs" id="2_on6i7"]
 
 [sub_resource type="Curve" id="Curve_4p6nq"]
-_data = [Vector2(0, 0.684982), 0.0, 2.37037, 0, 0, Vector2(0.310897, 0.96337), 0.0571429, 0.0571429, 0, 0, Vector2(1, 0.377289), 0.0862537, 1.4, 0, 0]
+_data = [Vector2(0, 0.802198), 0.0, 1.78249, 0, 0, Vector2(0.418367, 1), 0.0742705, 0.0742705, 0, 0, Vector2(1, 0.553114), -0.43807, 1.4, 0, 0]
 point_count = 3
 
 [sub_resource type="Resource" id="Resource_ngp6f"]
@@ -13,13 +13,15 @@ Damage = 5
 MaxAmmo = 1000
 FireRate = 0.09
 ReloadTime = 1.0
-RecoilCurve = SubResource("Curve_4p6nq")
-RecoilReturnRate = 0.39
-RecoilHarshness = 0.2
-RecoilAmount = Vector3(0.95, 0.15, 0.1)
-RecoilCurveSpeed = 0.2
-RecoilDecreaseSpeed = 0.4
 Type = 1
+RecoilCurve = SubResource("Curve_4p6nq")
+RecoilReturnRate = 0.43
+RecoilHarshness = 0.16
+RecoilAmount = Vector3(0.5, 0.05, 0.1)
+RecoilCurveSpeed = 0.16
+RecoilDecreaseSpeed = 0.4
+AimOffsetY = -0.07
+AimOffsetZ = -0.1
 
 [sub_resource type="BoxMesh" id="BoxMesh_bea5n"]
 size = Vector3(0.1, 0.1, 0.3)
