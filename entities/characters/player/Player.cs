@@ -10,29 +10,7 @@ public partial class Player : GroundCharacter
 	private Vector3 wishDirRaw;
 
 	[ExportGroup("Camera")]
-	[Export] public Camera3D PlayerCamera;
-	[Export] public float Sensitivity = 0.25f;
-	[Export] public float CameraRotationLimit = 0.25f;
-	[Export] private float cameraRollAngle = .5f;
-	[Export] private float cameraRollSpeed = 3f;
-	[Export] public bool enableHeadbob = true;
-	[Export] private float headbobTimer = 10f;  // Speed
-	[Export] private float headbobScale = 0.1f; // Magnitude
-	[Export] private float cameraShakeReductionRate = 1f;
-	[Export] private FastNoiseLite noise = new();
-	[Export] private float noiseSpeed = 50f;
-	[Export] private Vector3 maxShakeRotation;
-	private float cameraShake;
-	private float time;
-	private Vector3 cameraTargetRotation, shakeInitialRotation, viewmodelInitialPosition, oldPosition;
-	private Vector2 mouseInput;
-
-	[ExportSubgroup("Viewmodel")]
-	[Export] private Node3D viewmodel;
-	[Export] private float bobCycle;
-	[Export] private float bobUp;
-	[Export] private float bobAmount;
-	private Vector3 bobTimes, bobOffsets;
+	[Export] public View PlayerView;
 
 	[ExportGroup("Object interactions")]
 	[Export] private RayCast3D InteractionCheck;
@@ -40,25 +18,20 @@ public partial class Player : GroundCharacter
 	[Export] private Generic6DofJoint3D grabJoint;
 	[Export] private StaticBody3D grabStaticBody;
 	private const float grabRotationPower = 0.5f;
-	private bool grabMouseLock;
+	public bool GrabMouseLock;
 	private RigidBody3D grabbedObject;
 
 	[ExportGroup("Sounds")]
 	private float footstepsTimer;
 	private bool footstepCanPlay;
 
+	private float time;
+
 	[Signal] public delegate void AttackPrimaryEventHandler(); 
 
 	public override void _Ready()
 	{
-		Input.MouseMode = Input.MouseModeEnum.Captured;
-		PlayerCamera.MakeCurrent();
 
-		shakeInitialRotation = PlayerCamera.RotationDegrees;
-		viewmodelInitialPosition = viewmodel.Position;
-
-		// We disabling that to fix "jumping" values at low framerate for example in Lerp function
-		Input.UseAccumulatedInput = false;
 
 		AddToGroup("Player");
 	}
@@ -68,16 +41,6 @@ public partial class Player : GroundCharacter
 		if (@event.IsActionPressed("use"))
 		{
 			InteractWithObject();
-		}
-
-		if (@event is InputEventMouseMotion && !grabMouseLock)
-		{
-			InputEventMouseMotion mouseMotionEvent = @event as InputEventMouseMotion;
-			cameraTargetRotation.X -= mouseMotionEvent.Relative.Y * Sensitivity;
-			cameraTargetRotation.Y -= mouseMotionEvent.Relative.X * Sensitivity;
-
-			mouseInput = Vector2.Zero;
-			mouseInput = -mouseMotionEvent.Relative;
 		}
 
 		if (@event.IsActionPressed("jump"))
@@ -90,11 +53,6 @@ public partial class Player : GroundCharacter
 			isNoclip = !isNoclip;
 			StandingCollisionShape.Disabled = isNoclip;
 			CrouchingCollisionShape.Disabled = isNoclip;
-		}
-
-		if (@event.IsAction("debug_1"))
-		{
-			AddCameraShake(0.5f);
 		}
 	
 		if (Input.IsActionJustPressed("use"))
@@ -113,7 +71,7 @@ public partial class Player : GroundCharacter
 		{
 			if (grabbedObject != null)
 			{
-				grabMouseLock = true;
+				GrabMouseLock = true;
 				RotateObject(@event);
 			}
 			else
@@ -124,7 +82,7 @@ public partial class Player : GroundCharacter
 
 		if (Input.IsActionJustReleased("left_click"))
 		{
-			grabMouseLock = false;
+			GrabMouseLock = false;
 		}
 
 		if (Input.IsActionJustPressed("right_click"))
@@ -145,7 +103,7 @@ public partial class Player : GroundCharacter
 		footstepsTimer += (float)delta * Velocity.Length() * (IsOnFloor() ? 1 : 0f);
 
 		Vector2 inputDir = Input.GetVector("left", "right", "forward", "backward");
-		wishDirRaw = (PlayerCamera.GlobalTransform.Basis.X * inputDir.X + -PlayerCamera.GlobalTransform.Basis.Z * -inputDir.Y).Normalized();
+		wishDirRaw = (PlayerView.GlobalTransform.Basis.X * inputDir.X + -PlayerView.GlobalTransform.Basis.Z * -inputDir.Y).Normalized();
 		wishDir = (Transform.Basis * new Vector3(wishDirRaw.X, 0, wishDirRaw.Z)).Normalized();
 
 		if (isNoclip == true)
@@ -158,140 +116,13 @@ public partial class Player : GroundCharacter
 		}
 
 		ProcessCrouchingAndSprint(delta);
-		
-		oldPosition = PlayerCamera.GlobalPosition;
 
 		ProcessGrabbedObject();
 		PushRigidBodies(delta);
 		StartedProcessOnFloor = IsOnFloor();
 		MoveAndClimbStairs((float)delta, false);
-		ProcessCameraMovement(delta);
-		ProcessViewmodel();
 		CalculateFootsteps();
 	}
-
-	#region Camera
-	private void ProcessCameraMovement(double delta)
-	{
-		// Smooth camera when moving up stairs
-		if (IsOnFloor() && PlayerCamera.GlobalPosition.Y - oldPosition.Y > 0)
-		{
-			float stepTime = (float)delta;
-
-			oldPosition.Y += stepTime * 0.5f;
-
-			if (oldPosition.Y > PlayerCamera.GlobalPosition.Y)
-				oldPosition.Y = PlayerCamera.GlobalPosition.Y;
-
-			if (PlayerCamera.GlobalPosition.Y - oldPosition.Y > 0.14f)
-				oldPosition.Y = PlayerCamera.GlobalPosition.Y - 0.14f;
-			
-			Vector3 pos = PlayerCamera.GlobalPosition;
-			pos.Y += oldPosition.Y - PlayerCamera.GlobalPosition.Y;
-			PlayerCamera.GlobalPosition = pos;
-		}
-		else
-			oldPosition.Y = PlayerCamera.GlobalPosition.Y;
-
-
-		// Camera roll
-		float sign, side, angle;
-
-		side = Velocity.Dot(-PlayerCamera.GlobalBasis.X);
-		sign = Mathf.Sign(side);
-		side = Mathf.Abs(side);
-		angle = cameraRollAngle;
-
-		if (side < cameraRollSpeed)
-			side = side * angle / cameraRollSpeed;
-		else
-			side = angle;
-
-		float cameraZRotation = side * sign;
-
-		// Camera bob
-		if (enableHeadbob == true && IsOnFloor())
-		{
-			Vector2 offset;
-
-			offset.Y = Mathf.Sin(time * headbobTimer) * Mathf.Abs(Velocity.Length()) * headbobScale / 10f;
-
-			cameraTargetRotation.Y += offset.Y;
-		}
-
-		ProcessCameraShake(delta);
-
-		// Apply all rotation changes
-		cameraTargetRotation.X = Mathf.Clamp(cameraTargetRotation.X, -89.9f, 89.9f);
-		PlayerCamera.RotationDegrees = new Vector3(cameraTargetRotation.X, cameraTargetRotation.Y, cameraZRotation);
-	}
-
-	private void ProcessCameraShake(double delta)
-	{
-		cameraShake = Mathf.Max(cameraShake - (float)delta * cameraShakeReductionRate, 0f);
-
-		cameraTargetRotation.X += shakeInitialRotation.X + maxShakeRotation.X * GetCameraShakeIntensity() * GetNoiseFromSeed(0);
-		cameraTargetRotation.Y += shakeInitialRotation.Y + maxShakeRotation.Y * GetCameraShakeIntensity() * GetNoiseFromSeed(1);
-		cameraTargetRotation.Z += shakeInitialRotation.Z + maxShakeRotation.Z * GetCameraShakeIntensity() * GetNoiseFromSeed(2);
-	}
-
-	public void AddCameraShake(float amount)
-	{
-		cameraShake = Mathf.Clamp(cameraShake + amount, 0f, 1f);
-	}
-
-	private float GetCameraShakeIntensity()
-	{
-		return cameraShake * cameraShake;
-	}
-
-	private float GetNoiseFromSeed(int seed)
-	{
-		noise.Seed = seed;
-		return noise.GetNoise1D(time * noiseSpeed);
-	}
-
-	public void ViewPunch(Vector3 angle, bool? useSmoothing = false)
-	{
-		if (useSmoothing == true)
-		{
-			cameraTargetRotation = cameraTargetRotation.Slerp(cameraTargetRotation + angle, 0.25f);
-		}
-		else
-		{
-			cameraTargetRotation += angle;
-		}
-	}
-
-	// TODO
-	#region Viewmodel
-	private void ProcessViewmodel()
-	{
-		Vector3 offset = new()
-        {
-            //Y = Mathf.Sin(time * headbobTimer) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
-            //X = Mathf.Cos(time * headbobTimer / 2f) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
-			Y = Mathf.Sin(time * headbobTimer) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
-			X = Mathf.Sin((time * headbobTimer +  Mathf.Pi * 3f) / -2f) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
-        };
-
-        viewmodel.Position += offset;
-		viewmodel.Position = viewmodel.Position.Lerp(viewmodelInitialPosition, 0.125f);
-
-		Vector3 viewmodelRotation = viewmodel.RotationDegrees;
-
-		viewmodelRotation.X = Mathf.Lerp(viewmodel.Rotation.X, mouseInput.Y * .9f, 0.125f);
-		viewmodelRotation.Y = Mathf.Lerp(viewmodel.Rotation.Y, mouseInput.X * .9f, 0.125f);
-
-		viewmodel.RotationDegrees += viewmodelRotation;
-
-		viewmodel.RotationDegrees = viewmodel.RotationDegrees.Clamp(new Vector3(-6f, -6f, -6f), new Vector3(6f, 6f, 6f));
-		viewmodel.RotationDegrees = viewmodel.RotationDegrees.Lerp(Vector3.Zero, 0.125f);
-	}
-
-	#endregion
-	
-	#endregion
 
 	#region Movement
 
@@ -300,7 +131,7 @@ public partial class Player : GroundCharacter
 		if (Input.IsActionPressed("crouch"))
 		{
 			currentSpeed = CrouchSpeed;
-			PlayerCamera.Position = new Vector3(PlayerCamera.Position.X, Mathf.Lerp(PlayerCamera.Position.Y, 1.5f + crouchDepth, 7f * (float)delta), PlayerCamera.Position.Z);
+			PlayerView.Position = new Vector3(PlayerView.Position.X, Mathf.Lerp(PlayerView.Position.Y, 1.5f + crouchDepth, 7f * (float)delta), PlayerView.Position.Z);
 			if (StandingCollisionShape.Disabled == false)
 			{
 				StandingCollisionShape.Disabled = true;
@@ -316,7 +147,7 @@ public partial class Player : GroundCharacter
 				CrouchingCollisionShape.Disabled = true;
 			}
 
-			PlayerCamera.Position = new Vector3(PlayerCamera.Position.X, Mathf.Lerp(PlayerCamera.Position.Y, 1.5f, 7f * (float)delta), PlayerCamera.Position.Z);
+			PlayerView.Position = new Vector3(PlayerView.Position.X, Mathf.Lerp(PlayerView.Position.Y, 1.5f, 7f * (float)delta), PlayerView.Position.Z);
 			
 			if (Input.IsActionPressed("sprint"))
 			{

@@ -165,8 +165,8 @@ public partial class Weapon : Node3D
         recoilTargetPosition.Z += WeaponData.RecoilForceBack;
 
 
-        Global.Instance().CurrentLevel.CurrentPlayer.AddCameraShake(0.1f);
-        Global.Instance().CurrentLevel.CurrentPlayer.ViewPunch(recoilDirection * 8f, true);
+        Global.Instance().CurrentLevel.CurrentPlayer.PlayerView.AddCameraShake(0.1f);
+        Global.Instance().CurrentLevel.CurrentPlayer.PlayerView.ViewPunch(recoilDirection * 8f, true);
 
         GD.Print(recoilMagnitude, recoilCurveValue);
     }
