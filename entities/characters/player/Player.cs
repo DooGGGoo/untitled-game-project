@@ -269,8 +269,10 @@ public partial class Player : GroundCharacter
 	{
 		Vector3 offset = new()
         {
-            Y = Mathf.Sin(time * headbobTimer) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
-            X = Mathf.Cos(time * headbobTimer / 2f) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
+            //Y = Mathf.Sin(time * headbobTimer) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
+            //X = Mathf.Cos(time * headbobTimer / 2f) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
+			Y = Mathf.Sin(time * headbobTimer) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
+			X = Mathf.Sin((time * headbobTimer +  Mathf.Pi * 3f) / -2f) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
         };
 
         viewmodel.Position += offset;

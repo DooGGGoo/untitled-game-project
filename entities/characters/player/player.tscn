@@ -70,8 +70,8 @@ InteractionCheck = NodePath("Camera3D/RayCast3D")
 GrabbedObjectPositionMarker = NodePath("Camera3D/RayCast3D/GrabbedObjectPosition")
 grabJoint = NodePath("Camera3D/RayCast3D/Generic6DOFJoint3D")
 grabStaticBody = NodePath("Camera3D/RayCast3D/GrabbedObjectPosition/GrabStaticBody")
-MovementAcceleration = 2.8
-MovementFriction = 6.0
+MovementAcceleration = 1.8
+MovementFriction = 5.64
 WalkSpeed = 3.35
 SprintSpeed = 5.3
 
