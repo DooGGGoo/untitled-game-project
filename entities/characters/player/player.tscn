@@ -66,9 +66,17 @@ MovementFriction = 5.64
 WalkSpeed = 3.35
 SprintSpeed = 5.3
 
-[node name="View" type="Node3D" parent="."]
+[node name="View" type="Node3D" parent="." node_paths=PackedStringArray("PlayerCamera", "viewmodel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 script = ExtResource("2_kipc3")
+PlayerCamera = NodePath("Camera3D")
+headbobScale = 0.15
+cameraShakeReductionRate = 1.25
+maxShakeRotation = Vector3(1.5, 1.5, 0.6)
+viewmodel = NodePath("Viewmodel")
+bobCycle = 0.8
+bobUp = 0.8
+bobAmount = 0.15
 
 [node name="Camera3D" type="Camera3D" parent="View"]
 fov = 80.0

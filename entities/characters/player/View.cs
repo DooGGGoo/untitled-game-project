@@ -39,10 +39,6 @@ public partial class View : Node3D
 
         // We disabling that to fix "jumping" values at low framerate for example in Lerp function
         Input.UseAccumulatedInput = false;
-
-        player = GetParent<Player>();
-        if (player is null)
-            throw new Exception("View is not a child of Player");
     }
 
     public override void _Input(InputEvent @event)
@@ -60,6 +56,12 @@ public partial class View : Node3D
 
     public override void _PhysicsProcess(double delta)
     {
+        if (player == null)
+        {
+            player = Global.Instance().CurrentLevel.CurrentPlayer;
+            return;
+        }
+        
         time += (float)delta;
 
         oldPosition = GlobalPosition;
@@ -133,7 +135,7 @@ public partial class View : Node3D
         {
             cameraTargetRotation = cameraTargetRotation.Lerp(Vector3.Zero, 0.125f);
         }
-        
+
         PlayerCamera.RotationDegrees = cameraTargetRotation;
         RotationDegrees = new Vector3(targetRotation.X, targetRotation.Y, cameraZRotation);
     }
