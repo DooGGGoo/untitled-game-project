@@ -25,6 +25,7 @@ public partial class Player : GroundCharacter
 	private float footstepsTimer;
 	private bool footstepCanPlay;
 
+	private Vector3 oldPosition;
 	private float time;
 
 	[Signal] public delegate void AttackPrimaryEventHandler(); 
@@ -117,11 +118,37 @@ public partial class Player : GroundCharacter
 
 		ProcessCrouchingAndSprint(delta);
 
+		oldPosition = PlayerView.GlobalPosition;
+
 		ProcessGrabbedObject();
 		PushRigidBodies(delta);
 		StartedProcessOnFloor = IsOnFloor();
 		MoveAndClimbStairs((float)delta, false);
+		SmoothCameraOnStairs(delta);
 		CalculateFootsteps();
+	}
+
+	private void SmoothCameraOnStairs(double delta)
+	{
+		// Smooth camera when moving up stairs
+		if (IsOnFloor() && PlayerView.GlobalPosition.Y - oldPosition.Y > 0)
+		{
+			float stepTime = (float)delta;
+
+			oldPosition.Y += stepTime * 0.5f;
+
+			if (oldPosition.Y > PlayerView.GlobalPosition.Y)
+				oldPosition.Y = PlayerView.GlobalPosition.Y;
+
+			if (PlayerView.GlobalPosition.Y - oldPosition.Y > 0.14f)
+				oldPosition.Y = PlayerView.GlobalPosition.Y - 0.14f;
+
+			Vector3 pos = PlayerView.GlobalPosition;
+			pos.Y += oldPosition.Y - PlayerView.GlobalPosition.Y;
+			PlayerView.GlobalPosition = pos;
+		}
+		else
+			oldPosition.Y = PlayerView.GlobalPosition.Y;
 	}
 
 	#region Movement

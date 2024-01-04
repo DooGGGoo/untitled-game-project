@@ -64,7 +64,7 @@ public partial class View : Node3D
 
         time += (float)delta;
 
-        oldPosition = GlobalPosition;
+
         ProcessCameraMovement(delta);
 		ProcessViewmodel();
     }
@@ -72,27 +72,6 @@ public partial class View : Node3D
     #region Camera
     private void ProcessCameraMovement(double delta)
     {
-        // Smooth camera when moving up stairs
-        if (player.IsOnFloor() && GlobalPosition.Y - oldPosition.Y > 0)
-        {
-            float stepTime = (float)delta;
-
-            oldPosition.Y += stepTime * 0.5f;
-
-            if (oldPosition.Y > GlobalPosition.Y)
-                oldPosition.Y = GlobalPosition.Y;
-
-            if (GlobalPosition.Y - oldPosition.Y > 0.14f)
-                oldPosition.Y = GlobalPosition.Y - 0.14f;
-
-            Vector3 pos = GlobalPosition;
-            pos.Y += oldPosition.Y - GlobalPosition.Y;
-            GlobalPosition = pos;
-        }
-        else
-            oldPosition.Y = GlobalPosition.Y;
-
-
         // Camera roll
         float sign, side, angle;
 
