@@ -17,9 +17,10 @@ public partial class View : Node3D
     [Export] private FastNoiseLite noise = new();
     [Export] private float noiseSpeed = 50f;
     [Export] private Vector3 maxShakeRotation;
+    [Export] public bool LockCameraRotation;
     private float cameraShake;
     private float time;
-    private Vector3 cameraTargetRotation, shakeInitialRotation, viewmodelInitialPosition, oldPosition;
+    private Vector3 targetRotation, cameraTargetRotation, shakeInitialRotation, viewmodelInitialPosition, oldPosition;
     private Vector2 mouseInput;
 
     [ExportSubgroup("Viewmodel")]
@@ -34,7 +35,6 @@ public partial class View : Node3D
         Input.MouseMode = Input.MouseModeEnum.Captured;
         PlayerCamera.MakeCurrent();
 
-        shakeInitialRotation = PlayerCamera.RotationDegrees;
         viewmodelInitialPosition = viewmodel.Position;
 
         // We disabling that to fix "jumping" values at low framerate for example in Lerp function
@@ -50,8 +50,8 @@ public partial class View : Node3D
         if (@event is InputEventMouseMotion && !player.GrabMouseLock)
         {
             InputEventMouseMotion mouseMotionEvent = @event as InputEventMouseMotion;
-            cameraTargetRotation.X -= mouseMotionEvent.Relative.Y * Sensitivity;
-            cameraTargetRotation.Y -= mouseMotionEvent.Relative.X * Sensitivity;
+            targetRotation.X -= mouseMotionEvent.Relative.Y * Sensitivity;
+            targetRotation.Y -= mouseMotionEvent.Relative.X * Sensitivity;
 
             mouseInput = Vector2.Zero;
             mouseInput = -mouseMotionEvent.Relative;
@@ -113,14 +113,29 @@ public partial class View : Node3D
 
             offset.Y = Mathf.Sin(time * headbobTimer) * Mathf.Abs(player.Velocity.Length()) * headbobScale / 10f;
 
-            cameraTargetRotation.Y += offset.Y;
+            targetRotation.Y += offset.Y;
         }
 
         ProcessCameraShake(delta);
 
         // Apply all rotation changes
-        cameraTargetRotation.X = Mathf.Clamp(cameraTargetRotation.X, -89.9f, 89.9f);
-        RotationDegrees = new Vector3(cameraTargetRotation.X, cameraTargetRotation.Y, cameraZRotation);
+        targetRotation.X = Mathf.Clamp(targetRotation.X, -89.9f, 89.9f);
+
+        // Just to be sure
+        PlayerCamera.GlobalRotation = new Vector3(
+            Mathf.Clamp(PlayerCamera.GlobalRotation.X, -89.9f, 89.9f), 
+            PlayerCamera.GlobalRotation.Y, 
+            PlayerCamera.GlobalRotation.Z
+        );
+
+        // Return to camera's initial rotation
+        if (!LockCameraRotation)
+        {
+            cameraTargetRotation = cameraTargetRotation.Lerp(Vector3.Zero, 0.125f);
+        }
+        
+        PlayerCamera.RotationDegrees = cameraTargetRotation;
+        RotationDegrees = new Vector3(targetRotation.X, targetRotation.Y, cameraZRotation);
     }
 
     private void ProcessCameraShake(double delta)
@@ -132,6 +147,7 @@ public partial class View : Node3D
         cameraTargetRotation.Z += shakeInitialRotation.Z + maxShakeRotation.Z * GetCameraShakeIntensity() * GetNoiseFromSeed(2);
     }
 
+    #region Shake
     public void AddCameraShake(float amount)
     {
         cameraShake = Mathf.Clamp(cameraShake + amount, 0f, 1f);
@@ -148,11 +164,13 @@ public partial class View : Node3D
         return noise.GetNoise1D(time * noiseSpeed);
     }
 
+    #endregion
+
     public void ViewPunch(Vector3 angle, bool? useSmoothing = false)
     {
         if (useSmoothing == true)
         {
-            cameraTargetRotation = cameraTargetRotation.Slerp(cameraTargetRotation + angle, 0.25f);
+            targetRotation = cameraTargetRotation.Slerp(targetRotation + angle, 0.25f);
         }
         else
         {

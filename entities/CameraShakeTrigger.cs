@@ -21,7 +21,7 @@ public partial class CameraShakeTrigger : Area3D
 
         if (OverlapsBody(player))
         {
-            player.AddCameraShake(ShakeAmount);
+            player.PlayerView.AddCameraShake(ShakeAmount);
         }
     }
 }

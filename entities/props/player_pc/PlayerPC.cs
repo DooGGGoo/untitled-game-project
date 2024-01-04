@@ -14,6 +14,7 @@ public partial class PlayerPC : StaticBody3D, IInteractable
 			if (PCCamera.Current)
 			{
 				PCCamera.Current = false;
+				player.PlayerView.LockCameraRotation = false;
 				player.ProcessMode = ProcessModeEnum.Inherit;
 				Input.MouseMode = Input.MouseModeEnum.Captured;
 			}
@@ -27,7 +28,8 @@ public partial class PlayerPC : StaticBody3D, IInteractable
 
 		this.player = player;
 
-		playerCamera = player.PlayerCamera;
+		playerCamera = player.PlayerView.PlayerCamera;
+		player.PlayerView.LockCameraRotation = true;
 		player.ProcessMode = ProcessModeEnum.Disabled;
 
 		Camera3D spinCam = (Camera3D)playerCamera.Duplicate();
