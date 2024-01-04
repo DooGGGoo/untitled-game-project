@@ -61,7 +61,7 @@ public partial class View : Node3D
             player = Global.Instance().CurrentLevel.CurrentPlayer;
             return;
         }
-        
+
         time += (float)delta;
 
         oldPosition = GlobalPosition;
@@ -133,7 +133,7 @@ public partial class View : Node3D
         // Return to camera's initial rotation
         if (!LockCameraRotation)
         {
-            cameraTargetRotation = cameraTargetRotation.Lerp(Vector3.Zero, 0.125f);
+            cameraTargetRotation = cameraTargetRotation.Lerp(Vector3.Zero, 0.15f);
         }
 
         PlayerCamera.RotationDegrees = cameraTargetRotation;
@@ -172,7 +172,7 @@ public partial class View : Node3D
     {
         if (useSmoothing == true)
         {
-            targetRotation = cameraTargetRotation.Slerp(targetRotation + angle, 0.25f);
+            cameraTargetRotation = cameraTargetRotation.Slerp(cameraTargetRotation + angle, 0.35f);
         }
         else
         {

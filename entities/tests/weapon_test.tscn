@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/WeaponData.cs" id="2_on6i7"]
 
 [sub_resource type="Curve" id="Curve_4p6nq"]
-_data = [Vector2(0, 0.699634), 0.0, 2.48019, 0, 0, Vector2(0.221088, 0.904762), 0.0, 0.0, 0, 0, Vector2(1, 0.260073), -0.177028, 1.4, 0, 0]
+_data = [Vector2(0, 0.304029), 0.0, 1.87771, 0, 0, Vector2(0.153061, 0.626374), 0.897436, 0.897436, 0, 0, Vector2(1, 0.758242), -0.242687, 1.4, 0, 0]
 point_count = 3
 
 [sub_resource type="Resource" id="Resource_ngp6f"]
@@ -15,12 +15,12 @@ FireRate = 0.09
 ReloadTime = 1.0
 Type = 1
 RecoilCurve = SubResource("Curve_4p6nq")
-RecoilForceUp = 0.4
-RecoilForceBack = 0.085
-RecoilDispersion = 0.29
-CameraRecoil = 0.25
-RecoilReturnRate = 0.46
-RecoilHarshness = 0.25
+RecoilForceUp = 0.57
+RecoilForceBack = 0.055
+RecoilDispersion = 0.345
+CameraRecoil = 5.6
+RecoilReturnRate = 0.47
+RecoilHarshness = 0.15
 RecoilCurveSpeed = 0.075
 RecoilDecreaseSpeed = 0.3
 AimOffsetY = -0.02
