@@ -28,7 +28,8 @@ public partial class Player : GroundCharacter
 	private Vector3 oldPosition;
 	private float time;
 
-	[Signal] public delegate void AttackPrimaryEventHandler(); 
+	[Signal] public delegate void AttackPrimaryEventHandler();
+	[Signal] public delegate void AddPlayerWeaponEventHandler(PackedScene weaponScene);
 
 	public override void _Ready()
 	{
@@ -149,6 +150,11 @@ public partial class Player : GroundCharacter
 		}
 		else
 			oldPosition.Y = PlayerView.GlobalPosition.Y;
+	}
+
+	public void AddWeapon(PackedScene weaponScene)
+	{
+		EmitSignal(SignalName.AddPlayerWeapon, weaponScene);
 	}
 
 	#region Movement

@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://entities/characters/player/Player.cs" id="1_xom2y"]
 [ext_resource type="Script" path="res://entities/characters/player/View.cs" id="2_kipc3"]
-[ext_resource type="PackedScene" uid="uid://cpeptpsgeknxy" path="res://entities/tests/weapon_test.tscn" id="2_x13si"]
 [ext_resource type="Script" path="res://entities/audio/SoundQueue.cs" id="3_1jge1"]
+[ext_resource type="Script" path="res://entities/characters/WeaponInventory.cs" id="3_cfqmk"]
 [ext_resource type="AudioStream" uid="uid://d4m830oi76afq" path="res://assets/audio/footsteps/footstep_concrete_01.wav" id="4_6mr4j"]
 [ext_resource type="AudioStream" uid="uid://bl22easo48uxl" path="res://assets/audio/footsteps/footstep_concrete_02.wav" id="5_m758e"]
 [ext_resource type="AudioStream" uid="uid://dc0r6h0wpsyrg" path="res://assets/audio/footsteps/footstep_concrete_03.wav" id="6_ju16h"]
@@ -72,6 +72,7 @@ script = ExtResource("2_kipc3")
 PlayerCamera = NodePath("Camera3D")
 Sensitivity = 0.2
 cameraRollAngle = 0.75
+headbobTimer = 7.0
 headbobScale = 0.15
 cameraShakeReductionRate = 1.35
 noiseSpeed = 15000.0
@@ -88,8 +89,7 @@ near = 0.001
 [node name="Viewmodel" type="Marker3D" parent="View"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.095, -0.11, -0.12)
-
-[node name="weapon_test" parent="View/Viewmodel" instance=ExtResource("2_x13si")]
+script = ExtResource("3_cfqmk")
 
 [node name="RayCast3D" type="RayCast3D" parent="View"]
 target_position = Vector3(0, 0, -1.8)
@@ -189,4 +189,5 @@ AudioStream = SubResource("AudioStreamRandomizer_pwfu8")
 volume_db = 10.091
 max_polyphony = 2
 
+[connection signal="AddPlayerWeapon" from="." to="View/Viewmodel" method="AddWeapon"]
 [connection signal="PlayFootstepSound" from="." to="SoundQueue" method="PlaySound"]

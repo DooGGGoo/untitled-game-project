@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=41 format=3 uid="uid://dmv7hq177kus8"]
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_dwwee"]
 [ext_resource type="Texture2D" uid="uid://bd2datw4a75dw" path="res://assets/materials/textures/dev_1.png" id="1_gxu3p"]
@@ -9,6 +9,9 @@
 [ext_resource type="Material" uid="uid://byy0tf2266p3d" path="res://assets/materials/jerma.tres" id="6_fwhoe"]
 [ext_resource type="PackedScene" uid="uid://df317tod58c0w" path="res://entities/characters/enemy/scp/SCP173.tscn" id="8_rae2q"]
 [ext_resource type="PackedScene" uid="uid://dx6nwpc4tly55" path="res://entities/props/player_pc/PlayerPC.tscn" id="9_jxfj6"]
+[ext_resource type="Script" path="res://entities/level/WeaponSpawner.cs" id="10_ntu0d"]
+[ext_resource type="PackedScene" uid="uid://cpeptpsgeknxy" path="res://entities/tests/weapon_test.tscn" id="11_6liem"]
+[ext_resource type="FontFile" uid="uid://d3lj676xv236i" path="res://assets/fonts/Fixedsys Excelsior 3.01 Regular.ttf" id="11_f872t"]
 [ext_resource type="PackedScene" uid="uid://vlqgl00phyvr" path="res://entities/level/LevelObjective.tscn" id="11_luee5"]
 [ext_resource type="Script" path="res://entities/props/PhysicsProp.cs" id="12_dhpw0"]
 [ext_resource type="Script" path="res://entities/level/Indicator.cs" id="12_xatvq"]
@@ -91,6 +94,23 @@ bounce = 0.1
 [sub_resource type="SphereMesh" id="SphereMesh_dxk2x"]
 radial_segments = 8
 rings = 4
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ij7w8"]
+size = Vector3(1, 0.25, 0.75)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8eccs"]
+load_path = "res://.godot/imported/dev_1.png-bd0d19e05387360765cf4c562407257e.bptc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o8ks2"]
+albedo_color = Color(1, 0.12549, 0.0862745, 1)
+albedo_texture = SubResource("CompressedTexture2D_8eccs")
+metallic_specular = 0.0
+uv1_triplanar = true
+texture_filter = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_7s1je"]
+material = SubResource("StandardMaterial3D_o8ks2")
+size = Vector3(1, 0.25, 0.75)
 
 [sub_resource type="Resource" id="Resource_xfxk3"]
 script = ExtResource("14_fabfa")
@@ -339,6 +359,24 @@ shape = SubResource("SphereShape3D_0sjrc")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest2"]
 material_override = ExtResource("1_qbkpu")
 mesh = SubResource("SphereMesh_dxk2x")
+
+[node name="WeaponSpawner" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, 7.5)
+script = ExtResource("10_ntu0d")
+WeaponScene = ExtResource("11_6liem")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+shape = SubResource("BoxShape3D_ij7w8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+mesh = SubResource("BoxMesh_7s1je")
+
+[node name="Label3D" type="Label3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner"]
+transform = Transform3D(-1, 0, -8.74228e-08, -7.57103e-08, 0.5, 0.866025, 4.37114e-08, 0.866025, -0.5, 0, 0.2, 0)
+text = "Test weapon"
+font = ExtResource("11_f872t")
 
 [node name="Enemies" type="Node" parent="."]
 

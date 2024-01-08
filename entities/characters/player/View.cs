@@ -43,6 +43,11 @@ public partial class View : Node3D
 
     public override void _Input(InputEvent @event)
     {
+        if (player == null)
+        {
+            return;
+        }
+
         if (@event is InputEventMouseMotion && !player.GrabMouseLock)
         {
             InputEventMouseMotion mouseMotionEvent = @event as InputEventMouseMotion;

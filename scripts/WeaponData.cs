@@ -7,7 +7,7 @@ public partial class WeaponData : Resource
     [Export] public int MaxAmmo = 10;
     [Export] public float FireRate = 0.5f;
     [Export] public float ReloadTime = 1.0f;
-    [Export] public WeaponType Type = WeaponType.Primary;
+    [Export] public WeaponType _WeaponType = WeaponType.Primary;
     [ExportGroup("Recoil")]
     [Export] public Curve RecoilCurve;
     [Export] public float RecoilForceUp = 0.4f;
@@ -25,6 +25,7 @@ public partial class WeaponData : Resource
     {
         Melee,
         Primary,
-        Secondary
+        Secondary,
+        Other
     }
 }
