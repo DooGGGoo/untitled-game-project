@@ -37,12 +37,13 @@ public partial class View : Node3D
 
         viewmodelInitialPosition = viewmodel.Position;
 
-        // We disabling that to fix "jumping" values at low framerate for example in Lerp function
+        // We disabling that to fix "jumping" values that dependant on fps at low framerate; for example in Lerp function
         Input.UseAccumulatedInput = false;
     }
 
     public override void _Input(InputEvent @event)
     {
+        // TODO: Fix this shit
         if (player == null)
         {
             return;
@@ -61,6 +62,7 @@ public partial class View : Node3D
 
     public override void _PhysicsProcess(double delta)
     {
+    // TODO: Fix this shit
         if (player == null)
         {
             player = Global.Instance().CurrentLevel.CurrentPlayer;

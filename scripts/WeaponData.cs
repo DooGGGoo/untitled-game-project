@@ -23,9 +23,8 @@ public partial class WeaponData : Resource
 
     public enum WeaponType
     {
-        Melee,
         Primary,
         Secondary,
-        Other
+        Special
     }
 }

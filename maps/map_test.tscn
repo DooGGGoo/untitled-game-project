@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=40 format=3 uid="uid://dmv7hq177kus8"]
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_dwwee"]
 [ext_resource type="Texture2D" uid="uid://bd2datw4a75dw" path="res://assets/materials/textures/dev_1.png" id="1_gxu3p"]
@@ -10,11 +10,13 @@
 [ext_resource type="PackedScene" uid="uid://df317tod58c0w" path="res://entities/characters/enemy/scp/SCP173.tscn" id="8_rae2q"]
 [ext_resource type="PackedScene" uid="uid://dx6nwpc4tly55" path="res://entities/props/player_pc/PlayerPC.tscn" id="9_jxfj6"]
 [ext_resource type="Script" path="res://entities/level/WeaponSpawner.cs" id="10_ntu0d"]
-[ext_resource type="PackedScene" uid="uid://cpeptpsgeknxy" path="res://entities/tests/weapon_test.tscn" id="11_6liem"]
+[ext_resource type="PackedScene" uid="uid://cpeptpsgeknxy" path="res://entities/tests/weapons/weapon_test.tscn" id="11_6liem"]
 [ext_resource type="FontFile" uid="uid://d3lj676xv236i" path="res://assets/fonts/Fixedsys Excelsior 3.01 Regular.ttf" id="11_f872t"]
 [ext_resource type="PackedScene" uid="uid://vlqgl00phyvr" path="res://entities/level/LevelObjective.tscn" id="11_luee5"]
 [ext_resource type="Script" path="res://entities/props/PhysicsProp.cs" id="12_dhpw0"]
+[ext_resource type="PackedScene" uid="uid://bxadjnscr4b86" path="res://entities/tests/weapons/weapon_test_2.tscn" id="12_tl38v"]
 [ext_resource type="Script" path="res://entities/level/Indicator.cs" id="12_xatvq"]
+[ext_resource type="PackedScene" uid="uid://xximjq7gsnrp" path="res://entities/tests/weapons/weapon_test_secondary.tscn" id="13_vpdia"]
 [ext_resource type="Script" path="res://entities/props/BreakableProp.cs" id="13_xgew7"]
 [ext_resource type="Script" path="res://entities/props/PropData.cs" id="14_fabfa"]
 [ext_resource type="Script" path="res://entities/CameraShakeTrigger.cs" id="16_uk6tj"]
@@ -74,27 +76,6 @@ size = Vector3(0.5, 0.5, 0.5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_2b7y2"]
 size = Vector3(0.5, 0.5, 0.5)
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_icjm7"]
-friction = 0.85
-rough = true
-bounce = 0.1
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_q6enk"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_kkcpk"]
-material = ExtResource("1_qbkpu")
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_lwgu3"]
-friction = 0.85
-rough = true
-bounce = 0.1
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_0sjrc"]
-
-[sub_resource type="SphereMesh" id="SphereMesh_dxk2x"]
-radial_segments = 8
-rings = 4
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_ij7w8"]
 size = Vector3(1, 0.25, 0.75)
 
@@ -111,6 +92,16 @@ texture_filter = 2
 [sub_resource type="BoxMesh" id="BoxMesh_7s1je"]
 material = SubResource("StandardMaterial3D_o8ks2")
 size = Vector3(1, 0.25, 0.75)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_icjm7"]
+friction = 0.85
+rough = true
+bounce = 0.1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q6enk"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_kkcpk"]
+material = ExtResource("1_qbkpu")
 
 [sub_resource type="Resource" id="Resource_xfxk3"]
 script = ExtResource("14_fabfa")
@@ -307,9 +298,6 @@ script = ExtResource("12_xatvq")
 [node name="PlayerPC" parent="Map/NavigationRegion3D" instance=ExtResource("9_jxfj6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 1, -2.6)
 
-[node name="SpotLight3D" type="SpotLight3D" parent="Map/NavigationRegion3D/PlayerPC"]
-transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -0.5, 0.3, 1.5)
-
 [node name="test_objs" type="Node" parent="Map/NavigationRegion3D"]
 
 [node name="InteractableTest" parent="Map/NavigationRegion3D/test_objs" instance=ExtResource("3_igorc")]
@@ -335,31 +323,6 @@ light_specular = 0.69
 omni_range = 0.973
 omni_attenuation = 0.659754
 
-[node name="RBPushTest" type="RigidBody3D" parent="Map/NavigationRegion3D/test_objs"]
-transform = Transform3D(0.123654, 0, -0.992326, 0, 1, 0, 0.992326, 0, 0.123654, -6.96871, 0.653083, 8.55528)
-mass = 2.69
-physics_material_override = SubResource("PhysicsMaterial_icjm7")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest"]
-shape = SubResource("BoxShape3D_q6enk")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest"]
-material_override = ExtResource("6_fwhoe")
-mesh = SubResource("BoxMesh_kkcpk")
-
-[node name="RBPushTest2" type="RigidBody3D" parent="Map/NavigationRegion3D/test_objs"]
-transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, -6.96871, 1.65308, 8.55528)
-mass = 3.05
-physics_material_override = SubResource("PhysicsMaterial_lwgu3")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest2"]
-transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
-shape = SubResource("SphereShape3D_0sjrc")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/RBPushTest2"]
-material_override = ExtResource("1_qbkpu")
-mesh = SubResource("SphereMesh_dxk2x")
-
 [node name="WeaponSpawner" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, 7.5)
 script = ExtResource("10_ntu0d")
@@ -375,8 +338,47 @@ mesh = SubResource("BoxMesh_7s1je")
 
 [node name="Label3D" type="Label3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner"]
 transform = Transform3D(-1, 0, -8.74228e-08, -7.57103e-08, 0.5, 0.866025, 4.37114e-08, 0.866025, -0.5, 0, 0.2, 0)
-text = "Test weapon"
+text = "weapon_test"
 font = ExtResource("11_f872t")
+font_size = 25
+
+[node name="WeaponSpawner2" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.3, 0.5, 7.5)
+script = ExtResource("10_ntu0d")
+WeaponScene = ExtResource("12_tl38v")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner2"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+shape = SubResource("BoxShape3D_ij7w8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner2"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+mesh = SubResource("BoxMesh_7s1je")
+
+[node name="Label3D" type="Label3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner2"]
+transform = Transform3D(-1, 0, -8.74228e-08, -7.57103e-08, 0.5, 0.866025, 4.37114e-08, 0.866025, -0.5, 0, 0.2, 0)
+text = "weapon_test_2"
+font = ExtResource("11_f872t")
+font_size = 25
+
+[node name="WeaponSpawner3" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 0.5, 7.5)
+script = ExtResource("10_ntu0d")
+WeaponScene = ExtResource("13_vpdia")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner3"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+shape = SubResource("BoxShape3D_ij7w8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner3"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+mesh = SubResource("BoxMesh_7s1je")
+
+[node name="Label3D" type="Label3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner3"]
+transform = Transform3D(-1, 0, -8.74228e-08, -7.57103e-08, 0.5, 0.866025, 4.37114e-08, 0.866025, -0.5, 0, 0.2, 0)
+text = "weapon_test_seconary"
+font = ExtResource("11_f872t")
+font_size = 25
 
 [node name="Enemies" type="Node" parent="."]
 
@@ -393,7 +395,7 @@ process_mode = 4
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -15, 1, -7.1)
 
 [node name="PropPhysics" type="RigidBody3D" parent="."]
-transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, -7.12251, 0.55308, 4.63176)
+transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, 4.87749, 0.55308, 11.0318)
 mass = 2.0
 physics_material_override = SubResource("PhysicsMaterial_icjm7")
 script = ExtResource("12_dhpw0")
@@ -406,7 +408,7 @@ material_override = ExtResource("6_fwhoe")
 mesh = SubResource("BoxMesh_kkcpk")
 
 [node name="BreakableProp" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 0.6, 6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, 0.6, 12.4)
 mass = 2.0
 script = ExtResource("13_xgew7")
 MaxHealth = 25
@@ -422,7 +424,7 @@ mesh = SubResource("BoxMesh_kkcpk")
 [node name="Spawn" type="Node3D" parent="."]
 
 [node name="CameraShakeTrigger" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.4, 0.3, 6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.2, 0.3, 7.2)
 script = ExtResource("16_uk6tj")
 AlwaysProcess = true
 

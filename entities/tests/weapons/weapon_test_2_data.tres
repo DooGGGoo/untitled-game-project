@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3 uid="uid://csek58ds865xg"]
+
+[ext_resource type="Script" path="res://scripts/WeaponData.cs" id="1_rwy63"]
+
+[sub_resource type="Curve" id="Curve_r22f8"]
+_data = [Vector2(0, 0.304029), 0.0, 1.49451, 0, 0, Vector2(0.12585, 0.758242), 1.17483, 1.17483, 0, 0, Vector2(0.989796, 0.978022), 0.365059, 1.4, 0, 0]
+point_count = 3
+
+[resource]
+script = ExtResource("1_rwy63")
+Damage = 5
+MaxAmmo = 1000
+FireRate = 0.25
+ReloadTime = 1.0
+_WeaponType = 1
+RecoilCurve = SubResource("Curve_r22f8")
+RecoilForceUp = 0.638
+RecoilForceBack = 0.3
+RecoilDispersion = 0.435
+CameraRecoil = 5.6
+RecoilReturnRate = 0.33
+RecoilHarshness = 0.31
+RecoilCurveSpeed = 0.11
+RecoilDecreaseSpeed = 0.25
+AimOffsetY = -0.02
+AimOffsetZ = -0.085
