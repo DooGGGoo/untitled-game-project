@@ -15,7 +15,7 @@ public partial class WeaponInventory : Node3D
     {
         if (weaponScene == null)
         {
-            GD.Print("WeaponScene is null");
+            GD.Print("Can't add new weapon: WeaponScene is null");
             return;
         }
 
@@ -33,7 +33,7 @@ public partial class WeaponInventory : Node3D
         WeaponSlots[weaponType] = weapon;
         AddChild(weapon);
 
-        GD.Print($"Added weapon of type {weaponType} to the slot {WeaponSlots[weaponType]}");
+        GD.Print($"Added weapon of type |{weaponType}| to the slot |{WeaponSlots[weaponType]}|");
 
         // Equip animation
         Position = new Vector3(0.095f, -0.11f - 0.15f, -0.12f - -0.15f);

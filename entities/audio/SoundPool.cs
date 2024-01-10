@@ -5,9 +5,8 @@ using System.Collections.Generic;
 [Tool, GlobalClass]
 public partial class SoundPool : Node3D
 {
-    private List<SoundQueue> sounds = new List<SoundQueue>();
-    private RandomNumberGenerator random = new RandomNumberGenerator();
-
+    private List<SoundQueue> sounds = new();
+    private RandomNumberGenerator random = new();
 
     public override void _Ready()
     {
@@ -20,13 +19,11 @@ public partial class SoundPool : Node3D
         }
     }
 
-
     public virtual void PlayRandomSound()
     {
         int index = random.RandiRange(0, sounds.Count - 1);
         sounds[index].PlaySound();
     }
-
 
     public override string[] _GetConfigurationWarnings()
     {

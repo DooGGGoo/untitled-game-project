@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public partial class SoundQueue : Node3D
 {
     private int next = 0;
-    private List<AudioStreamPlayer3D> audioPlayers = new List<AudioStreamPlayer3D>();
+    private List<AudioStreamPlayer3D> audioPlayers = new();
 
     [Export] public int InstancesCount = 1;
     [Export] public AudioStream AudioStream;
@@ -14,7 +14,7 @@ public partial class SoundQueue : Node3D
 
     public override void _Ready()
     {
-        AudioStreamPlayer3D newAudioPlayer = new AudioStreamPlayer3D()
+        AudioStreamPlayer3D newAudioPlayer = new()
         {
             Stream = AudioStream
         };
@@ -51,7 +51,6 @@ public partial class SoundQueue : Node3D
             audioPlayers[next++].Play();
             next %= audioPlayers.Count;
         }
-
     }
 
     public override string[] _GetConfigurationWarnings()

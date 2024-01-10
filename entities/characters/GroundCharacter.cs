@@ -123,7 +123,7 @@ public partial class GroundCharacter : CharacterBody3D
 
             // step 1: upwards trace
             float upHeight = StepHeight;
-            //chaneged to true
+            //changed to true
             KinematicCollision3D ceilingCollision = MoveAndCollide(upHeight * Vector3.Up);
             ceilingTravelDistance = StepHeight;
             if (ceilingCollision != null)

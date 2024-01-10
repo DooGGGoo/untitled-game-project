@@ -33,8 +33,6 @@ public partial class Player : GroundCharacter
 
 	public override void _Ready()
 	{
-
-
 		AddToGroup("Player");
 	}
 
