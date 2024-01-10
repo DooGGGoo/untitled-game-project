@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/WeaponData.cs" id="1_wh2d3"]
 
 [sub_resource type="Curve" id="Curve_jyk0a"]
-_data = [Vector2(0, 0.216117), 0.0, 0.760181, 0, 0, Vector2(1, 0.406593), 0.0, 1.4, 0, 0]
+_data = [Vector2(0, 0.611722), 0.0, 0.208284, 0, 0, Vector2(1, 0.67033), 0.0, 1.4, 0, 0]
 point_count = 2
 
 [resource]
@@ -12,14 +12,14 @@ Damage = 5
 MaxAmmo = 1000
 FireRate = 0.15
 ReloadTime = 1.0
-_WeaponType = 2
+_WeaponType = 1
 RecoilCurve = SubResource("Curve_jyk0a")
-RecoilForceUp = 0.365
-RecoilForceBack = 0.02
-RecoilDispersion = 0.15
-CameraRecoil = 2.26
-RecoilReturnRate = 0.64
-RecoilHarshness = 0.73
+RecoilForceUp = 1.6
+RecoilForceBack = 0.1
+RecoilDispersion = 0.89
+CameraRecoil = 1.485
+RecoilReturnRate = 0.46
+RecoilHarshness = 0.56
 RecoilCurveSpeed = 0.25
 RecoilDecreaseSpeed = 0.35
 AimOffsetY = -0.02

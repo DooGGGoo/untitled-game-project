@@ -267,8 +267,7 @@ public partial class Player : GroundCharacter
 
 	#region Sounds
 
-	[Signal]
-	public delegate void PlayFootstepSoundEventHandler();
+	[Signal] public delegate void PlayFootstepSoundEventHandler();
 
 	public virtual void CalculateFootsteps()
 	{

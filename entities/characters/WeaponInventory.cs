@@ -18,31 +18,24 @@ public partial class WeaponInventory : Node3D
             GD.Print("WeaponScene is null");
             return;
         }
-        
+
         Weapon weapon = weaponScene.Instantiate<Weapon>();
         WeaponData.WeaponType weaponType = weapon.WeaponData._WeaponType;
 
-        foreach (WeaponData.WeaponType slotType in WeaponSlots.Keys)
+        if (WeaponSlots.TryGetValue(weaponType, out Weapon existingWeapon))
         {
-            if (slotType == weaponType)
+            if (IsInstanceValid(existingWeapon))
             {
-                if (IsInstanceValid(WeaponSlots[slotType]))
-                {
-                    Weapon weaponToRemove = WeaponSlots[slotType];
-                    weaponToRemove.QueueFree();
-                }
-
-                WeaponSlots[slotType] = weapon;
-
-                AddChild(weapon);
-                GD.PrintS("Weapon", weapon, "added to slot", slotType);
-                break;
-            }
-
-            else
-            {
-                GD.PrintS("Weapon", weapon, "doesn't fit in the slot", slotType, "Weapon in this slot:", WeaponSlots[slotType]);
+                existingWeapon.QueueFree();
             }
         }
+
+        WeaponSlots[weaponType] = weapon;
+        AddChild(weapon);
+
+        GD.Print($"Added weapon of type {weaponType} to the slot {WeaponSlots[weaponType]}");
+
+        // Equip animation
+        Position = new Vector3(0.095f, -0.11f - 0.15f, -0.12f - -0.15f);
     }
 }

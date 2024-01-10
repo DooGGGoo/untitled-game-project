@@ -1,7 +1,30 @@
-[gd_scene load_steps=5 format=3 uid="uid://cpeptpsgeknxy"]
+[gd_scene load_steps=7 format=3 uid="uid://cpeptpsgeknxy"]
 
 [ext_resource type="Script" path="res://scripts/Weapon.cs" id="1_xbny8"]
-[ext_resource type="Resource" uid="uid://balatgxul30hb" path="res://entities/tests/weapons/weapon_test_data.tres" id="2_n8i1y"]
+[ext_resource type="Script" path="res://scripts/WeaponData.cs" id="2_on6i7"]
+
+[sub_resource type="Curve" id="Curve_hsvdu"]
+_data = [Vector2(0, 0.304029), 0.0, 1.87771, 0, 0, Vector2(0.153061, 0.626374), 0.897436, 0.897436, 0, 0, Vector2(1, 0.758242), -0.242687, 1.4, 0, 0]
+point_count = 3
+
+[sub_resource type="Resource" id="Resource_gvlb0"]
+script = ExtResource("2_on6i7")
+Damage = 5
+MaxAmmo = 1000
+FireRate = 0.09
+ReloadTime = 1.0
+_WeaponType = 0
+RecoilCurve = SubResource("Curve_hsvdu")
+RecoilForceUp = 0.57
+RecoilForceBack = 0.055
+RecoilDispersion = 0.345
+CameraRecoil = 5.6
+RecoilReturnRate = 0.47
+RecoilHarshness = 0.15
+RecoilCurveSpeed = 0.075
+RecoilDecreaseSpeed = 0.3
+AimOffsetY = -0.02
+AimOffsetZ = -0.085
 
 [sub_resource type="BoxMesh" id="BoxMesh_bea5n"]
 size = Vector3(0.025, 0.025, 0.3)
@@ -11,7 +34,7 @@ size = Vector3(0.02, 0.01, 0.01)
 
 [node name="weapon_test" type="Node3D" node_paths=PackedStringArray("RayCast")]
 script = ExtResource("1_xbny8")
-WeaponData = ExtResource("2_n8i1y")
+WeaponData = SubResource("Resource_gvlb0")
 RayCast = NodePath("RayCast3D")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

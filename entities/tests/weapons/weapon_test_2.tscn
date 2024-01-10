@@ -1,8 +1,31 @@
-[gd_scene load_steps=6 format=3 uid="uid://bxadjnscr4b86"]
+[gd_scene load_steps=8 format=3 uid="uid://bxadjnscr4b86"]
 
 [ext_resource type="Script" path="res://scripts/Weapon.cs" id="1_1302j"]
-[ext_resource type="Resource" uid="uid://csek58ds865xg" path="res://entities/tests/weapons/weapon_test_2_data.tres" id="2_6nub2"]
+[ext_resource type="Script" path="res://scripts/WeaponData.cs" id="2_3fupy"]
 [ext_resource type="Material" uid="uid://byy0tf2266p3d" path="res://assets/materials/jerma.tres" id="3_yjavb"]
+
+[sub_resource type="Curve" id="Curve_6jwyu"]
+_data = [Vector2(0, 0.304029), 0.0, 1.49451, 0, 0, Vector2(0.12585, 0.758242), 1.17483, 1.17483, 0, 0, Vector2(0.989796, 0.978022), 0.365059, 1.4, 0, 0]
+point_count = 3
+
+[sub_resource type="Resource" id="Resource_mpda6"]
+script = ExtResource("2_3fupy")
+Damage = 5
+MaxAmmo = 1000
+FireRate = 0.25
+ReloadTime = 1.0
+_WeaponType = 0
+RecoilCurve = SubResource("Curve_6jwyu")
+RecoilForceUp = 0.638
+RecoilForceBack = 0.3
+RecoilDispersion = 0.435
+CameraRecoil = 5.6
+RecoilReturnRate = 0.33
+RecoilHarshness = 0.31
+RecoilCurveSpeed = 0.11
+RecoilDecreaseSpeed = 0.25
+AimOffsetY = -0.02
+AimOffsetZ = -0.085
 
 [sub_resource type="BoxMesh" id="BoxMesh_bea5n"]
 material = ExtResource("3_yjavb")
@@ -11,9 +34,9 @@ size = Vector3(0.025, 0.025, 0.3)
 [sub_resource type="BoxMesh" id="BoxMesh_j3k2e"]
 size = Vector3(0.02, 0.01, 0.01)
 
-[node name="weapon_test" type="Node3D" node_paths=PackedStringArray("RayCast")]
+[node name="weapon_test_2" type="Node3D" node_paths=PackedStringArray("RayCast")]
 script = ExtResource("1_1302j")
-WeaponData = ExtResource("2_6nub2")
+WeaponData = SubResource("Resource_mpda6")
 RayCast = NodePath("RayCast3D")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
