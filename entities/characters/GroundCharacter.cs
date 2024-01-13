@@ -37,15 +37,15 @@ public partial class GroundCharacter : CharacterBody3D
 
         if (wishDir != Vector3.Zero)
         {
-            MovementAcceleration = IsOnFloor() ? 9f : 1f;
-            velocity.X = Mathf.Lerp(velocity.X, wishDir.X * currentSpeed, MovementAcceleration * (float)delta);
-            velocity.Z = Mathf.Lerp(velocity.Z, wishDir.Z * currentSpeed, MovementAcceleration * (float)delta);
+            float movementAcceleration = IsOnFloor() ? MovementAcceleration : 1f;
+            velocity.X = Mathf.Lerp(velocity.X, wishDir.X * currentSpeed, movementAcceleration * (float)delta);
+            velocity.Z = Mathf.Lerp(velocity.Z, wishDir.Z * currentSpeed, movementAcceleration * (float)delta);
         }
         else
         {
-            MovementFriction = IsOnFloor() ? 12f : 1f;
-            velocity.X = Mathf.Lerp(velocity.X, 0f, MovementFriction * (float)delta);
-            velocity.Z = Mathf.Lerp(velocity.Z, 0f, MovementFriction * (float)delta);
+            float movementFriction = IsOnFloor() ? MovementFriction : 1f;
+            velocity.X = Mathf.Lerp(velocity.X, 0f, movementFriction * (float)delta);
+            velocity.Z = Mathf.Lerp(velocity.Z, 0f, movementFriction * (float)delta);
         }
 
         Velocity = velocity;

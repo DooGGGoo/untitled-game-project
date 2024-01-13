@@ -1,8 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://bxadjnscr4b86"]
+[gd_scene load_steps=13 format=3 uid="uid://bxadjnscr4b86"]
 
 [ext_resource type="Script" path="res://scripts/Weapon.cs" id="1_1302j"]
 [ext_resource type="Script" path="res://scripts/WeaponData.cs" id="2_3fupy"]
 [ext_resource type="Material" uid="uid://byy0tf2266p3d" path="res://assets/materials/jerma.tres" id="3_yjavb"]
+[ext_resource type="Script" path="res://entities/audio/SoundQueue.cs" id="4_80ltv"]
+[ext_resource type="AudioStream" uid="uid://d0fxjb076he33" path="res://assets/audio/weapons/shoot/556_Single.wav" id="5_fj1lt"]
+[ext_resource type="AudioStream" uid="uid://cify73mtt5y5s" path="res://assets/audio/weapons/shoot/762x39_Single.wav" id="6_4b7ci"]
 
 [sub_resource type="Curve" id="Curve_6jwyu"]
 _data = [Vector2(0, 0.304029), 0.0, 1.49451, 0, 0, Vector2(0.12585, 0.758242), 1.17483, 1.17483, 0, 0, Vector2(0.989796, 0.978022), 0.365059, 1.4, 0, 0]
@@ -34,6 +37,20 @@ size = Vector3(0.025, 0.025, 0.3)
 [sub_resource type="BoxMesh" id="BoxMesh_j3k2e"]
 size = Vector3(0.02, 0.01, 0.01)
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_2pj58"]
+random_pitch = 1.15
+random_volume_offset_db = 0.75
+streams_count = 1
+stream_0/stream = ExtResource("5_fj1lt")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_goxgc"]
+random_pitch = 1.1
+random_volume_offset_db = 0.5
+streams_count = 1
+stream_0/stream = ExtResource("6_4b7ci")
+stream_0/weight = 1.0
+
 [node name="weapon_test_2" type="Node3D" node_paths=PackedStringArray("RayCast")]
 script = ExtResource("1_1302j")
 WeaponData = SubResource("Resource_mpda6")
@@ -50,3 +67,15 @@ mesh = SubResource("BoxMesh_j3k2e")
 [node name="RayCast3D" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2)
 target_position = Vector3(0, 0, -100)
+
+[node name="SoundQueue" type="Node3D" parent="."]
+script = ExtResource("4_80ltv")
+AudioStream = SubResource("AudioStreamRandomizer_2pj58")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SoundQueue"]
+stream = SubResource("AudioStreamRandomizer_goxgc")
+volume_db = 2.33
+pitch_scale = 0.95
+max_polyphony = 30
+
+[connection signal="ShotFired" from="." to="SoundQueue" method="PlaySound"]

@@ -158,7 +158,11 @@ public partial class View : Node3D
     {
         if (useSmoothing == true)
         {
-            cameraTargetRotation = cameraTargetRotation.Slerp(cameraTargetRotation + angle, 0.35f);
+            Vector3 finalRotation = cameraTargetRotation + angle;
+
+            cameraTargetRotation = cameraTargetRotation.Lerp(finalRotation, 0.33f);
+            cameraTargetRotation = cameraTargetRotation.Lerp(finalRotation, 0.33f);
+            cameraTargetRotation = cameraTargetRotation.Lerp(finalRotation, 0.33f);
         }
         else
         {
@@ -170,15 +174,16 @@ public partial class View : Node3D
     #region Viewmodel
     private void ProcessViewmodel()
     {
-        Vector3 offset = new()
-        {
-            //Y = Mathf.Sin(time * headbobTimer) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
-            //X = Mathf.Cos(time * headbobTimer / 2f) * Mathf.Abs(Velocity.Length()) * headbobScale / 400f,
-            Y = Mathf.Sin(time * headbobTimer) * Mathf.Abs(player.Velocity.Length()) * headbobScale / 400f,
-            X = Mathf.Sin((time * headbobTimer + Mathf.Pi * 3f) / -2f) * Mathf.Abs(player.Velocity.Length()) * headbobScale / 400f,
-        };
+        float t = time;
 
-        viewmodel.Position += offset;
+        float tHor = Mathf.Wrap(t, 0f, 1f);
+        float tVer = Mathf.Wrap(t + 0.25f, 0f, 1f) * 2f;
+
+        float r = tVer * Mathf.Pi;
+        float v = 1f - Mathf.Sin(r < Mathf.Pi ? r : r - Mathf.Pi) * Mathf.Abs(player.Velocity.Length());
+        float h = Mathf.Sin(tHor * 2f * Mathf.Pi) * Mathf.Abs(player.Velocity.Length());
+
+        viewmodel.Position += new Vector3(h / 1000f, v / 1000f, 0f);
         viewmodel.Position = viewmodel.Position.Lerp(viewmodelInitialPosition, 0.125f);
 
         Vector3 viewmodelRotation = viewmodel.RotationDegrees;
@@ -189,7 +194,7 @@ public partial class View : Node3D
         viewmodel.RotationDegrees += viewmodelRotation;
 
         viewmodel.RotationDegrees = viewmodel.RotationDegrees.Clamp(new Vector3(-6f, -6f, -6f), new Vector3(6f, 6f, 6f));
-        viewmodel.RotationDegrees = viewmodel.RotationDegrees.Lerp(Vector3.Zero, 0.125f);
+        viewmodel.RotationDegrees = viewmodel.RotationDegrees.Slerp(Vector3.Zero, 0.125f);
     }
 
     #endregion

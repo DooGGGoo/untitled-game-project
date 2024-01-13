@@ -45,12 +45,12 @@ public partial class SoundQueue : Node3D
     {
         //GD.Print($"Playing sound {Name} (at {GetPath()})");
 
-        if (!audioPlayers[next].Playing)
-        {
+        // if (!audioPlayers[next].Playing)
+        // {
             //GD.Print("Playing");
             audioPlayers[next++].Play();
             next %= audioPlayers.Count;
-        }
+        // }
     }
 
     public override string[] _GetConfigurationWarnings()

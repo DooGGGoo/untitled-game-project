@@ -70,6 +70,7 @@ area = NodePath("MeshInstance3D/Area3D")
 shape = NodePath("MeshInstance3D/Area3D/CollisionShape3D")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="3DUI"]
+material_override = SubResource("StandardMaterial3D_3gi15")
 cast_shadow = 0
 mesh = SubResource("QuadMesh_vc5av")
 

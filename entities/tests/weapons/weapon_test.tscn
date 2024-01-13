@@ -1,7 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://cpeptpsgeknxy"]
+[gd_scene load_steps=11 format=3 uid="uid://cpeptpsgeknxy"]
 
 [ext_resource type="Script" path="res://scripts/Weapon.cs" id="1_xbny8"]
 [ext_resource type="Script" path="res://scripts/WeaponData.cs" id="2_on6i7"]
+[ext_resource type="Script" path="res://entities/audio/SoundQueue.cs" id="3_px5f7"]
+[ext_resource type="AudioStream" uid="uid://d0fxjb076he33" path="res://assets/audio/weapons/shoot/556_Single.wav" id="4_q6een"]
 
 [sub_resource type="Curve" id="Curve_hsvdu"]
 _data = [Vector2(0, 0.304029), 0.0, 1.87771, 0, 0, Vector2(0.153061, 0.626374), 0.897436, 0.897436, 0, 0, Vector2(1, 0.758242), -0.242687, 1.4, 0, 0]
@@ -32,6 +34,20 @@ size = Vector3(0.025, 0.025, 0.3)
 [sub_resource type="BoxMesh" id="BoxMesh_j3k2e"]
 size = Vector3(0.02, 0.01, 0.01)
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_1e4hy"]
+random_pitch = 1.15
+random_volume_offset_db = 0.75
+streams_count = 1
+stream_0/stream = ExtResource("4_q6een")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_m176n"]
+random_pitch = 1.15
+random_volume_offset_db = 0.75
+streams_count = 1
+stream_0/stream = ExtResource("4_q6een")
+stream_0/weight = 1.0
+
 [node name="weapon_test" type="Node3D" node_paths=PackedStringArray("RayCast")]
 script = ExtResource("1_xbny8")
 WeaponData = SubResource("Resource_gvlb0")
@@ -48,3 +64,14 @@ mesh = SubResource("BoxMesh_j3k2e")
 [node name="RayCast3D" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2)
 target_position = Vector3(0, 0, -100)
+
+[node name="SoundQueue" type="Node3D" parent="."]
+script = ExtResource("3_px5f7")
+AudioStream = SubResource("AudioStreamRandomizer_1e4hy")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SoundQueue"]
+stream = SubResource("AudioStreamRandomizer_m176n")
+volume_db = 1.68
+max_polyphony = 30
+
+[connection signal="ShotFired" from="." to="SoundQueue" method="PlaySound"]

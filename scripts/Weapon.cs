@@ -18,6 +18,8 @@ public partial class Weapon : Node3D
     private bool isReloading;
     public enum FireMode { Semi, Auto } 
 
+    [Signal] public delegate void ShotFiredEventHandler();
+
     public override void _Ready()
     {
         CurrentAmmo = WeaponData.MaxAmmo;
@@ -55,11 +57,11 @@ public partial class Weapon : Node3D
         CurrentAmmo--;
         timeSinceLastShot = 0f;
 
-        Node target = RayCast.GetCollider() as Node;
-
         AddRecoil(WeaponData.RecoilCurveSpeed);
 
-        if (target == null)
+        EmitSignal(SignalName.ShotFired);
+
+        if (RayCast.GetCollider() is not Node target)
         {
             return;
         }
@@ -165,8 +167,8 @@ public partial class Weapon : Node3D
         recoilTargetPosition.Z += WeaponData.RecoilForceBack;
 
 
-        Global.Instance().CurrentLevel.CurrentPlayer.PlayerView.AddCameraShake(0.1f);
-        Global.Instance().CurrentLevel.CurrentPlayer.PlayerView.ViewPunch(recoilDirection * WeaponData.CameraRecoil / 0.75f, true);
+        Global.Instance().CurrentLevel.CurrentPlayer.PlayerView.AddCameraShake(0.12f * (1f - recoilCurveValue));
+        Global.Instance().CurrentLevel.CurrentPlayer.PlayerView.ViewPunch(recoilDirection * WeaponData.CameraRecoil / 1.2f, true);
 
         //GD.Print(recoilMagnitude, recoilCurveValue);
     }

@@ -269,7 +269,7 @@ public partial class Player : GroundCharacter
 
 	public virtual void CalculateFootsteps()
 	{
-		const float freq = 5.85f;
+		const float freq = 3.85f;
 		const float amp = 0.08f;
 		float pos;
 		float lowPos = amp - 0.05f;
@@ -283,16 +283,8 @@ public partial class Player : GroundCharacter
 		if (pos < -lowPos && footstepCanPlay)
 		{
 			footstepCanPlay = false;
-			
-			
-			if (Mathf.Abs(Velocity.X) > WalkSpeed || Mathf.Abs(Velocity.Z) > WalkSpeed)
-			{
-				EmitSignal(SignalName.PlayFootstepSound);
-			}
-			else
-			{
-				EmitSignal(SignalName.PlayFootstepSound);
-			}
+
+			EmitSignal(SignalName.PlayFootstepSound);
 		}
 	}
 	#endregion
