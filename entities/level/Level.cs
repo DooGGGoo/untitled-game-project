@@ -1,5 +1,6 @@
+using System.Linq;
 using Godot;
-using System;
+using Godot.Collections;
 
 [GlobalClass]
 public partial class Level : Node
@@ -15,11 +16,11 @@ public partial class Level : Node
 	{
 		Global.Instance().CurrentLevel = this;
 
-		CurrentPlayer = SpawnPlayer();
-
+		PlayerSpawned += (Player player) => GD.Print("Player spawned" + player.GlobalPosition);
+		
 		GD.Print(ReturnToScene);
 
-		PlayerSpawned += (Player player) => GD.Print("Player spawned" + player.GlobalPosition);
+		CurrentPlayer = SpawnPlayer();
 	}
 
 	public Player SpawnPlayer(int spawn = 0)
@@ -60,5 +61,66 @@ public partial class Level : Node
 	public void ChangeLevel(PackedScene level)
 	{
 		GetTree().ChangeSceneToPacked(level);
+	}
+
+	public MeshInstance3D DrawDebugSphere(Vector3 position, float radius = 0.05f)
+	{
+		StandardMaterial3D MaterialOverride = new()
+        {
+			AlbedoColor = Colors.DarkRed,
+			ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded
+		};
+
+		MeshInstance3D debugMesh = new()
+        {
+			Mesh = new SphereMesh()
+			{
+				Rings = 4,
+				RadialSegments = 8,
+				Radius = radius,
+				Height = radius * 2f,
+			},
+			MaterialOverride = MaterialOverride,
+			TopLevel = true
+		};
+
+		AddChild(debugMesh);
+		debugMesh.GlobalPosition = position;
+		return debugMesh;
+	}
+
+	public void SpawnExplosion(Vector3 position, float explosionForce = 5f)
+	{
+		PhysicsDirectSpaceState3D spaceState = CurrentPlayer.GetWorld3D().DirectSpaceState;
+
+		Transform3D transform = Transform3D.Identity;
+		transform.Origin = position;
+
+		PhysicsShapeQueryParameters3D query = new()
+		{
+			Shape = new SphereShape3D() { Radius = explosionForce * 0.8f },
+			Transform = transform
+		};
+		Array<Dictionary> result = spaceState.IntersectShape(query);
+
+		foreach (Dictionary hit in result)
+		{
+			if ((Node3D)hit["collider"] != null)
+			{
+				Node3D node = (Node3D)hit["collider"];
+				
+				if (node is Player player)
+				{
+					player.PlayerView.AddCameraShake(explosionForce / Mathf.Max(player.GlobalPosition.DistanceTo(position), 1f));
+				}
+
+				if (node is RigidBody3D body)
+				{
+					body.ApplyCentralImpulse(-body.GlobalPosition.DirectionTo(position) * explosionForce * explosionForce / body.Mass);
+				}
+			}
+		}
+
+		//DrawDebugSphere(position, explosionForce);
 	}
 }

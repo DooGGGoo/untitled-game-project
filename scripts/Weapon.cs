@@ -49,7 +49,7 @@ public partial class Weapon : Node3D
         ProcessRecoil(delta);
     }
 
-    public bool IsUseable()
+    public virtual bool IsUseable()
     {
         return CurrentAmmo > 0 && timeSinceLastShot >= WeaponData.FireRate && !isReloading;
     }
@@ -116,7 +116,7 @@ public partial class Weapon : Node3D
 
     public virtual void SecondaryAttack() { }
 
-    public async void Reload()
+    public async virtual void Reload()
     {
         isReloading = true;
 

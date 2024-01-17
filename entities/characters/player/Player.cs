@@ -94,6 +94,11 @@ public partial class Player : GroundCharacter
 				DropObject();
 			}
 		}
+
+		if (Input.IsActionJustPressed("debug_1"))
+		{
+			Global.Instance().CurrentLevel.SpawnExplosion(GlobalPosition);
+		}
 	}
 
 	bool StartedProcessOnFloor = false;

@@ -1,20 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://bu5smm751lw2s"]
+[gd_scene load_steps=4 format=3 uid="uid://bu5smm751lw2s"]
 
 [ext_resource type="Script" path="res://entities/props/player_pc/PCMission.cs" id="1_40nyx"]
-[ext_resource type="PackedScene" uid="uid://c5t48y3ps4vcw" path="res://maps/map_objective_test.tscn" id="2_d7etc"]
 [ext_resource type="Script" path="res://entities/props/player_pc/PCMissionData.cs" id="3_jv7gv"]
 
-[sub_resource type="Resource" id="Resource_5nu5c"]
-resource_local_to_scene = true
+[sub_resource type="Resource" id="Resource_26rg0"]
 script = ExtResource("3_jv7gv")
-Name = "Test Mission sexo sexo"
-Scene = ExtResource("2_d7etc")
+Name = "Test mission"
 
 [node name="Mission" type="Panel" node_paths=PackedStringArray("NameLabel")]
 custom_minimum_size = Vector2(0, 64)
 size_flags_vertical = 2
 script = ExtResource("1_40nyx")
-MissionData = SubResource("Resource_5nu5c")
+MissionData = SubResource("Resource_26rg0")
 NameLabel = NodePath("MarginContainer/HBoxContainer/Label")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
