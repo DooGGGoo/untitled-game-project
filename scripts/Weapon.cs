@@ -27,7 +27,11 @@ public partial class Weapon : Node3D
 
     public override void _Process(double delta)
     {
-        if (Input.IsActionPressed("left_click"))
+        if (WeaponFireMode == FireMode.Auto && Input.IsActionPressed("left_click"))
+        {
+            PrimaryAttack();
+        }
+        else if (WeaponFireMode == FireMode.Semi && Input.IsActionJustPressed("left_click"))
         {
             PrimaryAttack();
         }
