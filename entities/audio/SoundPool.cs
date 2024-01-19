@@ -19,7 +19,7 @@ public partial class SoundPool : Node3D
         }
     }
 
-    public virtual void PlayRandomSound()
+    public void PlayRandomSound()
     {
         int index = random.RandiRange(0, sounds.Count - 1);
         sounds[index].PlaySound();

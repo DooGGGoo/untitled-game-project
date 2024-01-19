@@ -186,7 +186,6 @@ scroll_active = false
 
 [node name="SoundQueue" type="Node3D" parent="."]
 script = ExtResource("3_1jge1")
-AudioStream = SubResource("AudioStreamRandomizer_pwfu8")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SoundQueue"]
 stream = SubResource("AudioStreamRandomizer_pwfu8")
