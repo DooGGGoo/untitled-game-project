@@ -57,7 +57,7 @@ skeleton = NodePath("../..")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.6, 0.9)
-fov = 61.0
+fov = 70.0
 size = 0.635
 near = 0.001
 

@@ -1,8 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://bs5mfxn0sa83m"]
+[gd_scene load_steps=25 format=3 uid="uid://bs5mfxn0sa83m"]
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_vcklc"]
 [ext_resource type="Texture2D" uid="uid://bd2datw4a75dw" path="res://assets/materials/textures/dev_1.png" id="2_2iwr3"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="3_x7ixd"]
+[ext_resource type="PackedScene" uid="uid://c8hufy0b7hp07" path="res://entities/tests/interactable_test.tscn" id="4_3melh"]
+[ext_resource type="Script" path="res://entities/Button.cs" id="5_bkb6d"]
+[ext_resource type="PackedScene" uid="uid://vlqgl00phyvr" path="res://entities/level/LevelObjective.tscn" id="6_cvfu4"]
+[ext_resource type="Script" path="res://entities/level/Indicator.cs" id="7_hybnw"]
+[ext_resource type="Script" path="res://entities/level/WeaponSpawner.cs" id="8_2oitn"]
+[ext_resource type="PackedScene" uid="uid://cpeptpsgeknxy" path="res://entities/tests/weapons/weapon_test.tscn" id="9_xgi73"]
+[ext_resource type="FontFile" uid="uid://d3lj676xv236i" path="res://assets/fonts/Fixedsys Excelsior 3.01 Regular.ttf" id="10_tsq0w"]
+[ext_resource type="PackedScene" uid="uid://bxadjnscr4b86" path="res://entities/tests/weapons/weapon_test_2.tscn" id="11_7e8qj"]
+[ext_resource type="PackedScene" uid="uid://xximjq7gsnrp" path="res://entities/tests/weapons/weapon_test_secondary.tscn" id="12_8h6y3"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_eox80"]
 panorama = ExtResource("2_2iwr3")
@@ -35,13 +44,46 @@ volumetric_fog_length = 39.66
 volumetric_fog_detail_spread = 1.68179
 volumetric_fog_sky_affect = 0.575
 
-[sub_resource type="NavigationMesh" id="NavigationMesh_iyj1d"]
+[sub_resource type="NavigationMesh" id="NavigationMesh_fb3s8"]
 vertices = PackedVector3Array(-5.25, 0.30458, -4.5, -5, 0.30458, -3.25, -3.75, 0.30458, -3, -3.25, 0.30458, -6.5, -8.75, 0.30458, -4.5, -3.25, 0.30458, -6.5, -3.25, 0.30458, -19.5, -19.5, 0.30458, -19.5, -19.5, 0.30458, -3.25, -8.75, 0.30458, -4.5, -5.25, 0.30458, -4.5, -3.25, 0.30458, -6.5, -19.5, 0.30458, -3.25, -9, 0.30458, -3.25, -8.75, 0.30458, -4.5, -2.5, 0.55458, -6.5, -2.5, 1.30458, -3.5, -1.5, 1.30458, -3.5, -1.5, 0.55458, -6.5, -0.5, 0.30458, -6.75, 0, 0.30458, -19.5, -3.25, 0.30458, -19.5, -3.25, 0.30458, -6.5, -2.5, 0.55458, -6.5, -2.5, 0.55458, -6.5, -1.5, 0.55458, -6.5, -0.5, 0.30458, -6.75, -0.5, 0.30458, -6.75, -0.25, 0.30458, -6.25, 0, 0.30458, -19.5, -0.25, 0.30458, -4, 0.75, 0.30458, -4, 1.5, 0.30458, -5, -0.25, 0.30458, -6.25, 0, 0.30458, -19.5, 2.5, 0.30458, -5, 4, 0.30458, -3.25, 19.5, 0.30458, -3.25, 19.5, 0.30458, -19.5, -0.25, 0.30458, -6.25, 1.5, 0.30458, -5, 2.5, 0.30458, -5, 0, 0.30458, -19.5, 1.25, 2.80458, -3.25, 1.75, 2.80458, -2.25, 2.75, 2.80458, -2.75, 2.25, 2.80458, -3.75, 2.75, 0.55458, 5, 3.5, 1.05458, 5, 3.5, 1.05458, 3.75, 1.5, 0.30458, 3.5, 0.5, 0.30458, -2, -0.5, 0.30458, -1.75, -0.75, 0.30458, -1, 1.5, 0.30458, 3.5, 1.5, 0.30458, -1.25, 3, 0.30458, 6.75, 4.5, 0.30458, 6.75, 4.5, 0.30458, 6, 2.75, 0.30458, 6, -8.75, 0.30458, -2.25, -19.5, 0.30458, -3.25, -19.5, 0.30458, 19.5, 5.5, 0.30458, 19.5, 3, 0.30458, 10, -3.75, 0.30458, -3, -5, 0.30458, -3.25, -5.25, 0.30458, -2.25, -3.75, 0.30458, -2, 3, 0.30458, 10, 2.75, 0.30458, 6, 1.5, 0.30458, 3.5, -2, 0.30458, -1, -5.25, 0.30458, -2.25, -8.75, 0.30458, -2.25, 3, 0.55458, 7.75, 3, 0.30458, 6.75, 2.75, 0.30458, 6, 5.5, 0.30458, 19.5, 5.5, 0.30458, 10, 3, 0.30458, 10, 1.5, 0.30458, 3.5, -0.75, 0.30458, -1, -2, 0.30458, -1, 2.75, 0.30458, 6, 2.75, 0.55458, 5, 1.5, 0.30458, 3.5, -2, 0.30458, -1, -3.75, 0.30458, -2, -5.25, 0.30458, -2.25, 3, 0.55458, 9, 7.25, 1.30458, 9, 7.25, 1.30458, 7.75, 3, 0.55458, 7.75, 4.41667, 1.30458, 9, 4.41667, 1.30458, 7.75, -8.75, 0.30458, -2.25, -9, 0.30458, -3.25, -19.5, 0.30458, -3.25, 3, 0.55458, 9, 3, 0.55458, 7.75, 2.75, 0.30458, 6, 3, 0.30458, 10, 3, 0.55458, 9, 2.75, 0.30458, 6, 4, 0.30458, -2.5, 3.25, 0.30458, -2, 3.75, 0.30458, -1.5, 5.75, 0.30458, 5.75, 4.5, 0.30458, 6, 4.5, 0.30458, 6.75, 8, 0.30458, 6.75, 4, 0.30458, -3.25, 4, 0.30458, -2.5, 5.75, 0.30458, 3, 8, 0.30458, 6.75, 19.5, 0.30458, 8.25, 19.5, 0.30458, -3.25, 5.75, 0.30458, 3, 5.75, 0.30458, 5.75, 8, 0.30458, 6.75, 3.75, 0.30458, -1.5, 3.75, 0.30458, 2.75, 5.75, 0.30458, 3, 4, 0.30458, -2.5, 8, 0.30458, 6.75, 8.25, 0.30458, 8.25, 19.5, 0.30458, 8.25, 8, 0.30458, 10, 5.5, 0.30458, 10, 5.5, 0.30458, 19.5, 19.5, 0.30458, 8.25, 8.25, 0.30458, 8.25, 8, 0.30458, 10, 19.5, 0.30458, 19.5, 19.5, 0.30458, 8.25, 8, 0.30458, 10, 5.5, 0.30458, 19.5)
 polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Array(4, 8, 5), PackedInt32Array(5, 8, 6), PackedInt32Array(6, 8, 7), PackedInt32Array(11, 10, 9), PackedInt32Array(14, 13, 12), PackedInt32Array(18, 17, 15), PackedInt32Array(15, 17, 16), PackedInt32Array(23, 22, 19), PackedInt32Array(19, 22, 21), PackedInt32Array(19, 21, 20), PackedInt32Array(26, 25, 24), PackedInt32Array(29, 28, 27), PackedInt32Array(31, 30, 32), PackedInt32Array(32, 30, 33), PackedInt32Array(35, 34, 36), PackedInt32Array(36, 34, 37), PackedInt32Array(37, 34, 38), PackedInt32Array(40, 39, 41), PackedInt32Array(41, 39, 42), PackedInt32Array(46, 45, 43), PackedInt32Array(43, 45, 44), PackedInt32Array(48, 47, 49), PackedInt32Array(49, 47, 50), PackedInt32Array(52, 51, 53), PackedInt32Array(53, 51, 55), PackedInt32Array(53, 55, 54), PackedInt32Array(57, 56, 58), PackedInt32Array(58, 56, 59), PackedInt32Array(64, 63, 60), PackedInt32Array(60, 63, 61), PackedInt32Array(61, 63, 62), PackedInt32Array(66, 65, 67), PackedInt32Array(67, 65, 68), PackedInt32Array(70, 69, 71), PackedInt32Array(71, 69, 72), PackedInt32Array(72, 69, 73), PackedInt32Array(73, 69, 74), PackedInt32Array(77, 76, 75), PackedInt32Array(80, 79, 78), PackedInt32Array(83, 82, 81), PackedInt32Array(86, 85, 84), PackedInt32Array(89, 88, 87), PackedInt32Array(93, 95, 90), PackedInt32Array(90, 95, 94), PackedInt32Array(94, 95, 92), PackedInt32Array(94, 92, 91), PackedInt32Array(96, 98, 97), PackedInt32Array(101, 100, 99), PackedInt32Array(104, 103, 102), PackedInt32Array(107, 106, 105), PackedInt32Array(109, 108, 110), PackedInt32Array(110, 108, 111), PackedInt32Array(113, 112, 114), PackedInt32Array(114, 112, 115), PackedInt32Array(115, 112, 117), PackedInt32Array(115, 117, 116), PackedInt32Array(120, 119, 118), PackedInt32Array(121, 124, 122), PackedInt32Array(122, 124, 123), PackedInt32Array(127, 126, 125), PackedInt32Array(130, 129, 128), PackedInt32Array(131, 133, 132), PackedInt32Array(135, 134, 136), PackedInt32Array(136, 134, 137)]
 geometry_parsed_geometry_type = 1
 agent_height = 1.8
 agent_radius = 0.4
 filter_walkable_low_height_spans = true
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_e64vn"]
+load_path = "res://.godot/imported/dev_1.png-bd0d19e05387360765cf4c562407257e.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ss8p8"]
+albedo_color = Color(1, 0.698039, 0, 1)
+albedo_texture = SubResource("CompressedTexture2D_e64vn")
+uv1_triplanar = true
+texture_filter = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_va27m"]
+material = SubResource("StandardMaterial3D_ss8p8")
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g1s2l"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ytsx0"]
+size = Vector3(1, 0.25, 0.75)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_odnpt"]
+load_path = "res://.godot/imported/dev_1.png-bd0d19e05387360765cf4c562407257e.bptc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o8ks2"]
+albedo_color = Color(1, 0.12549, 0.0862745, 1)
+albedo_texture = SubResource("CompressedTexture2D_odnpt")
+metallic_specular = 0.0
+uv1_triplanar = true
+texture_filter = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_nt7qv"]
+material = SubResource("StandardMaterial3D_o8ks2")
+size = Vector3(1, 0.25, 0.75)
 
 [node name="map_test" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
 script = ExtResource("1_vcklc")
@@ -63,7 +105,7 @@ directional_shadow_max_distance = 14.8
 [node name="Map" type="Node" parent="."]
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="Map"]
-navigation_mesh = SubResource("NavigationMesh_iyj1d")
+navigation_mesh = SubResource("NavigationMesh_fb3s8")
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="Map/NavigationRegion3D"]
 use_collision = true
@@ -196,4 +238,105 @@ material_override = ExtResource("3_x7ixd")
 size = Vector3(2, 1, 3.5)
 material = ExtResource("3_x7ixd")
 
+[node name="PlayerSpawn" type="Node3D" parent="Map/NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="ObjectiveTest" parent="Map/NavigationRegion3D" instance=ExtResource("4_3melh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.1, 0.5, -3.3)
+script = ExtResource("5_bkb6d")
+ToggleState = false
+buttonType = 0
+
+[node name="LevelObjective" parent="Map/NavigationRegion3D/ObjectiveTest" instance=ExtResource("6_cvfu4")]
+
+[node name="InteractableTest" parent="Map/NavigationRegion3D/ObjectiveTest/LevelObjective" instance=ExtResource("4_3melh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, -3.4)
+script = ExtResource("7_hybnw")
+
+[node name="test_objs" type="Node" parent="Map/NavigationRegion3D"]
+
+[node name="InteractableTest" parent="Map/NavigationRegion3D/test_objs" instance=ExtResource("4_3melh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.298285, 0.679339, -3)
+
+[node name="Lightswitch" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.44082, 0.927259, -1.81021)
+script = ExtResource("5_bkb6d")
+buttonType = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/Lightswitch"]
+mesh = SubResource("BoxMesh_va27m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/Lightswitch"]
+shape = SubResource("BoxShape3D_g1s2l")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Map/NavigationRegion3D/test_objs"]
+transform = Transform3D(-0.999848, -0.0130307, 0.0116099, -6.19544e-10, 0.66523, 0.746638, -0.0174525, 0.746524, -0.665129, -2.48612, 0.535934, -1.83187)
+light_color = Color(0.0588235, 0.964706, 0, 1)
+light_energy = 1.19
+light_indirect_energy = 2.333
+light_specular = 0.69
+omni_range = 0.973
+omni_attenuation = 0.659754
+
+[node name="WeaponSpawner" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, 7.5)
+script = ExtResource("8_2oitn")
+WeaponScene = ExtResource("9_xgi73")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+shape = SubResource("BoxShape3D_ytsx0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+mesh = SubResource("BoxMesh_nt7qv")
+
+[node name="Label3D" type="Label3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner"]
+transform = Transform3D(-1, 0, -8.74228e-08, -7.57103e-08, 0.5, 0.866025, 4.37114e-08, 0.866025, -0.5, 0, 0.2, 0)
+text = "weapon_test"
+font = ExtResource("10_tsq0w")
+font_size = 25
+
+[node name="WeaponSpawner2" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.3, 0.5, 7.5)
+script = ExtResource("8_2oitn")
+WeaponScene = ExtResource("11_7e8qj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner2"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+shape = SubResource("BoxShape3D_ytsx0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner2"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+mesh = SubResource("BoxMesh_nt7qv")
+
+[node name="Label3D" type="Label3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner2"]
+transform = Transform3D(-1, 0, -8.74228e-08, -7.57103e-08, 0.5, 0.866025, 4.37114e-08, 0.866025, -0.5, 0, 0.2, 0)
+text = "weapon_test_2"
+font = ExtResource("10_tsq0w")
+font_size = 25
+
+[node name="WeaponSpawner3" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 0.5, 7.5)
+script = ExtResource("8_2oitn")
+WeaponScene = ExtResource("12_8h6y3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner3"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+shape = SubResource("BoxShape3D_ytsx0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner3"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+mesh = SubResource("BoxMesh_nt7qv")
+
+[node name="Label3D" type="Label3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner3"]
+transform = Transform3D(-1, 0, -8.74228e-08, -7.57103e-08, 0.5, 0.866025, 4.37114e-08, 0.866025, -0.5, 0, 0.2, 0)
+text = "weapon_test_seconary"
+font = ExtResource("10_tsq0w")
+font_size = 25
+
 [node name="Spawn" type="Node3D" parent="."]
+
+[connection signal="ButtonPressed" from="Map/NavigationRegion3D/ObjectiveTest" to="Map/NavigationRegion3D/ObjectiveTest/LevelObjective" method="CompleteObjective"]
+[connection signal="ObjectiveCompleted" from="Map/NavigationRegion3D/ObjectiveTest/LevelObjective" to="Map/NavigationRegion3D/ObjectiveTest/LevelObjective/InteractableTest" method="ChangeColor"]
+[connection signal="ButtonToggled" from="Map/NavigationRegion3D/test_objs/Lightswitch" to="Map/NavigationRegion3D/test_objs/OmniLight3D" method="set_visible"]

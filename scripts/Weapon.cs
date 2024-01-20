@@ -41,6 +41,16 @@ public partial class Weapon : Node3D
             IsAiming = !IsAiming;
         }
 
+        if (Input.IsActionJustPressed("reload"))
+        {
+            Reload();
+        }
+
+        if (Input.IsActionJustPressed("change_firemode"))
+        {
+            WeaponFireMode = WeaponFireMode == FireMode.Auto ? FireMode.Semi : FireMode.Auto;
+        }
+
         timeSinceLastShot += (float)delta;
     }
 

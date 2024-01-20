@@ -8,6 +8,7 @@ public partial class Level : Node
 	[Export] public Node3D[] PlayerSpawn;
 	[Export(PropertyHint.File, "*.tscn")] public string PlayerScene = "res://entities/characters/player/player.tscn";
 	[Export(PropertyHint.File, "*.tscn")] public string ReturnToScene = "res://maps/map_test.tscn";
+	[Export(PropertyHint.File, "*.tscn")] public string ExplosionParticlesScene = "res://assets/particles/scenes/explosion_particles.tscn";
 	public Player CurrentPlayer;
 
 	[Signal] public delegate void PlayerSpawnedEventHandler(Player player);
@@ -120,6 +121,16 @@ public partial class Level : Node
 				}
 			}
 		}
+
+		PackedScene explosionScene = ResourceLoader.Load<PackedScene>(ExplosionParticlesScene);
+		ParticlePool explosionParticles = explosionScene.Instantiate<ParticlePool>();
+		AddChild(explosionParticles);
+		explosionParticles.GlobalPosition = position;
+		explosionParticles.EmitParticles();
+		
+		// HACK
+		SceneTreeTimer particleLifetimeTimer = GetTree().CreateTimer(8f);
+		particleLifetimeTimer.Timeout += () => explosionParticles.QueueFree();
 
 		//DrawDebugSphere(position, explosionForce);
 	}

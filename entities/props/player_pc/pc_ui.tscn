@@ -15,7 +15,7 @@ corner_detail = 5
 
 [sub_resource type="Resource" id="Resource_ii8tl"]
 script = ExtResource("4_rjfo0")
-Name = "null"
+Name = "map_test_2"
 Scene = ExtResource("3_fvh0l")
 
 [sub_resource type="Resource" id="Resource_fhl0g"]

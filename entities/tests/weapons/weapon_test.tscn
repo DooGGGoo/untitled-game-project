@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://cpeptpsgeknxy"]
+[gd_scene load_steps=26 format=3 uid="uid://cpeptpsgeknxy"]
 
 [ext_resource type="Script" path="res://scripts/Weapon.cs" id="1_xbny8"]
 [ext_resource type="Script" path="res://scripts/WeaponData.cs" id="2_on6i7"]
 [ext_resource type="Script" path="res://entities/audio/SoundQueue.cs" id="3_px5f7"]
 [ext_resource type="AudioStream" uid="uid://d0fxjb076he33" path="res://assets/audio/weapons/shoot/556_Single.wav" id="4_q6een"]
+[ext_resource type="Script" path="res://entities/particles/ParticlePool.cs" id="5_60bt0"]
 [ext_resource type="Script" path="res://entities/particles/ParticleQueue.cs" id="5_gjjn4"]
 
 [sub_resource type="Curve" id="Curve_hsvdu"]
@@ -43,9 +44,9 @@ stream_0/stream = ExtResource("4_q6een")
 stream_0/weight = 1.0
 
 [sub_resource type="Curve" id="Curve_2sppi"]
-max_value = 100.0
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.717593, 14.2857), 47.952, 47.952, 0, 0, Vector2(1, 28.9377), -62.1664, 0.0, 0, 0]
-point_count = 3
+max_value = 10.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 10), 14.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_734hs"]
 curve = SubResource("Curve_2sppi")
@@ -73,11 +74,11 @@ direction = Vector3(0, 0, -1)
 spread = 18.0
 initial_velocity_min = 8.75
 initial_velocity_max = 10.9
-gravity = Vector3(0, 1.6, 0)
+gravity = Vector3(0, 6, 0)
 damping_min = 0.51
-damping_max = 1.505
+damping_max = 4.855
 damping_curve = SubResource("CurveTexture_734hs")
-scale_min = 0.05
+scale_min = 0.0
 scale_max = 0.25
 scale_curve = SubResource("CurveTexture_638is")
 scale_over_velocity_min = 0.7
@@ -86,10 +87,11 @@ scale_over_velocity_curve = SubResource("CurveTexture_vhyvx")
 turbulence_enabled = true
 turbulence_noise_strength = 0.05
 turbulence_influence_min = 0.0
-turbulence_influence_max = 0.025
+turbulence_influence_max = 0.02
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2ysb6"]
-albedo_color = Color(0.894118, 0.894118, 0.894118, 1)
+transparency = 1
+albedo_color = Color(0.764706, 0.764706, 0.764706, 0.654902)
 metallic_specular = 0.0
 texture_filter = 2
 disable_receive_shadows = true
@@ -101,6 +103,37 @@ particles_anim_loop = false
 [sub_resource type="QuadMesh" id="QuadMesh_uylcc"]
 material = SubResource("StandardMaterial3D_2ysb6")
 size = Vector2(0.1, 0.1)
+
+[sub_resource type="Curve" id="Curve_y6psb"]
+min_value = -360.0
+max_value = 360.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_b56uy"]
+curve = SubResource("Curve_y6psb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_unyd2"]
+angle_min = 90.0
+angle_max = 90.0
+angle_curve = SubResource("CurveTexture_b56uy")
+direction = Vector3(0, 0, 1)
+spread = 12.67
+initial_velocity_min = 2.3
+initial_velocity_max = 2.95
+gravity = Vector3(9.8, 0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s4y2l"]
+albedo_color = Color(0.835294, 0.682353, 0.356863, 1)
+metallic_specular = 0.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_kerbk"]
+material = SubResource("StandardMaterial3D_s4y2l")
+top_radius = 0.008
+bottom_radius = 0.008
+height = 0.03
+radial_segments = 10
+rings = 1
 
 [node name="weapon_test" type="Node3D" node_paths=PackedStringArray("RayCast")]
 script = ExtResource("1_xbny8")
@@ -127,14 +160,18 @@ stream = SubResource("AudioStreamRandomizer_m176n")
 volume_db = 1.68
 max_polyphony = 30
 
-[node name="ParticleQueue" type="Node3D" parent="."]
+[node name="ParticlePool" type="Node3D" parent="."]
+script = ExtResource("5_60bt0")
+
+[node name="ParticleQueue" type="Node3D" parent="ParticlePool"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.246636)
 script = ExtResource("5_gjjn4")
 InstancesCount = 4
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="ParticleQueue"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.246636)
+[node name="GPUParticles3D" type="GPUParticles3D" parent="ParticlePool/ParticleQueue"]
+process_mode = 3
 emitting = false
-amount = 24
+amount = 10
 lifetime = 0.66
 one_shot = true
 explosiveness = 0.96
@@ -142,5 +179,21 @@ randomness = 0.4
 process_material = SubResource("ParticleProcessMaterial_uwdgf")
 draw_pass_1 = SubResource("QuadMesh_uylcc")
 
+[node name="ParticleQueue2" type="Node3D" parent="ParticlePool"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.105693)
+script = ExtResource("5_gjjn4")
+InstancesCount = 12
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="ParticlePool/ParticleQueue2"]
+process_mode = 3
+transform = Transform3D(-7.35137e-08, 0, 1, -1, 1.91069e-15, -7.35137e-08, -1.91069e-15, -1, 0, 0, 0, 0)
+emitting = false
+amount = 1
+one_shot = true
+randomness = 0.26
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_unyd2")
+draw_pass_1 = SubResource("CylinderMesh_kerbk")
+
 [connection signal="ShotFired" from="." to="SoundQueue" method="PlaySound"]
-[connection signal="ShotFired" from="." to="ParticleQueue" method="EmitParticles"]
+[connection signal="ShotFired" from="." to="ParticlePool" method="EmitParticles"]

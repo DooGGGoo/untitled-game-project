@@ -2,11 +2,14 @@ using Godot;
 using System.Collections.Generic;
 
 [Tool, GlobalClass]
-public partial class ParticlePool : Node
+public partial class ParticlePool : Node3D
 {
 	[Export] private bool useRandom;
 	private List<ParticleQueue> particleQueues = new();
 	private RandomNumberGenerator random = new();
+	
+
+	[Signal] public delegate void FinishedEmittingParticlesEventHandler();
 
 	public override void _Ready()
 	{
