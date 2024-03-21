@@ -190,6 +190,7 @@ public partial class View : Node3D
 
         viewmodelRotation.X = Mathf.Lerp(viewmodel.Rotation.X, mouseInput.Y * .9f, 0.125f);
         viewmodelRotation.Y = Mathf.Lerp(viewmodel.Rotation.Y, mouseInput.X * .9f, 0.125f);
+        viewmodelRotation.Z = Mathf.Lerp(viewmodel.Rotation.Z, mouseInput.X * .33f, 0.125f);
 
         viewmodel.RotationDegrees += viewmodelRotation;
 

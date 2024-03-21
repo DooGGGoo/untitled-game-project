@@ -99,6 +99,11 @@ public partial class Player : GroundCharacter
 		{
 			Global.Instance().CurrentLevel.SpawnExplosion(GlobalPosition);
 		}
+	
+		if (Input.IsActionJustPressed("debug_2"))
+		{
+			RequestAirstrike();
+		}
 	}
 
 	bool StartedProcessOnFloor = false;
@@ -293,4 +298,19 @@ public partial class Player : GroundCharacter
 		}
 	}
 	#endregion
+
+	bool airstrikeReady = true;
+	private void RequestAirstrike()
+	{
+		PackedScene airstrikeScene = GD.Load<PackedScene>("res://entities/level/airstrike/airstrike.tscn");
+		Airstrike airstrike = airstrikeScene.Instantiate<Airstrike>();
+
+		airstrike.GlobalPosition = GlobalPosition;
+
+		Global.Instance().CurrentLevel.AddChild(airstrike);
+
+		airstrikeReady = false;
+		SceneTreeTimer timer = GetTree().CreateTimer(20f);
+		timer.Timeout += () => airstrikeReady = true;
+	}
 }

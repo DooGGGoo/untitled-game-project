@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dsfd5bcx3jojs"]
+[gd_scene load_steps=17 format=3 uid="uid://dsfd5bcx3jojs"]
 
 [ext_resource type="Script" path="res://entities/particles/ParticlePool.cs" id="1_dbq2b"]
 [ext_resource type="Script" path="res://entities/particles/ParticleQueue.cs" id="2_ij2rd"]
@@ -24,6 +24,14 @@ disable_receive_shadows = true
 material = SubResource("StandardMaterial3D_tbl83")
 size = Vector2(0.025, 0.1)
 
+[sub_resource type="Gradient" id="Gradient_3vrhv"]
+offsets = PackedFloat32Array(0, 0.00763359, 0.019084)
+colors = PackedColorArray(0.782913, 0.018299, 8.66354e-07, 1, 0.95638, 0.225759, 0.0803625, 1, 0.16446, 0.16446, 0.16446, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qe2gu"]
+gradient = SubResource("Gradient_3vrhv")
+use_hdr = true
+
 [sub_resource type="Curve" id="Curve_8hqao"]
 max_value = 100.0
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.162037, 59.707), 140.0, 0.0, 0, 0]
@@ -32,22 +40,22 @@ point_count = 2
 [sub_resource type="CurveTexture" id="CurveTexture_2yu4o"]
 curve = SubResource("Curve_8hqao")
 
+[sub_resource type="Curve" id="Curve_2c4nt"]
+_data = [Vector2(0, 0.810171), 19.8617, 0.0, 0, 0, Vector2(0.0512367, 0), -0.41166, 1.4, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_o48j7"]
+curve = SubResource("Curve_2c4nt")
+
 [sub_resource type="Curve" id="Curve_b5pof"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+_data = [Vector2(0.0407407, 0.992674), 0.0, 0.0, 0, 0, Vector2(1, 0.025641), -3.41038, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_ga4mm"]
 curve = SubResource("Curve_b5pof")
 
-[sub_resource type="Curve" id="Curve_sm3sq"]
-max_value = 3.0
-_data = [Vector2(0, 3), 0.0, -10.444, 0, 0, Vector2(1, 0), -16.2989, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_arav7"]
-curve = SubResource("Curve_sm3sq")
-
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_80bvr"]
+lifetime_randomness = 0.17
 particle_flag_damping_as_friction = true
 angle_min = -720.0
 angle_max = 720.0
@@ -61,20 +69,20 @@ gravity = Vector3(0, -1, 0)
 damping_min = 1.72
 damping_max = 3.295
 damping_curve = SubResource("CurveTexture_2yu4o")
-scale_min = 0.75
-scale_max = 1.3
+scale_min = 0.0
 scale_curve = SubResource("CurveTexture_ga4mm")
+scale_over_velocity_min = 1.35
 scale_over_velocity_max = 4.7
-scale_over_velocity_curve = SubResource("CurveTexture_arav7")
+color = Color(0.470588, 0.470588, 0.470588, 1)
+color_ramp = SubResource("GradientTexture1D_qe2gu")
+emission_curve = SubResource("CurveTexture_o48j7")
 turbulence_enabled = true
 turbulence_influence_min = 0.03
 turbulence_influence_max = 0.065
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v56we"]
-transparency = 1
-albedo_color = Color(0.247059, 0.247059, 0.247059, 0.988235)
-metallic_specular = 0.0
-emission = Color(0.701961, 0.701961, 0.701961, 1)
+shading_mode = 0
+vertex_color_use_as_albedo = true
 texture_filter = 2
 disable_receive_shadows = true
 billboard_mode = 3
@@ -84,7 +92,7 @@ particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_8xld3"]
 material = SubResource("StandardMaterial3D_v56we")
-size = Vector2(0.5, 0.5)
+size = Vector2(0.25, 0.25)
 
 [node name="ExplosionParticles" type="Node3D"]
 script = ExtResource("1_dbq2b")
@@ -93,7 +101,7 @@ script = ExtResource("1_dbq2b")
 script = ExtResource("2_ij2rd")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="ParticleQueue"]
-amount = 35
+amount = 12
 lifetime = 5.55
 explosiveness = 1.0
 randomness = 0.44
@@ -104,8 +112,8 @@ draw_pass_1 = SubResource("QuadMesh_3d7wd")
 script = ExtResource("2_ij2rd")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="ParticleQueue2"]
-amount = 35
-lifetime = 8.0
+amount = 18
+lifetime = 4.0
 explosiveness = 0.99
 randomness = 0.44
 process_material = SubResource("ParticleProcessMaterial_80bvr")

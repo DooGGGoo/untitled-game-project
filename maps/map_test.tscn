@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=40 format=3 uid="uid://dmv7hq177kus8"]
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_dwwee"]
 [ext_resource type="Texture2D" uid="uid://bd2datw4a75dw" path="res://assets/materials/textures/dev_1.png" id="1_gxu3p"]
@@ -19,7 +19,6 @@
 [ext_resource type="PackedScene" uid="uid://xximjq7gsnrp" path="res://entities/tests/weapons/weapon_test_secondary.tscn" id="13_vpdia"]
 [ext_resource type="Script" path="res://entities/props/BreakableProp.cs" id="13_xgew7"]
 [ext_resource type="Script" path="res://entities/props/PropData.cs" id="14_fabfa"]
-[ext_resource type="PackedScene" uid="uid://b5y7ydw7i8j20" path="res://entities/level/airstrike/airstrike.tscn" id="14_l26u5"]
 [ext_resource type="Script" path="res://entities/CameraShakeTrigger.cs" id="16_uk6tj"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_eox80"]
@@ -45,9 +44,13 @@ glow_intensity = 0.1
 glow_strength = 0.93
 glow_bloom = 0.01
 glow_blend_mode = 0
-fog_light_color = Color(0.511355, 0.502337, 0.511351, 1)
+fog_enabled = true
+fog_light_color = Color(0.470588, 0.462745, 0.470588, 1)
 fog_sun_scatter = 0.25
+fog_density = 0.0
 fog_aerial_perspective = 0.785
+fog_height = 361.88
+fog_height_density = -0.0001
 volumetric_fog_anisotropy = 0.27
 volumetric_fog_length = 39.66
 volumetric_fog_detail_spread = 1.68179
@@ -434,13 +437,6 @@ shape = SubResource("SphereShape3D_e8nub")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CameraShakeTrigger"]
 mesh = SubResource("SphereMesh_veo4k")
-
-[node name="Airstrike" parent="." instance=ExtResource("14_l26u5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.4, 0, -16)
-TimeBetweenShots = 0.1
-PositionRandomness = 0.2
-Spacing = 3.0
-HitsCount = 12
 
 [connection signal="ButtonPressed" from="Map/NavigationRegion3D/ObjectiveTest" to="Map/NavigationRegion3D/ObjectiveTest/LevelObjective" method="CompleteObjective"]
 [connection signal="ObjectiveCompleted" from="Map/NavigationRegion3D/ObjectiveTest/LevelObjective" to="Map/NavigationRegion3D/ObjectiveTest/LevelObjective/InteractableTest" method="ChangeColor"]

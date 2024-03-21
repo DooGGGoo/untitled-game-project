@@ -8,6 +8,8 @@ public partial class Airstrike : Node3D
 	[Export] public float PositionRandomness = 0.1f;
 	[Export] public float Spacing = 0.25f;
 	[Export] public int HitsCount = 6;
+	[Export] private AnimationPlayer animationPlayer;
+	[Export] private string planeAnimationName = "plane_move";
 
 	public List<Node3D> HitPoints = new();
 
@@ -29,11 +31,11 @@ public partial class Airstrike : Node3D
 				)
             };
 
-
 			AddChild(hitPoint);
 			HitPoints.Add(hitPoint);
         }
 
+		animationPlayer.Play(planeAnimationName);
 		EmitSignal(SignalName.AirstrikeCalled);
 	}
 

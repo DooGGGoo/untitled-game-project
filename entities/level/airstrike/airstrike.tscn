@@ -1,10 +1,11 @@
-[gd_scene load_steps=34 format=3 uid="uid://b5y7ydw7i8j20"]
+[gd_scene load_steps=27 format=3 uid="uid://b5y7ydw7i8j20"]
 
 [ext_resource type="Script" path="res://entities/level/airstrike/Airstrike.cs" id="1_iaip4"]
 [ext_resource type="Script" path="res://entities/particles/ParticleQueue.cs" id="2_haj8a"]
 [ext_resource type="AudioStream" uid="uid://2drpkafdh6jl" path="res://assets/audio/other/a10/456267__soundfxstudio__a-10-thunderbolt-maximum-rpm.wav" id="3_o8s8f"]
 [ext_resource type="AudioStream" uid="uid://ddwd2g30l3ri7" path="res://assets/audio/other/a10/a10_brrrt.wav" id="4_kk4dn"]
 [ext_resource type="AudioStream" uid="uid://cp3sy0mebw6vk" path="res://assets/audio/other/a10/a10_impact.wav" id="5_3jfki"]
+[ext_resource type="AudioStream" uid="uid://bd7b3unj36vgg" path="res://assets/audio/other/a10/274867__alienxxx__gotta_do_better_than_that.wav" id="6_tq05s"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_jbcqy"]
 size = Vector3(2, 1.5, 19)
@@ -68,27 +69,6 @@ particles_anim_loop = false
 material = SubResource("StandardMaterial3D_pc6i7")
 size = Vector2(3, 3)
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mcl14"]
-particle_flag_align_y = true
-direction = Vector3(0, 0, 0)
-
-[sub_resource type="Curve" id="Curve_yhcer"]
-_data = [Vector2(0, 0.201465), 0.0, 1.10305, 0, 0, Vector2(1, 0.494505), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_epmgl"]
-transparency = 1
-cull_mode = 2
-albedo_color = Color(0.588235, 0.588235, 0.588235, 0.941176)
-use_particle_trails = true
-
-[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_p73o0"]
-material = SubResource("StandardMaterial3D_epmgl")
-size = 1.75
-sections = 3
-section_segments = 2
-curve = SubResource("Curve_yhcer")
-
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_utx2p"]
 angle_min = -90.0
 angle_max = 90.0
@@ -107,7 +87,8 @@ cull_mode = 2
 albedo_color = Color(0.992157, 0.74902, 0.337255, 0.929412)
 metallic_specular = 0.0
 emission_enabled = true
-emission = Color(0.996078, 0.827451, 0.560784, 1)
+emission = Color(1, 0.52549, 0.266667, 1)
+emission_energy_multiplier = 1.5
 texture_filter = 2
 disable_receive_shadows = true
 billboard_mode = 3
@@ -118,27 +99,6 @@ particles_anim_loop = false
 [sub_resource type="QuadMesh" id="QuadMesh_xefri"]
 material = SubResource("StandardMaterial3D_q7abn")
 size = Vector2(3, 3)
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gj6hl"]
-particle_flag_align_y = true
-direction = Vector3(0, 0, 0)
-
-[sub_resource type="Curve" id="Curve_6nxjc"]
-_data = [Vector2(0, 0.201465), 0.0, 1.10305, 0, 0, Vector2(1, 0.494505), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ck12m"]
-transparency = 1
-cull_mode = 2
-albedo_color = Color(0.588235, 0.588235, 0.588235, 0.941176)
-use_particle_trails = true
-
-[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_6hifs"]
-material = SubResource("StandardMaterial3D_ck12m")
-size = 1.17
-sections = 3
-section_segments = 2
-curve = SubResource("Curve_6nxjc")
 
 [sub_resource type="Animation" id="Animation_f8qtw"]
 resource_name = "plane_flares"
@@ -151,7 +111,7 @@ tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.1),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -191,7 +151,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 10),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0, 0, -1500), Vector3(0, 0, 1500)]
+"values": [Vector3(0, 0, -1800), Vector3(0, 0, 1800)]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -271,8 +231,13 @@ _data = {
 "plane_move": SubResource("Animation_4x8o3")
 }
 
-[node name="Airstrike" type="Node3D"]
+[node name="Airstrike" type="Node3D" node_paths=PackedStringArray("animationPlayer")]
 script = ExtResource("1_iaip4")
+TimeBetweenShots = 0.2
+PositionRandomness = 0.2
+Spacing = 2.0
+HitsCount = 16
+animationPlayer = NodePath("Node3D/AnimationPlayer")
 
 [node name="Node3D" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 500, 0)
@@ -338,25 +303,12 @@ InstancesCount = 10
 [node name="GPUParticles3D" type="GPUParticles3D" parent="Node3D/Plane/ParticleQueue"]
 emitting = false
 amount = 2
-sub_emitter = NodePath("GPUParticles3D2")
 lifetime = 3.0
 one_shot = true
 explosiveness = 0.95
 randomness = 0.1
 process_material = SubResource("ParticleProcessMaterial_24eiv")
 draw_pass_1 = SubResource("QuadMesh_6hdhd")
-
-[node name="GPUParticles3D2" type="GPUParticles3D" parent="Node3D/Plane/ParticleQueue/GPUParticles3D"]
-emitting = false
-amount = 5
-lifetime = 3.0
-one_shot = true
-explosiveness = 0.95
-randomness = 0.1
-trail_enabled = true
-trail_lifetime = 0.75
-process_material = SubResource("ParticleProcessMaterial_mcl14")
-draw_pass_1 = SubResource("RibbonTrailMesh_p73o0")
 
 [node name="ParticleQueue2" type="Node3D" parent="Node3D/Plane"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -10.8)
@@ -366,25 +318,12 @@ InstancesCount = 10
 [node name="GPUParticles3D" type="GPUParticles3D" parent="Node3D/Plane/ParticleQueue2"]
 emitting = false
 amount = 2
-sub_emitter = NodePath("GPUParticles3D2")
 lifetime = 3.0
 one_shot = true
 explosiveness = 0.95
 randomness = 0.1
 process_material = SubResource("ParticleProcessMaterial_utx2p")
 draw_pass_1 = SubResource("QuadMesh_xefri")
-
-[node name="GPUParticles3D2" type="GPUParticles3D" parent="Node3D/Plane/ParticleQueue2/GPUParticles3D"]
-emitting = false
-amount = 5
-lifetime = 3.0
-one_shot = true
-explosiveness = 0.95
-randomness = 0.1
-trail_enabled = true
-trail_lifetime = 0.75
-process_material = SubResource("ParticleProcessMaterial_gj6hl")
-draw_pass_1 = SubResource("RibbonTrailMesh_6hifs")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Node3D/Plane"]
 root_node = NodePath("../ParticleQueue")
@@ -396,8 +335,8 @@ autoplay = "plane_flares"
 [node name="EngineAudio" type="AudioStreamPlayer3D" parent="Node3D/Plane"]
 stream = ExtResource("3_o8s8f")
 volume_db = 35.0
-unit_size = 8.0
-max_distance = 1700.0
+unit_size = 6.0
+max_distance = 1500.0
 emission_angle_degrees = 85.8
 emission_angle_filter_attenuation_db = -2.7
 doppler_tracking = 1
@@ -414,17 +353,26 @@ root_node = NodePath("../..")
 libraries = {
 "": SubResource("AnimationLibrary_bgpjp")
 }
-autoplay = "plane_move"
 
 [node name="ImpactAudio" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("5_3jfki")
 volume_db = 18.0
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Notification" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_tq05s")
+volume_db = 2.0
+
+[node name="DespawnTimer" type="Timer" parent="."]
 wait_time = 10.0
 one_shot = true
-autostart = true
 
-[connection signal="ready" from="." to="." method="CallAirstrike"]
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[connection signal="AirstrikeCalled" from="." to="DespawnTimer" method="start"]
+[connection signal="ready" from="." to="Notification" method="play"]
+[connection signal="ready" from="." to="Timer" method="start"]
 [connection signal="finished" from="Node3D/Plane/EngineAudio" to="Node3D/Plane/EngineAudio" method="play"]
-[connection signal="timeout" from="Timer" to="." method="queue_free"]
+[connection signal="timeout" from="DespawnTimer" to="." method="queue_free"]
+[connection signal="timeout" from="Timer" to="." method="CallAirstrike"]
