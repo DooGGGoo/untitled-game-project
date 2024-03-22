@@ -6,10 +6,10 @@ public sealed partial class Global : Node
     private Global() { }
     private static Global instance;
 
-    public static Global Instance()
+    public static Global Instance
     {
-        instance ??= new Global();
-        return instance;
+        get => instance ??= new Global();
+        private set => instance = value;
     }
 
     public Level CurrentLevel;

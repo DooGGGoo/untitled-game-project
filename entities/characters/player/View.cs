@@ -65,7 +65,7 @@ public partial class View : Node3D
     // TODO: Fix this shit
         if (player == null)
         {
-            player = Global.Instance().CurrentLevel.CurrentPlayer;
+            player = Global.Instance.CurrentLevel.CurrentPlayer;
             return;
         }
 

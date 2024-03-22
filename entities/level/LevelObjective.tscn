@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://vlqgl00phyvr"]
-
-[ext_resource type="Script" path="res://entities/level/LevelObjective.cs" id="1_cvtga"]
-
-[node name="LevelObjective" type="Node"]
-script = ExtResource("1_cvtga")

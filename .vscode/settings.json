@@ -6,6 +6,7 @@
         "Lerp",
         "Mathf",
         "oldvel",
+        "Populator",
         "rigidbody",
         "viewmodel"
     ]

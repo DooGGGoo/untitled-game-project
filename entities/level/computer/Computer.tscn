@@ -1,0 +1,73 @@
+[gd_scene load_steps=13 format=3 uid="uid://dkh3ne7tmorbc"]
+
+[ext_resource type="Script" path="res://entities/level/computer/Computer.cs" id="1_d6nte"]
+[ext_resource type="PackedScene" uid="uid://dmv7hq177kus8" path="res://maps/map_test.tscn" id="2_3rgjq"]
+[ext_resource type="Script" path="res://entities/UI3D.cs" id="2_mu1ci"]
+[ext_resource type="PackedScene" uid="uid://desnxsamuyl2f" path="res://entities/level/computer/computer_ui.tscn" id="3_6q5lh"]
+[ext_resource type="Script" path="res://scripts/mission_system/MissionObjective.cs" id="3_blwvw"]
+[ext_resource type="Script" path="res://scripts/mission_system/Mission.cs" id="4_6ul7q"]
+
+[sub_resource type="Resource" id="Resource_q8rao"]
+script = ExtResource("3_blwvw")
+Title = "awdsa"
+Description = "asdawsd"
+
+[sub_resource type="Resource" id="Resource_6pghd"]
+script = ExtResource("4_6ul7q")
+Title = "Pems"
+Description = "asdadas"
+Level = ExtResource("2_3rgjq")
+Objectives = Array[Object]([SubResource("Resource_q8rao")])
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_48nq0"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0vlam"]
+resource_local_to_scene = true
+shading_mode = 0
+specular_mode = 2
+disable_ambient_light = true
+albedo_texture = SubResource("ViewportTexture_48nq0")
+
+[sub_resource type="QuadMesh" id="QuadMesh_d3s3j"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_0vlam")
+size = Vector2(1.067, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5tcmx"]
+size = Vector3(1.067, 0.6, 0.075)
+
+[node name="Computer" type="Node3D" node_paths=PackedStringArray("PCCamera", "missionsContainer", "testAddMission")]
+script = ExtResource("1_d6nte")
+PCCamera = NodePath("Camera3D")
+possibleMissions = Array[Resource]([SubResource("Resource_6pghd")])
+missionsContainer = NodePath("3DUI/SubViewport/ComputerUI/ColorRect/MarginContainer/ColorRect/MarginContainer/VBoxContainer")
+testAddMission = NodePath("3DUI/SubViewport/ComputerUI/ColorRect/MarginContainer/ColorRect/Button")
+UImissionScene = ExtResource("3_6q5lh")
+
+[node name="3DUI" type="Node3D" parent="." node_paths=PackedStringArray("subViewport", "quad", "area", "shape")]
+script = ExtResource("2_mu1ci")
+subViewport = NodePath("SubViewport")
+quad = NodePath("MeshInstance3D")
+area = NodePath("MeshInstance3D/Area3D")
+shape = NodePath("MeshInstance3D/Area3D/CollisionShape3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="3DUI"]
+mesh = SubResource("QuadMesh_d3s3j")
+
+[node name="Area3D" type="Area3D" parent="3DUI/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="3DUI/MeshInstance3D/Area3D"]
+shape = SubResource("BoxShape3D_5tcmx")
+
+[node name="SubViewport" type="SubViewport" parent="3DUI"]
+disable_3d = true
+canvas_item_default_texture_filter = 3
+size = Vector2i(1200, 675)
+
+[node name="ComputerUI" parent="3DUI/SubViewport" instance=ExtResource("3_6q5lh")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.444075)
+
+[editable path="3DUI/SubViewport/ComputerUI"]

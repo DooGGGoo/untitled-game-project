@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Button : StaticBody3D, IInteractable
+public partial class Button3D : StaticBody3D, IInteractable
 {
     [Export] public bool ToggleState = false;
     [Export] private ButtonType buttonType;

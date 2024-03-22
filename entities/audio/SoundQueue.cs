@@ -8,7 +8,7 @@ public partial class SoundQueue : Node3D
     private int next = 0;
     private List<AudioStreamPlayer3D> audioPlayers = new();
 
-    private Global Global = Global.Instance();
+    private Global Global = Global.Instance;
 
     public override void _Ready()
     {

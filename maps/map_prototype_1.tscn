@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bp1u2ivnyumbq"]
+
+[ext_resource type="Script" path="res://entities/level/Level.cs" id="1_wwg5w"]
+
+[node name="map_prototype_1" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
+script = ExtResource("1_wwg5w")
+PlayerSpawn = []

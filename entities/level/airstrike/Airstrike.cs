@@ -52,7 +52,7 @@ public partial class Airstrike : Node3D
 	private async void SpawnExplosion(Vector3 position)
 	{
 		await ToSignal(GetTree().CreateTimer(TimeBetweenShots), "timeout");
-		Global.Instance().CurrentLevel.SpawnExplosion(position);
+		Global.Instance.CurrentLevel.SpawnExplosion(position);
 	}
 
 }

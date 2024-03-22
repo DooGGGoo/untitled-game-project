@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=39 format=3 uid="uid://dmv7hq177kus8"]
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_dwwee"]
 [ext_resource type="Texture2D" uid="uid://bd2datw4a75dw" path="res://assets/materials/textures/dev_1.png" id="1_gxu3p"]
@@ -6,20 +6,19 @@
 [ext_resource type="PackedScene" uid="uid://c8hufy0b7hp07" path="res://entities/tests/interactable_test.tscn" id="3_igorc"]
 [ext_resource type="Script" path="res://entities/Button.cs" id="4_24jn2"]
 [ext_resource type="PackedScene" uid="uid://bk8e1unhd8k4d" path="res://entities/characters/enemy/GenericEnemy.tscn" id="6_838wa"]
+[ext_resource type="Script" path="res://entities/Button3D.cs" id="6_dihxa"]
 [ext_resource type="Material" uid="uid://byy0tf2266p3d" path="res://assets/materials/jerma.tres" id="6_fwhoe"]
 [ext_resource type="PackedScene" uid="uid://df317tod58c0w" path="res://entities/characters/enemy/scp/SCP173.tscn" id="8_rae2q"]
-[ext_resource type="PackedScene" uid="uid://dx6nwpc4tly55" path="res://entities/props/player_pc/PlayerPC.tscn" id="9_jxfj6"]
 [ext_resource type="Script" path="res://entities/level/WeaponSpawner.cs" id="10_ntu0d"]
 [ext_resource type="PackedScene" uid="uid://cpeptpsgeknxy" path="res://entities/tests/weapons/weapon_test.tscn" id="11_6liem"]
 [ext_resource type="FontFile" uid="uid://d3lj676xv236i" path="res://assets/fonts/Fixedsys Excelsior 3.01 Regular.ttf" id="11_f872t"]
-[ext_resource type="PackedScene" uid="uid://vlqgl00phyvr" path="res://entities/level/LevelObjective.tscn" id="11_luee5"]
 [ext_resource type="Script" path="res://entities/props/PhysicsProp.cs" id="12_dhpw0"]
 [ext_resource type="PackedScene" uid="uid://bxadjnscr4b86" path="res://entities/tests/weapons/weapon_test_2.tscn" id="12_tl38v"]
-[ext_resource type="Script" path="res://entities/level/Indicator.cs" id="12_xatvq"]
 [ext_resource type="PackedScene" uid="uid://xximjq7gsnrp" path="res://entities/tests/weapons/weapon_test_secondary.tscn" id="13_vpdia"]
 [ext_resource type="Script" path="res://entities/props/BreakableProp.cs" id="13_xgew7"]
 [ext_resource type="Script" path="res://entities/props/PropData.cs" id="14_fabfa"]
 [ext_resource type="Script" path="res://entities/CameraShakeTrigger.cs" id="16_uk6tj"]
+[ext_resource type="PackedScene" uid="uid://dkh3ne7tmorbc" path="res://entities/level/computer/Computer.tscn" id="20_3q5up"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_eox80"]
 panorama = ExtResource("1_gxu3p")
@@ -287,21 +286,6 @@ material = ExtResource("1_qbkpu")
 [node name="PlayerSpawn" type="Node3D" parent="Map/NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 
-[node name="ObjectiveTest" parent="Map/NavigationRegion3D" instance=ExtResource("3_igorc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.1, 0.5, -3.3)
-script = ExtResource("4_24jn2")
-ToggleState = false
-buttonType = 0
-
-[node name="LevelObjective" parent="Map/NavigationRegion3D/ObjectiveTest" instance=ExtResource("11_luee5")]
-
-[node name="InteractableTest" parent="Map/NavigationRegion3D/ObjectiveTest/LevelObjective" instance=ExtResource("3_igorc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, -3.4)
-script = ExtResource("12_xatvq")
-
-[node name="PlayerPC" parent="Map/NavigationRegion3D" instance=ExtResource("9_jxfj6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 1, -2.6)
-
 [node name="test_objs" type="Node" parent="Map/NavigationRegion3D"]
 
 [node name="InteractableTest" parent="Map/NavigationRegion3D/test_objs" instance=ExtResource("3_igorc")]
@@ -310,6 +294,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.298285, 0.679339, -3)
 [node name="Lightswitch" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.44082, 0.927259, -1.81021)
 script = ExtResource("4_24jn2")
+ToggleState = null
 buttonType = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/Lightswitch"]
@@ -317,6 +302,7 @@ mesh = SubResource("BoxMesh_lqqxr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/Lightswitch"]
 shape = SubResource("BoxShape3D_2b7y2")
+script = ExtResource("6_dihxa")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Map/NavigationRegion3D/test_objs"]
 transform = Transform3D(-0.999848, -0.0130307, 0.0116099, -6.19544e-10, 0.66523, 0.746638, -0.0174525, 0.746524, -0.665129, -2.48612, 0.535934, -1.83187)
@@ -438,6 +424,5 @@ shape = SubResource("SphereShape3D_e8nub")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CameraShakeTrigger"]
 mesh = SubResource("SphereMesh_veo4k")
 
-[connection signal="ButtonPressed" from="Map/NavigationRegion3D/ObjectiveTest" to="Map/NavigationRegion3D/ObjectiveTest/LevelObjective" method="CompleteObjective"]
-[connection signal="ObjectiveCompleted" from="Map/NavigationRegion3D/ObjectiveTest/LevelObjective" to="Map/NavigationRegion3D/ObjectiveTest/LevelObjective/InteractableTest" method="ChangeColor"]
-[connection signal="ButtonToggled" from="Map/NavigationRegion3D/test_objs/Lightswitch" to="Map/NavigationRegion3D/test_objs/OmniLight3D" method="set_visible"]
+[node name="Computer" parent="." instance=ExtResource("20_3q5up")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3, 1.4, -3)

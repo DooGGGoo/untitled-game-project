@@ -9,13 +9,14 @@ public partial class Level : Node
 	[Export(PropertyHint.File, "*.tscn")] public string PlayerScene = "res://entities/characters/player/player.tscn";
 	[Export(PropertyHint.File, "*.tscn")] public string ReturnToScene = "res://maps/map_test.tscn";
 	[Export(PropertyHint.File, "*.tscn")] public string ExplosionParticlesScene = "res://assets/particles/scenes/explosion_particles.tscn";
+	
 	public Player CurrentPlayer;
 
 	[Signal] public delegate void PlayerSpawnedEventHandler(Player player);
 
 	public override void _Ready()
 	{
-		Global.Instance().CurrentLevel = this;
+		Global.Instance.CurrentLevel = this;
 
 		PlayerSpawned += (Player player) => GD.Print("Player spawned" + player.GlobalPosition);
 		
@@ -131,7 +132,5 @@ public partial class Level : Node
 		// HACK
 		SceneTreeTimer particleLifetimeTimer = GetTree().CreateTimer(8f);
 		particleLifetimeTimer.Timeout += () => explosionParticles.QueueFree();
-
-		//DrawDebugSphere(position, explosionForce);
 	}
 }

@@ -97,7 +97,7 @@ public partial class Player : GroundCharacter
 
 		if (Input.IsActionJustPressed("debug_1"))
 		{
-			Global.Instance().CurrentLevel.SpawnExplosion(GlobalPosition);
+			Global.Instance.CurrentLevel.SpawnExplosion(GlobalPosition);
 		}
 	
 		if (Input.IsActionJustPressed("debug_2"))
@@ -307,10 +307,11 @@ public partial class Player : GroundCharacter
 
 		airstrike.GlobalPosition = GlobalPosition;
 
-		Global.Instance().CurrentLevel.AddChild(airstrike);
+		Global.Instance.CurrentLevel.AddChild(airstrike);
 
 		airstrikeReady = false;
 		SceneTreeTimer timer = GetTree().CreateTimer(20f);
 		timer.Timeout += () => airstrikeReady = true;
 	}
+
 }

@@ -1,8 +1,16 @@
 using Godot;
+using Godot.Collections;
+using Missions;
 
-public partial class PlayerPC : StaticBody3D, IInteractable
+public partial class Computer : Node3D
 {
 	[Export] private Camera3D PCCamera;
+	[Export] private Array<Mission> possibleMissions;
+	[Export] private Array<Mission> missions;
+	[Export] private VBoxContainer missionsContainer;
+	[Export] private Button testAddMission;
+	[Export] private PackedScene UImissionScene;
+
 	private Player player;
 	private Camera3D playerCamera;
 	private bool isActive = false;
@@ -19,7 +27,16 @@ public partial class PlayerPC : StaticBody3D, IInteractable
 				Input.MouseMode = Input.MouseModeEnum.Captured;
 			}
 		}
+	}
 
+	public override void _Ready()
+	{
+        testAddMission.Pressed += () =>
+        {
+			Mission newMission = CreateDummyMission();
+			MissionUIDisplay uiDisplay = (MissionUIDisplay)UImissionScene.Instantiate();
+			uiDisplay.SetMission(newMission);
+		};
 	}
 
 	public void Interact(CharacterBody3D interactor)
@@ -54,5 +71,17 @@ public partial class PlayerPC : StaticBody3D, IInteractable
 	private void CurrentCameraPC()
 	{
 		PCCamera.MakeCurrent();
+	}
+	
+	public Mission GetRandomMission()
+	{
+		return possibleMissions[(int)GD.Randi() % possibleMissions.Count];
+	}
+
+	public Mission CreateDummyMission()
+	{
+		Mission mission = new($"{GD.Randi()}", $"{GD.Randi()}");
+		missions.Add(mission);
+		return mission;
 	}
 }

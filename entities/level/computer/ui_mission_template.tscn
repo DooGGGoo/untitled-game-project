@@ -1,0 +1,60 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfby131moaoeq"]
+
+[ext_resource type="Script" path="res://entities/level/computer/MissionUIDisplay.cs" id="1_8dne8"]
+
+[node name="UIMissionTemplate" type="Control" node_paths=PackedStringArray("missionTitleLabel", "missionDescriptionLabel", "acceptButton")]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 3
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8dne8")
+missionTitleLabel = NodePath("ColorRect/MarginContainer/VBoxContainer/NameLabel")
+missionDescriptionLabel = NodePath("ColorRect/MarginContainer/VBoxContainer/DescLabel")
+acceptButton = NodePath("ColorRect/MarginContainer/Button")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0627451, 0.0588235, 0.0901961, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Lorem ipsum"
+
+[node name="DescLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Lorem ipsum"
+
+[node name="VSeparator" type="VSeparator" parent="ColorRect/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button" type="Button" parent="ColorRect/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Accept"
