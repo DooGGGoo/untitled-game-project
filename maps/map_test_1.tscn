@@ -1,10 +1,9 @@
-[gd_scene load_steps=39 format=3 uid="uid://dmv7hq177kus8"]
+[gd_scene load_steps=38 format=3 uid="uid://dmv7hq177kus8"]
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_dwwee"]
 [ext_resource type="Texture2D" uid="uid://bd2datw4a75dw" path="res://assets/materials/textures/dev_1.png" id="1_gxu3p"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="1_qbkpu"]
 [ext_resource type="PackedScene" uid="uid://c8hufy0b7hp07" path="res://entities/tests/interactable_test.tscn" id="3_igorc"]
-[ext_resource type="Script" path="res://entities/Button.cs" id="4_24jn2"]
 [ext_resource type="PackedScene" uid="uid://bk8e1unhd8k4d" path="res://entities/characters/enemy/GenericEnemy.tscn" id="6_838wa"]
 [ext_resource type="Script" path="res://entities/Button3D.cs" id="6_dihxa"]
 [ext_resource type="Material" uid="uid://byy0tf2266p3d" path="res://assets/materials/jerma.tres" id="6_fwhoe"]
@@ -18,7 +17,7 @@
 [ext_resource type="Script" path="res://entities/props/BreakableProp.cs" id="13_xgew7"]
 [ext_resource type="Script" path="res://entities/props/PropData.cs" id="14_fabfa"]
 [ext_resource type="Script" path="res://entities/CameraShakeTrigger.cs" id="16_uk6tj"]
-[ext_resource type="PackedScene" uid="uid://dkh3ne7tmorbc" path="res://entities/level/computer/Computer.tscn" id="20_3q5up"]
+[ext_resource type="PackedScene" uid="uid://dkh3ne7tmorbc" path="res://entities/level/computer/Computer.tscn" id="18_i7my3"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_eox80"]
 panorama = ExtResource("1_gxu3p")
@@ -293,8 +292,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.298285, 0.679339, -3)
 
 [node name="Lightswitch" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.44082, 0.927259, -1.81021)
-script = ExtResource("4_24jn2")
-ToggleState = null
+script = ExtResource("6_dihxa")
 buttonType = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Map/NavigationRegion3D/test_objs/Lightswitch"]
@@ -302,7 +300,6 @@ mesh = SubResource("BoxMesh_lqqxr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/test_objs/Lightswitch"]
 shape = SubResource("BoxShape3D_2b7y2")
-script = ExtResource("6_dihxa")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Map/NavigationRegion3D/test_objs"]
 transform = Transform3D(-0.999848, -0.0130307, 0.0116099, -6.19544e-10, 0.66523, 0.746638, -0.0174525, 0.746524, -0.665129, -2.48612, 0.535934, -1.83187)
@@ -424,5 +421,10 @@ shape = SubResource("SphereShape3D_e8nub")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CameraShakeTrigger"]
 mesh = SubResource("SphereMesh_veo4k")
 
-[node name="Computer" parent="." instance=ExtResource("20_3q5up")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3, 1.4, -3)
+[node name="Computer" parent="." instance=ExtResource("18_i7my3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.43723, 1.38186, -2.48585)
+
+[node name="Label3D" type="Label3D" parent="Computer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425561, 0)
+text = "this is map_1"
+font = ExtResource("11_f872t")

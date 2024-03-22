@@ -1,7 +1,26 @@
-[gd_scene load_steps=2 format=3 uid="uid://bp1u2ivnyumbq"]
+[gd_scene load_steps=4 format=3 uid="uid://bp1u2ivnyumbq"]
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_wwg5w"]
+[ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="2_h2pv7"]
+[ext_resource type="FontFile" uid="uid://d3lj676xv236i" path="res://assets/fonts/Fixedsys Excelsior 3.01 Regular.ttf" id="3_qa5n0"]
 
 [node name="map_prototype_1" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
 script = ExtResource("1_wwg5w")
-PlayerSpawn = []
+PlayerSpawn = [NodePath("Node3D")]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+size = Vector3(11.4, 1, 7.6)
+material = ExtResource("2_h2pv7")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, -4.1)
+pixel_size = 0.0487
+text = "Boobs"
+font = ExtResource("3_qa5n0")
+
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.230636, 0)

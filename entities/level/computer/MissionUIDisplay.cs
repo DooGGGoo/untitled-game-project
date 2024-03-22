@@ -9,7 +9,7 @@ public partial class MissionUIDisplay : Control
 
     public override void _Ready()
     {
-        SetMission(new Mission("Test Mission", "Test Description"));
+        //SetMission(new Mission("Test Mission", "Test Description"));
     }
 
     public void SetMission(Mission mission)
@@ -20,7 +20,8 @@ public partial class MissionUIDisplay : Control
         acceptButton.Pressed += () =>
         {
             GD.Print($"Accepted mission {mission.Title}");
-            GetTree().ChangeSceneToPacked(mission.Level);
+            PackedScene level = ResourceLoader.Load<PackedScene>(mission.LevelScenePath);
+            GetTree().ChangeSceneToPacked(level);
         };
     }
 }

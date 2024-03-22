@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_7opmf"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="2_frga6"]
-[ext_resource type="PackedScene" uid="uid://dx6nwpc4tly55" path="res://entities/props/player_pc/PlayerPC.tscn" id="3_c633i"]
+[ext_resource type="PackedScene" uid="uid://dkh3ne7tmorbc" path="res://entities/level/computer/Computer.tscn" id="3_c633i"]
 
 [node name="map_hub" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
 script = ExtResource("1_7opmf")
@@ -48,4 +48,4 @@ material = ExtResource("2_frga6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 0.1, -0.9)
 
 [node name="PlayerPC" parent="." instance=ExtResource("3_c633i")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.8, 0.6, 1.4)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.05864, 1, 1.4)

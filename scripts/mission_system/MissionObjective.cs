@@ -9,6 +9,13 @@ namespace Missions
         [Export] public string Description;
         public bool IsCompleted;
 
+        public MissionObjective()
+        {
+            Title = "Objective";
+            Description = "Description";
+            IsCompleted = false;
+        }
+
         public MissionObjective(string title, string description)
         {
             Title = title;

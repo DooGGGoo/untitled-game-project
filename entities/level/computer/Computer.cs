@@ -2,11 +2,11 @@ using Godot;
 using Godot.Collections;
 using Missions;
 
-public partial class Computer : Node3D
+public partial class Computer : Node3D, IInteractable
 {
 	[Export] private Camera3D PCCamera;
-	[Export] private Array<Mission> possibleMissions;
-	[Export] private Array<Mission> missions;
+	[Export] private Array<Mission> possibleMissions = new();
+	[Export] private Array<Mission> missions = new();
 	[Export] private VBoxContainer missionsContainer;
 	[Export] private Button testAddMission;
 	[Export] private PackedScene UImissionScene;
@@ -27,16 +27,6 @@ public partial class Computer : Node3D
 				Input.MouseMode = Input.MouseModeEnum.Captured;
 			}
 		}
-	}
-
-	public override void _Ready()
-	{
-        testAddMission.Pressed += () =>
-        {
-			Mission newMission = CreateDummyMission();
-			MissionUIDisplay uiDisplay = (MissionUIDisplay)UImissionScene.Instantiate();
-			uiDisplay.SetMission(newMission);
-		};
 	}
 
 	public void Interact(CharacterBody3D interactor)
@@ -75,7 +65,9 @@ public partial class Computer : Node3D
 	
 	public Mission GetRandomMission()
 	{
-		return possibleMissions[(int)GD.Randi() % possibleMissions.Count];
+		if (possibleMissions.Count != 0)
+			return possibleMissions.PickRandom();
+		else return null;
 	}
 
 	public Mission CreateDummyMission()
@@ -83,5 +75,21 @@ public partial class Computer : Node3D
 		Mission mission = new($"{GD.Randi()}", $"{GD.Randi()}");
 		missions.Add(mission);
 		return mission;
+	}
+
+	public void CreateTestMission()
+	{
+		Mission newMission = CreateDummyMission();
+		MissionUIDisplay uiDisplay = UImissionScene.Instantiate<MissionUIDisplay>();
+		uiDisplay.SetMission(newMission);
+		missionsContainer.AddChild(uiDisplay);
+	}
+
+	public void CreateRandomMission()
+	{
+		Mission newMission = GetRandomMission();
+		MissionUIDisplay uiDisplay = UImissionScene.Instantiate<MissionUIDisplay>();
+		uiDisplay.SetMission(newMission);
+		missionsContainer.AddChild(uiDisplay);
 	}
 }

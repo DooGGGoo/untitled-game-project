@@ -36,16 +36,6 @@ theme_override_constants/margin_bottom = 25
 layout_mode = 2
 color = Color(0.0823529, 0.0823529, 0.0823529, 1)
 
-[node name="Button" type="Button" parent="ColorRect/MarginContainer/ColorRect"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -24.0
-offset_right = 96.0
-grow_vertical = 0
-text = "Penis music"
-
 [node name="MarginContainer" type="MarginContainer" parent="ColorRect/MarginContainer/ColorRect"]
 layout_mode = 1
 anchors_preset = 15
@@ -61,3 +51,17 @@ theme_override_constants/margin_bottom = 25
 [node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/MarginContainer/ColorRect/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/MarginContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="Button" type="Button" parent="ColorRect/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Dummy mission"
+
+[node name="Button2" type="Button" parent="ColorRect/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Rand mission"
