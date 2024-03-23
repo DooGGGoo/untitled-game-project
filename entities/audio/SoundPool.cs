@@ -5,12 +5,12 @@ using System.Collections.Generic;
 [Tool, GlobalClass]
 public partial class SoundPool : Node3D
 {
-    private List<SoundQueue> sounds = new();
+    private readonly List<SoundQueue> sounds = new();
     private RandomNumberGenerator random = new();
 
     public override void _Ready()
     {
-        foreach (var child in GetChildren())
+        foreach (Node child in GetChildren())
         {
             if (child is SoundQueue sound)
             {
@@ -28,7 +28,7 @@ public partial class SoundPool : Node3D
     public override string[] _GetConfigurationWarnings()
     {
         int numberOfSQChildren = 0;
-        foreach (var child in GetChildren())
+        foreach (Node child in GetChildren())
         {
             if (child is SoundQueue sound)
             {

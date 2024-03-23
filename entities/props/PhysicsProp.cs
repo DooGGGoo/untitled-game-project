@@ -35,13 +35,15 @@ public partial class PhysicsProp : RigidBody3D
         GD.Print("Impact on " + collisionPosition);
 
         // create new debug mesh at collision point
-        StandardMaterial3D MaterialOverride = new StandardMaterial3D
+        StandardMaterial3D MaterialOverride = new()
+
         {
             AlbedoColor = new Color(1, 0, 0),
             ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded
         };
 
-        MeshInstance3D debugMesh = new MeshInstance3D
+        MeshInstance3D debugMesh = new()
+
         {
             Mesh = new SphereMesh()
             {

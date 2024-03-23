@@ -98,13 +98,15 @@ public partial class Weapon : Node3D
         // DEBUG //
 
         // create new debug mesh at collision point
-        StandardMaterial3D MaterialOverride = new StandardMaterial3D
+        StandardMaterial3D MaterialOverride = new()
+
         {
             AlbedoColor = new Color(1, 0, 0),
             ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded
         };
 
-        MeshInstance3D debugMesh = new MeshInstance3D
+        MeshInstance3D debugMesh = new()
+
         {
             Mesh = new SphereMesh()
             {
@@ -120,8 +122,6 @@ public partial class Weapon : Node3D
         GetParent().AddChild(debugMesh);
 
         debugMesh.GlobalPosition = hitPosition;
-
-        // DEBUG //
     }
 
     public virtual void SecondaryAttack() { }

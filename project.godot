@@ -32,8 +32,8 @@ project/assembly_name="scp-game"
 
 movie_writer/movie_file="D:/gamedev_devlog/unnamed.avi"
 movie_writer/disable_vsync=true
-naming/default_signal_callback_name="on{signal_name}"
-naming/default_signal_callback_to_self_name="on{signal_name}"
+naming/default_signal_callback_name="on_{signal_name}"
+naming/default_signal_callback_to_self_name="on_{signal_name}"
 
 [editor_plugins]
 

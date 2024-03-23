@@ -1,0 +1,83 @@
+[gd_scene load_steps=5 format=3 uid="uid://b43tstrayx5r1"]
+
+[ext_resource type="Script" path="res://entities/level/Level.cs" id="1_nodc1"]
+[ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="2_dffkr"]
+[ext_resource type="FontFile" uid="uid://d3lj676xv236i" path="res://assets/fonts/Fixedsys Excelsior 3.01 Regular.ttf" id="3_dyl7s"]
+[ext_resource type="Script" path="res://scripts/mission_system/LevelObjectivePoint.cs" id="4_oow50"]
+
+[node name="map_prototype_1" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
+script = ExtResource("1_nodc1")
+PlayerSpawn = [NodePath("Node3D")]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+size = Vector3(11.4, 1, 7.6)
+material = ExtResource("2_dffkr")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0.2, -2.8)
+size = Vector3(1, 0.5, 1)
+material = ExtResource("2_dffkr")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.2, -2.8)
+size = Vector3(1, 0.5, 1)
+material = ExtResource("2_dffkr")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.2, -2.8)
+size = Vector3(1, 0.5, 1)
+material = ExtResource("2_dffkr")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, -4.1)
+pixel_size = 0.0487
+text = "Boobs 2
+"
+font = ExtResource("3_dyl7s")
+
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.230636, 0)
+
+[node name="LevelObjectivePoint" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0.5, -2.8)
+script = ExtResource("4_oow50")
+PossibleSpawnTypes = [null]
+
+[node name="Label3D" type="Label3D" parent="LevelObjectivePoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0.6)
+pixel_size = 0.0067
+text = "Objective 1 (100%)
+"
+font = ExtResource("3_dyl7s")
+
+[node name="LevelObjectivePoint2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.5, -2.8)
+script = ExtResource("4_oow50")
+SpawnChance = 75
+PossibleSpawnTypes = [null]
+
+[node name="Label3D" type="Label3D" parent="LevelObjectivePoint2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0.6)
+pixel_size = 0.0067
+text = "Objective 1 (75%)
+"
+font = ExtResource("3_dyl7s")
+
+[node name="LevelObjectivePoint3" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.5, -2.8)
+script = ExtResource("4_oow50")
+SpawnChance = 0
+PossibleSpawnTypes = [null]
+
+[node name="Label3D" type="Label3D" parent="LevelObjectivePoint3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0.6)
+pixel_size = 0.0067
+text = "Objective 1 (0%)
+"
+font = ExtResource("3_dyl7s")
+
+[connection signal="ready" from="LevelObjectivePoint" to="LevelObjectivePoint" method="SpawnObjective"]
