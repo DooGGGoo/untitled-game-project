@@ -1,12 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://dkh3ne7tmorbc"]
+[gd_scene load_steps=10 format=3 uid="uid://dkh3ne7tmorbc"]
 
 [ext_resource type="Script" path="res://entities/level/computer/Computer.cs" id="1_d6nte"]
 [ext_resource type="Script" path="res://entities/UI3D.cs" id="2_mu1ci"]
-[ext_resource type="PackedScene" uid="uid://bfby131moaoeq" path="res://entities/level/computer/ui_mission_template.tscn" id="2_p8xa1"]
-[ext_resource type="Resource" uid="uid://bvyhscbf138rd" path="res://missions/test_1.tres" id="2_yqc0k"]
 [ext_resource type="PackedScene" uid="uid://desnxsamuyl2f" path="res://entities/level/computer/computer_ui.tscn" id="3_6q5lh"]
-[ext_resource type="Resource" uid="uid://p0b67bl5eacp" path="res://missions/test_2.tres" id="3_fb1fa"]
-[ext_resource type="Resource" uid="uid://c43cli5tvnlqe" path="res://missions/test_3.tres" id="4_7fv7p"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_48nq0"]
 viewport_path = NodePath("3DUI/SubViewport")
@@ -38,9 +34,7 @@ size = Vector3(0.88, 0.03, 0.335)
 [node name="Computer" type="StaticBody3D" node_paths=PackedStringArray("PCCamera", "missionsContainer")]
 script = ExtResource("1_d6nte")
 PCCamera = NodePath("Camera3D")
-possibleMissions = [ExtResource("2_yqc0k"), ExtResource("3_fb1fa"), ExtResource("4_7fv7p")]
 missionsContainer = NodePath("3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps/Mail/MarginContainer/ColorRect/MarginContainer/VBoxContainer")
-UImissionScene = ExtResource("2_p8xa1")
 
 [node name="3DUI" type="Node3D" parent="." node_paths=PackedStringArray("subViewport", "quad", "area", "shape")]
 script = ExtResource("2_mu1ci")

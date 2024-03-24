@@ -1,12 +1,9 @@
 using Godot;
 using Godot.Collections;
-using Missions;
 
 public partial class Computer : Node3D, IInteractable
 {
 	[Export] private Camera3D PCCamera;
-	[Export] private Array<Mission> possibleMissions = new();
-	[Export] private Array<Mission> missions = new();
 	[Export] private VBoxContainer missionsContainer;
 	[Export] private Button testAddMission;
 	[Export] private PackedScene UImissionScene;
@@ -63,33 +60,4 @@ public partial class Computer : Node3D, IInteractable
 		PCCamera.MakeCurrent();
 	}
 	
-	public Mission GetRandomMission()
-	{
-		if (possibleMissions.Count != 0)
-			return possibleMissions.PickRandom();
-		else return null;
-	}
-
-	public Mission CreateDummyMission()
-	{
-		Mission mission = new($"{GD.Randi()}", $"{GD.Randi()}");
-		missions.Add(mission);
-		return mission;
-	}
-
-	public void CreateTestMission()
-	{
-		Mission newMission = CreateDummyMission();
-		MissionUIDisplay uiDisplay = UImissionScene.Instantiate<MissionUIDisplay>();
-		uiDisplay.SetMission(newMission);
-		missionsContainer.AddChild(uiDisplay);
-	}
-
-	public void CreateRandomMission()
-	{
-		Mission newMission = GetRandomMission();
-		MissionUIDisplay uiDisplay = UImissionScene.Instantiate<MissionUIDisplay>();
-		uiDisplay.SetMission(newMission);
-		missionsContainer.AddChild(uiDisplay);
-	}
 }
