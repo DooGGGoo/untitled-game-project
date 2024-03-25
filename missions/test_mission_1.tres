@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Mission" load_steps=2 format=3 uid="uid://cme57q8iii7tf"]
+
+[ext_resource type="Script" path="res://scripts/mission_system/Mission.cs" id="1_vlnwh"]
+
+[resource]
+script = ExtResource("1_vlnwh")
+MissionName = "test mission 1"
+MissionDescription = "objectives 1 2 & 3"
+ObjectivesPaths = Array[NodePath]([NodePath("LevelObjectivePoint/Button/Objective"), NodePath("LevelObjectivePoint2/Button/Objective"), NodePath("LevelObjectivePoint3/Button/Objective")])
+LevelScenePath = "res://maps/map_missions_test.tscn"

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using Godot;
+using System.Linq;
 
 public sealed partial class MissionSystem : Node
 {
@@ -13,41 +14,51 @@ public sealed partial class MissionSystem : Node
         private set => instance = value;
     }
 
-    public List<Mission> AvailableMissions = [];
+    public readonly List<Mission> AvailableMissions = [];
     public Mission ActiveMission;
 
-    public override void _EnterTree()
+    public override void _Ready()
     {
-        LoadMissionsFromDir();
+        //LoadMissionsFromDir();
     }
 
     public Mission StartRandomMission()
     {
-        if (AvailableMissions.Count == 0) return null;
+        if (AvailableMissions.Count == 0)
+        {
+            LoadMissionsFromDir();
+            if (AvailableMissions.Count == 0)
+            {
+                GD.Print("No missions available");
+                return null; 
+            }
+        }
 
-        int randomIndex = GD.RandRange(0, AvailableMissions.Count);
+        int randomIndex = GD.RandRange(0, AvailableMissions.Count - 1);
         Mission randomMission = AvailableMissions[randomIndex];
 
-        return ActiveMission != null ? null : StartMission(randomMission);
+        return StartMission(randomMission);
     }
 
-    public Mission StartMission(Mission mission)
+
+    public Mission StartMission(Mission mission) 
     {
         if (mission == null) return mission;
 
-        if (ActiveMission != null)
+        if (ActiveMission != null) 
         {
             GD.PrintErr("Attempted to start a new mission when one already is active!");
-            return mission;
+            return null;
         }
 
-        AvailableMissions.Remove(mission);
         ActiveMission = mission;
-
         ActiveMission.MissionCompleted += EndMission;
+        
+        AvailableMissions.Remove(mission);
 
         return ActiveMission;
     }
+
 
     public void EndMission()
     {
@@ -65,6 +76,9 @@ public sealed partial class MissionSystem : Node
             return;
         }
 
+        int loadSuccess = 0;
+        int loadFailed = 0;
+
         DirAccess dir = DirAccess.Open(dirPath);
 
         foreach (string fileName in dir.GetFiles())
@@ -76,17 +90,23 @@ public sealed partial class MissionSystem : Node
                 {
                     try
                     {
-                        Mission missionToLoad = ResourceLoader.Load<Mission>(filename);
+                        Mission missionToLoad = GD.Load<Mission>(dirPath + filename);
                         AvailableMissions.Add(missionToLoad);
+                        GD.Print($"Loaded {missionToLoad.MissionName} mission.");
+                        loadSuccess++;
+                        missionToLoad.Changed += () => GD.Print($"{missionToLoad} changing");
                     }
                     catch (Exception e)
                     {
                         GD.PrintErr("Failed to load mission: " + e.Message);
+                        loadFailed++;
                     }
                 }
             }
         }
 
-        GD.Print("Loaded " + AvailableMissions.Count + " missions.");
+
+
+        GD.Print($"Loaded {AvailableMissions.Count} missions ({loadSuccess} successfully, {loadFailed} failed).");
     }
 }

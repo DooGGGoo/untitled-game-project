@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 
@@ -6,28 +7,55 @@ public partial class Mission : Resource
 {
     [Export] public string MissionName;
     [Export(PropertyHint.MultilineText)] public string MissionDescription;
-    [Export] public Array<NodePath> Objectives;
+    [Export] public Array<NodePath> ObjectivesPaths;
     [Export(PropertyHint.File, "*.tscn")] public string LevelScenePath;
+    private readonly List<Objective> objectives = [];
     
     [Signal] public delegate void MissionCompletedEventHandler();
 
-    public void Start()
+    private void GetObjectivesFromPaths()
     {
-        if(Objectives.Count == 0) 
+        foreach (NodePath objectivePath in ObjectivesPaths)
         {
-            GD.Print("No objectives set!");
-            return;
-        }
-
-        foreach (NodePath objectivePath in Objectives)
-        {
-            Objective objective = Global.Instance.CurrentLevel.GetNode<Objective>(objectivePath);
+            Objective objective = Global.Instance.CurrentLevel.GetTree().CurrentScene.GetNode<Objective>(objectivePath);
 
             if (!IsInstanceValid(objective))
             {
                 GD.Print($"One of the objectives for mission {MissionName} is invalid!");
                 return;
             }
+
+            objectives.Add(objective);
+
+            objective.ObjectiveCompleted += () =>
+            {
+                if (IsCompleted())
+                {
+                    EmitSignal(SignalName.MissionCompleted);
+                }
+            };
+        }
+    }
+
+    public void Start()
+    {
+        GetObjectivesFromPaths();
+
+        if (objectives.Count == 0) 
+        {
+            GD.Print("No objectives set!");
+            return;
+        }
+
+        foreach (Objective objective in objectives)
+        {
+            if (!IsInstanceValid(objective))
+            {
+                GD.Print($"One of the objectives for mission {MissionName} is invalid!");
+                return;
+            }
+
+            objective.ToggleEnabled();
 
             objective.ObjectiveCompleted += () => 
             {
@@ -41,10 +69,8 @@ public partial class Mission : Resource
     
     public bool IsCompleted()
     {
-        foreach (NodePath objectivePath in Objectives)
+        foreach (Objective objective in objectives)
         {
-            Objective objective = Global.Instance.CurrentLevel.GetNode<Objective>(objectivePath);
-
             if (!IsInstanceValid(objective))
             {
                 GD.Print($"One of the objectives for mission {MissionName} is invalid!");

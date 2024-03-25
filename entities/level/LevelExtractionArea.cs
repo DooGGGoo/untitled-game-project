@@ -16,8 +16,8 @@ public partial class LevelExtractionArea : Area3D
 
     public override void _Ready()
     {
-        BodyEntered += (Node3D body) => OnBodyEntered(body);
-		BodyExited += (Node3D body) => OnBodyExited(body);
+        BodyEntered += OnBodyEntered;
+		BodyExited += OnBodyExited;
     }
 
 	public override void _PhysicsProcess(double delta)

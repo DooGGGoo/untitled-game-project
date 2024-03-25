@@ -10,6 +10,7 @@ public sealed partial class Objective : Node
 
     public override void _EnterTree()
     {
+        GetParent<Node3D>().ProcessMode = ProcessModeEnum.Disabled;
         GetParent<Node3D>().Visible = false;
     }
 
@@ -19,10 +20,23 @@ public sealed partial class Objective : Node
         {
             IsCompleted = true;
             EmitSignal(SignalName.ObjectiveCompleted);
+            ToggleDisabled();
         }
         else if (!OneShot)
         {
             EmitSignal(SignalName.ObjectiveCompleted);
         }
+    }
+
+    public void ToggleEnabled()
+    {
+        GetParent<Node3D>().Visible = true;
+        GetParent<Node3D>().ProcessMode = ProcessModeEnum.Inherit;
+    }
+
+    public void ToggleDisabled()
+    {
+        GetParent<Node3D>().ProcessMode = ProcessModeEnum.Disabled;
+        GetParent<Node3D>().Visible = false;
     }
 }

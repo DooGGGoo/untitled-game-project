@@ -20,7 +20,7 @@ public partial class MissionUIDisplay : Control
         {
             GD.Print($"Accepted mission {mission.MissionName}");
             PackedScene level = ResourceLoader.Load<PackedScene>(mission.LevelScenePath);
-            GetTree().ChangeSceneToPacked(level);
+            Global.Instance.CurrentLevel.ChangeLevel(level);
         };
     }
 }

@@ -7,17 +7,21 @@ public partial class Level : Node
 {
 	[Export] public Node3D[] PlayerSpawn;
 	[Export(PropertyHint.File, "*.tscn")] public string PlayerScene = "res://entities/characters/player/player.tscn";
-	[Export(PropertyHint.File, "*.tscn")] public string ReturnToScene = "res://maps/map_test.tscn";
+	[Export(PropertyHint.File, "*.tscn")] public string ReturnToScene = "res://maps/map_test_1.tscn";
 	[Export(PropertyHint.File, "*.tscn")] public string ExplosionParticlesScene = "res://assets/particles/scenes/explosion_particles.tscn";
 	
 	public Player CurrentPlayer;
 
 	[Signal] public delegate void PlayerSpawnedEventHandler(Player player);
 
-	public override void _Ready()
+	public override void _EnterTree()
 	{
 		Global.Instance.CurrentLevel = this;
+		MissionSystem.Instance.ActiveMission?.CallDeferred(Mission.MethodName.Start);
+	}
 
+	public override void _Ready()
+	{
 		PlayerSpawned += (Player player) => GD.Print("Player spawned" + player.GlobalPosition);
 		
 		GD.Print(ReturnToScene);

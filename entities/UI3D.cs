@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 
 [GlobalClass]
 public partial class UI3D : Node3D
@@ -32,10 +33,10 @@ public partial class UI3D : Node3D
 
 	private void CalculateSizes()
 	{
-		var mesh = (QuadMesh)quad.Mesh;
+		QuadMesh mesh = (QuadMesh)quad.Mesh;
 
-		var material = new StandardMaterial3D
-		{
+		StandardMaterial3D material = new()
+        {
 			AlbedoTexture = subViewport.GetTexture(),
 			CullMode = BaseMaterial3D.CullModeEnum.Disabled
 		};
@@ -91,7 +92,7 @@ public partial class UI3D : Node3D
 
 	public void HandleSyntheticMouseMotion(Vector3 position)
 	{
-		var ev = new InputEventMouseMotion();
+		InputEventMouseMotion ev = new();
 
 		isMouseInside = true;
 
@@ -100,7 +101,7 @@ public partial class UI3D : Node3D
 
 	public void HandleSyntheticMouseClick(Vector3 position, bool pressed)
 	{
-		var ev = new InputEventMouseButton() { ButtonIndex = MouseButton.Left, Pressed = pressed };
+		InputEventMouseButton ev = new() { ButtonIndex = MouseButton.Left, Pressed = pressed };
 
 		isMouseInside = true;
 
@@ -135,7 +136,7 @@ public partial class UI3D : Node3D
 			}
 		}
 
-		var mousePosition2D = new Vector2(mousePosition3D.X, -mousePosition3D.Y);
+		Vector2 mousePosition2D = new(mousePosition3D.X, -mousePosition3D.Y);
 
 		mousePosition2D.X += quadSize.X / 2;
 		mousePosition2D.Y += quadSize.Y / 2;
@@ -156,20 +157,21 @@ public partial class UI3D : Node3D
 
 		lastMousePosition2D = mousePosition2D;
 
-		subViewport.PushInput(@event);
+		if(IsInsideTree() && subViewport.IsInsideTree())
+			subViewport.PushInput(@event);
 	}
 
 	private bool FindMouse(Vector2 globalPosition, out Vector3 position)
 	{
-		var camera = GetViewport().GetCamera3D();
+		Camera3D camera = GetViewport().GetCamera3D();
 
-		var from = camera.ProjectRayOrigin(globalPosition);
-		var dist = FindFurtherDistanceTo(camera.Transform.Origin);
-		var to = from + camera.ProjectRayNormal(globalPosition) * dist;
+		Vector3 from = camera.ProjectRayOrigin(globalPosition);
+		float dist = FindFurtherDistanceTo(camera.Transform.Origin);
+		Vector3 to = from + camera.ProjectRayNormal(globalPosition) * dist;
 
-		var parameters = new PhysicsRayQueryParameters3D() { From = from, To = to, CollideWithAreas = true, CollisionMask = area.CollisionLayer, CollideWithBodies = false };
+		PhysicsRayQueryParameters3D parameters = new() { From = from, To = to, CollideWithAreas = true, CollisionMask = area.CollisionLayer, CollideWithBodies = false };
 
-		var result = GetWorld3D().DirectSpaceState.IntersectRay(parameters);
+		Dictionary result = GetWorld3D().DirectSpaceState.IntersectRay(parameters);
 
 		position = Vector3.Zero;
 
@@ -187,18 +189,18 @@ public partial class UI3D : Node3D
 
 	private float FindFurtherDistanceTo(Vector3 origin)
 	{
-		Vector3[] edges = new Vector3[] {
+		Vector3[] edges = [
 			area.ToGlobal(new Vector3(quadSize.X / 2, quadSize.Y / 2, 0)),
 			area.ToGlobal(new Vector3(quadSize.X / 2, -quadSize.Y / 2, 0)),
 			area.ToGlobal(new Vector3(-quadSize.X / 2, quadSize.Y / 2, 0)),
 			area.ToGlobal(new Vector3(-quadSize.X / 2, -quadSize.Y / 2, 0)),
-		};
+		];
 
 		float farDistance = 0;
 
-		foreach (var edge in edges)
+		foreach (Vector3 edge in edges)
 		{
-			var tempDistance = origin.DistanceTo(edge);
+			float tempDistance = origin.DistanceTo(edge);
 
 			if (tempDistance > farDistance)
 			{

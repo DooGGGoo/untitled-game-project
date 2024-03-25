@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://b43tstrayx5r1"]
+[gd_scene load_steps=6 format=3 uid="uid://b43tstrayx5r1"]
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_nodc1"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="2_dffkr"]
 [ext_resource type="FontFile" uid="uid://d3lj676xv236i" path="res://assets/fonts/Fixedsys Excelsior 3.01 Regular.ttf" id="3_dyl7s"]
+[ext_resource type="Script" path="res://scripts/mission_system/Objective.cs" id="4_l2yqe"]
+[ext_resource type="PackedScene" uid="uid://clmdui4kep3fn" path="res://entities/tests/button_test.tscn" id="4_xxx21"]
 
 [node name="map_prototype_1" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
 script = ExtResource("1_nodc1")
@@ -47,9 +49,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0.5, -2.8)
 [node name="Label3D" type="Label3D" parent="LevelObjectivePoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0.6)
 pixel_size = 0.0067
-text = "Objective 1 (100%)
+text = "Objective 1
 "
 font = ExtResource("3_dyl7s")
+
+[node name="Button" parent="LevelObjectivePoint" instance=ExtResource("4_xxx21")]
+
+[node name="Objective" type="Node" parent="LevelObjectivePoint/Button"]
+script = ExtResource("4_l2yqe")
 
 [node name="LevelObjectivePoint2" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.5, -2.8)
@@ -57,9 +64,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.5, -2.8)
 [node name="Label3D" type="Label3D" parent="LevelObjectivePoint2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0.6)
 pixel_size = 0.0067
-text = "Objective 2 (50%)
+text = "Objective 2
 "
 font = ExtResource("3_dyl7s")
+
+[node name="Button" parent="LevelObjectivePoint2" instance=ExtResource("4_xxx21")]
+
+[node name="Objective" type="Node" parent="LevelObjectivePoint2/Button"]
+script = ExtResource("4_l2yqe")
 
 [node name="LevelObjectivePoint3" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.5, -2.8)
@@ -67,10 +79,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.5, -2.8)
 [node name="Label3D" type="Label3D" parent="LevelObjectivePoint3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0.6)
 pixel_size = 0.0067
-text = "Objective 3 (0%)
+text = "Objective 3
 "
 font = ExtResource("3_dyl7s")
 
-[connection signal="ready" from="LevelObjectivePoint" to="LevelObjectivePoint" method="SpawnObjective"]
-[connection signal="ready" from="LevelObjectivePoint2" to="LevelObjectivePoint2" method="SpawnObjective"]
-[connection signal="ready" from="LevelObjectivePoint3" to="LevelObjectivePoint3" method="SpawnObjective"]
+[node name="Button" parent="LevelObjectivePoint3" instance=ExtResource("4_xxx21")]
+
+[node name="Objective" type="Node" parent="LevelObjectivePoint3/Button"]
+script = ExtResource("4_l2yqe")
+
+[connection signal="ButtonPressed" from="LevelObjectivePoint/Button" to="LevelObjectivePoint/Button/Objective" method="Complete"]
+[connection signal="ButtonPressed" from="LevelObjectivePoint2/Button" to="LevelObjectivePoint2/Button/Objective" method="Complete"]
+[connection signal="ButtonPressed" from="LevelObjectivePoint3/Button" to="LevelObjectivePoint3/Button/Objective" method="Complete"]

@@ -7,7 +7,7 @@ public partial class Computer : Node3D, IInteractable
 	[Export] private VBoxContainer missionsContainer;
 	[Export] private Button testAddMission;
 	[Export] private PackedScene UImissionScene;
-
+	private MissionSystem missionSystem = MissionSystem.Instance;
 	private Player player;
 	private Camera3D playerCamera;
 	private bool isActive = false;
@@ -62,13 +62,11 @@ public partial class Computer : Node3D, IInteractable
 	
 	public void AddRandomMission()
 	{
-		MissionSystem ms = MissionSystem.Instance;
-
-		Mission newMission = ms.StartRandomMission();
+		Mission newMission = missionSystem.StartRandomMission();
 		
 		if (newMission == null)
 		{
-			GD.Print("No mission found");
+			GD.Print("Rand ms ret null");
 			return;
 		}
 
