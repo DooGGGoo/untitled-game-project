@@ -1,5 +1,6 @@
 using Godot;
 
+[GlobalClass]
 public sealed partial class Objective : Node
 {
     [Export] public bool OneShot = true;

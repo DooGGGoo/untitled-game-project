@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 
+[GlobalClass]
 public partial class Mission : Resource
 {
     [Export] public string MissionName;
@@ -9,6 +10,34 @@ public partial class Mission : Resource
     [Export(PropertyHint.File, "*.tscn")] public string LevelScenePath;
     
     [Signal] public delegate void MissionCompletedEventHandler();
+
+    public void Start()
+    {
+        if(Objectives.Count == 0) 
+        {
+            GD.Print("No objectives set!");
+            return;
+        }
+
+        foreach (NodePath objectivePath in Objectives)
+        {
+            Objective objective = Global.Instance.CurrentLevel.GetNode<Objective>(objectivePath);
+
+            if (!IsInstanceValid(objective))
+            {
+                GD.Print($"One of the objectives for mission {MissionName} is invalid!");
+                return;
+            }
+
+            objective.ObjectiveCompleted += () => 
+            {
+                if (IsCompleted())
+                {
+                    EmitSignal(SignalName.MissionCompleted);
+                }
+            };
+        }
+    }
     
     public bool IsCompleted()
     {
@@ -28,7 +57,6 @@ public partial class Mission : Resource
             }
         }
 
-        EmitSignal(SignalName.MissionCompleted);
         return true;
     }
 }

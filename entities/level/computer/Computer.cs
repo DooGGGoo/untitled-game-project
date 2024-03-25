@@ -74,6 +74,6 @@ public partial class Computer : Node3D, IInteractable
 
 		MissionUIDisplay uiDisplay = UImissionScene.Instantiate<MissionUIDisplay>();
 		uiDisplay.SetMission(newMission);
-		missionsContainer.AddChild(uiDisplay)
+		missionsContainer.AddChild(uiDisplay);
 	}
 }
