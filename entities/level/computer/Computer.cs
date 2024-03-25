@@ -60,4 +60,20 @@ public partial class Computer : Node3D, IInteractable
 		PCCamera.MakeCurrent();
 	}
 	
+	public void AddRandomMission()
+	{
+		MissionSystem ms = MissionSystem.Instance;
+
+		Mission newMission = ms.StartRandomMission();
+		
+		if (newMission == null)
+		{
+			GD.Print("No mission found");
+			return;
+		}
+
+		MissionUIDisplay uiDisplay = UImissionScene.Instantiate<MissionUIDisplay>();
+		uiDisplay.SetMission(newMission);
+		missionsContainer.AddChild(uiDisplay)
+	}
 }

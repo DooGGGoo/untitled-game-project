@@ -8,6 +8,7 @@
         "oldvel",
         "Populator",
         "rigidbody",
+        "tscn",
         "viewmodel"
     ]
 }

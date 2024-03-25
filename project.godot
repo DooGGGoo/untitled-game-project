@@ -45,6 +45,7 @@ folder_colors={
 "res://assets/": "blue",
 "res://entities/": "red",
 "res://maps/": "orange",
+"res://missions/": "pink",
 "res://scripts/": "gray"
 }
 
