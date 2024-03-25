@@ -13,6 +13,7 @@ public partial class Level : Node
 	public Player CurrentPlayer;
 
 	[Signal] public delegate void PlayerSpawnedEventHandler(Player player);
+	[Signal] public delegate void MissionCompleteEventHandler();
 
 	public override void _EnterTree()
 	{
@@ -23,8 +24,11 @@ public partial class Level : Node
 	public override void _Ready()
 	{
 		PlayerSpawned += (Player player) => GD.Print("Player spawned" + player.GlobalPosition);
-		
-		GD.Print(ReturnToScene);
+
+		if (MissionSystem.Instance.ActiveMission != null)
+		{
+			MissionSystem.Instance.ActiveMission.MissionCompleted += () => EmitSignal(SignalName.MissionComplete);	
+		}
 
 		CurrentPlayer = SpawnPlayer();
 	}

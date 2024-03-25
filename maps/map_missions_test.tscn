@@ -1,10 +1,24 @@
-[gd_scene load_steps=6 format=3 uid="uid://b43tstrayx5r1"]
+[gd_scene load_steps=10 format=3 uid="uid://b43tstrayx5r1"]
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_nodc1"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="2_dffkr"]
 [ext_resource type="FontFile" uid="uid://d3lj676xv236i" path="res://assets/fonts/Fixedsys Excelsior 3.01 Regular.ttf" id="3_dyl7s"]
 [ext_resource type="Script" path="res://scripts/mission_system/Objective.cs" id="4_l2yqe"]
 [ext_resource type="PackedScene" uid="uid://clmdui4kep3fn" path="res://entities/tests/button_test.tscn" id="4_xxx21"]
+[ext_resource type="Script" path="res://entities/level/LevelExtractionArea.cs" id="6_p36mg"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lolip"]
+size = Vector3(3, 2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rglsn"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.239216, 0.780392, 0, 0.160784)
+
+[sub_resource type="BoxMesh" id="BoxMesh_eyx56"]
+material = SubResource("StandardMaterial3D_rglsn")
+size = Vector3(3, 2, 2)
 
 [node name="map_prototype_1" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
 script = ExtResource("1_nodc1")
@@ -88,6 +102,18 @@ font = ExtResource("3_dyl7s")
 [node name="Objective" type="Node" parent="LevelObjectivePoint3/Button"]
 script = ExtResource("4_l2yqe")
 
+[node name="LevelExtractionArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2, 1, 2.8)
+script = ExtResource("6_p36mg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelExtractionArea"]
+shape = SubResource("BoxShape3D_lolip")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LevelExtractionArea"]
+mesh = SubResource("BoxMesh_eyx56")
+
+[connection signal="MissionComplete" from="." to="LevelExtractionArea" method="CanExtract"]
 [connection signal="ButtonPressed" from="LevelObjectivePoint/Button" to="LevelObjectivePoint/Button/Objective" method="Complete"]
 [connection signal="ButtonPressed" from="LevelObjectivePoint2/Button" to="LevelObjectivePoint2/Button/Objective" method="Complete"]
 [connection signal="ButtonPressed" from="LevelObjectivePoint3/Button" to="LevelObjectivePoint3/Button/Objective" method="Complete"]
+[connection signal="ExtractFromLevel" from="LevelExtractionArea" to="." method="ReturnToBase"]

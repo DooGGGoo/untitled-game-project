@@ -63,7 +63,6 @@ public partial class LevelExtractionArea : Area3D
 		}
 	}
 
-
 	public void CanExtract()
 	{
 		canExtract = true;
