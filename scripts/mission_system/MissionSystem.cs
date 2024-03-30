@@ -26,6 +26,7 @@ public sealed partial class MissionSystem : Node
         if (AvailableMissions.Count == 0)
         {
             LoadMissionsFromDir();
+            
             if (AvailableMissions.Count == 0)
             {
                 GD.Print("No missions available");

@@ -1,0 +1,261 @@
+[gd_scene load_steps=20 format=3 uid="uid://df4sa7pq8gmlm"]
+
+[ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="1_atay1"]
+[ext_resource type="Script" path="res://entities/level/computer/Computer.cs" id="2_bqdjy"]
+[ext_resource type="PackedScene" uid="uid://bfby131moaoeq" path="res://entities/level/computer/ui_mission_template.tscn" id="3_155jq"]
+[ext_resource type="Theme" uid="uid://qi0vrfqld3ej" path="res://assets/ui/MenuTheme.tres" id="3_lv61d"]
+[ext_resource type="Script" path="res://entities/UI3D.cs" id="4_ohm5d"]
+[ext_resource type="PackedScene" uid="uid://desnxsamuyl2f" path="res://entities/level/computer/computer_ui.tscn" id="5_g43gw"]
+[ext_resource type="PackedScene" uid="uid://hmfp5qbqlo2k" path="res://maps/map_hub.tscn" id="7_q0r1h"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ol51b"]
+viewport_path = NodePath("PlayerPC/3DUI/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w0mex"]
+resource_local_to_scene = true
+shading_mode = 0
+specular_mode = 2
+albedo_texture = SubResource("ViewportTexture_ol51b")
+texture_filter = 2
+disable_receive_shadows = true
+billboard_keep_scale = true
+grow_amount = 1.542
+
+[sub_resource type="QuadMesh" id="QuadMesh_4js23"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_w0mex")
+size = Vector2(1.067, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5tcmx"]
+size = Vector3(1.067, 0.6, 0.075)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yeykr"]
+size = Vector3(0.893555, 0.0393066, 0.338135)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hb13g"]
+size = Vector3(0.88, 0.03, 0.335)
+
+[sub_resource type="Animation" id="Animation_6nm1r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.46342, 2.80213, -1.66581e-08)]
+}
+
+[sub_resource type="Animation" id="Animation_panyv"]
+resource_name = "camera_idle"
+length = 12.0
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.1, 11.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.46342, 2.80213, -1.66581e-08), Vector3(-0.46342, 2.0994, -5.56434e-09)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kr3sg"]
+_data = {
+"RESET": SubResource("Animation_6nm1r"),
+"camera_idle": SubResource("Animation_panyv")
+}
+
+[sub_resource type="GDScript" id="GDScript_2ep6b"]
+script/source = "extends Node
+
+@export var StartScene : PackedScene
+
+func start_game() -> void:
+	get_tree().change_scene_to_packed(StartScene)
+	
+func quit_game() -> void:
+	get_tree().quit()
+	
+func open_options() -> void:
+	pass
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_nc2uh"]
+font_size = 51
+
+[sub_resource type="LabelSettings" id="LabelSettings_isgs0"]
+font_size = 13
+font_color = Color(1, 1, 1, 0.615686)
+outline_color = Color(0.0588235, 0.0588235, 0.0588235, 1)
+
+[node name="MainMenu" type="Node3D"]
+
+[node name="Environment" type="Node" parent="."]
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.6, 0)
+spot_range = 4.835
+spot_attenuation = 0.420448
+spot_angle = 84.42
+spot_angle_attenuation = 1.07177
+
+[node name="Geometry" type="Node" parent="."]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Geometry"]
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Geometry/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 1.3, 0.0499997)
+size = Vector3(11, 11, 11)
+material = ExtResource("1_atay1")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Geometry/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 1.3, 0.05)
+operation = 2
+size = Vector3(6.3, 2.7, 4.7)
+material = ExtResource("1_atay1")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Geometry/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.325, 0.2, -2.23517e-08)
+size = Vector3(0.9, 0.75, 2.4)
+material = ExtResource("1_atay1")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Geometry/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 1, 0)
+operation = 2
+size = Vector3(1, 2, 1.2)
+material = ExtResource("1_atay1")
+
+[node name="Spawn" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 0.1, -0.9)
+
+[node name="PlayerPC" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.35864, 1, -1.04308e-07)
+script = ExtResource("2_bqdjy")
+UImissionScene = ExtResource("3_155jq")
+
+[node name="3DUI" type="Node3D" parent="PlayerPC"]
+script = ExtResource("4_ohm5d")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerPC/3DUI"]
+mesh = SubResource("QuadMesh_4js23")
+
+[node name="Area3D" type="Area3D" parent="PlayerPC/3DUI/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerPC/3DUI/MeshInstance3D/Area3D"]
+shape = SubResource("BoxShape3D_5tcmx")
+
+[node name="SubViewport" type="SubViewport" parent="PlayerPC/3DUI"]
+disable_3d = true
+canvas_item_default_texture_filter = 3
+size = Vector2i(1200, 675)
+
+[node name="ComputerUI" parent="PlayerPC/3DUI/SubViewport" instance=ExtResource("5_g43gw")]
+
+[node name="Button" parent="PlayerPC/3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps/Mail/HBoxContainer" index="0"]
+disabled = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerPC"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.331878, 0.249574)
+shape = SubResource("BoxShape3D_yeykr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerPC/CollisionShape3D"]
+mesh = SubResource("BoxMesh_hb13g")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.942933, -0.148846, 0.297861, -1.49011e-08, 0.894529, 0.44701, -0.33298, 0.421501, -0.843481, 1.43257, 2.46732, -1.92004)
+current = true
+fov = 71.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_kr3sg")
+}
+autoplay = "camera_idle"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_lv61d")
+script = SubResource("GDScript_2ep6b")
+StartScene = ExtResource("7_q0r1h")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+text = "Huge Boobs Free"
+label_settings = SubResource("LabelSettings_nc2uh")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 75
+
+[node name="StartButton" type="Button" parent="Control/VBoxContainer"]
+custom_minimum_size = Vector2(144, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Start"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="OptionsButton" type="Button" parent="Control/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Options"
+
+[node name="QuitButton" type="Button" parent="Control/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Quit"
+
+[node name="Version" type="Label" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 40.0
+grow_vertical = 0
+theme = ExtResource("3_lv61d")
+text = "build 240330 - pre alpha"
+label_settings = SubResource("LabelSettings_isgs0")
+vertical_alignment = 2
+
+[connection signal="pressed" from="PlayerPC/3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps/Mail/HBoxContainer/Button" to="PlayerPC" method="CreateTestMission"]
+[connection signal="pressed" from="PlayerPC/3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps/Mail/HBoxContainer/Button2" to="PlayerPC" method="AddRandomMission"]
+[connection signal="button_up" from="Control/VBoxContainer/StartButton" to="Control" method="start_game"]
+[connection signal="button_up" from="Control/VBoxContainer/HBoxContainer/OptionsButton" to="Control" method="open_options"]
+[connection signal="button_up" from="Control/VBoxContainer/HBoxContainer/QuitButton" to="Control" method="quit_game"]
+
+[editable path="PlayerPC/3DUI/SubViewport/ComputerUI"]

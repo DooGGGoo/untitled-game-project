@@ -12,7 +12,7 @@ config_version=5
 
 config/name="scp-game"
 config/tags=PackedStringArray("3d", "c#", "singleplayer")
-run/main_scene="res://maps/map_test_1.tscn"
+run/main_scene="res://maps/main_menu.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 boot_splash/show_image=false
 boot_splash/use_filter=false
@@ -26,7 +26,10 @@ MissionSystem="*res://scripts/mission_system/MissionSystem.cs"
 
 window/size/viewport_width=922
 window/size/viewport_height=518
+window/size/resizable=false
+window/stretch/mode="canvas_items"
 window/dpi/allow_hidpi=false
+window/vsync/vsync_mode=2
 
 [dotnet]
 
@@ -38,10 +41,11 @@ movie_writer/movie_file="D:/gamedev_devlog/unnamed.avi"
 movie_writer/disable_vsync=true
 naming/default_signal_callback_name="on_{signal_name}"
 naming/default_signal_callback_to_self_name="on_{signal_name}"
+export/convert_text_resources_to_binary=false
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/anthonyec.camera_preview/plugin.cfg", "res://addons/proto_shape/plugin.cfg", "res://addons/timer/plugin.cfg")
+enabled=PackedStringArray("res://addons/anthonyec.camera_preview/plugin.cfg", "res://addons/godotvmf/plugin.cfg", "res://addons/timer/plugin.cfg")
 
 [file_customization]
 

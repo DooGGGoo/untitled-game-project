@@ -17,9 +17,13 @@ public partial class Mission : Resource
     {
         foreach (NodePath objectivePath in ObjectivesPaths)
         {
-            Objective objective = Global.Instance.CurrentLevel.GetTree().CurrentScene.GetNode<Objective>(objectivePath);
+            Objective objective = Global.Instance.CurrentLevel.CurrentPlayer.GetTree().CurrentScene.GetNode(objectivePath) as Objective;
 
-            if (!IsInstanceValid(objective))
+    
+
+            GD.Print(objective);
+
+            if (objective == null)
             {
                 GD.Print($"One of the objectives for mission {MissionName} is invalid!");
                 return;

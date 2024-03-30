@@ -1,9 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://c7xuvylsuwi2a"]
+[gd_scene load_steps=18 format=3 uid="uid://c7xuvylsuwi2a"]
 
 [ext_resource type="Script" path="res://entities/characters/player/Player.cs" id="1_xom2y"]
 [ext_resource type="Script" path="res://entities/characters/player/View.cs" id="2_kipc3"]
 [ext_resource type="Script" path="res://entities/audio/SoundQueue.cs" id="3_1jge1"]
 [ext_resource type="Script" path="res://entities/characters/WeaponInventory.cs" id="3_cfqmk"]
+[ext_resource type="Theme" uid="uid://qi0vrfqld3ej" path="res://assets/ui/MenuTheme.tres" id="4_6i36l"]
 [ext_resource type="AudioStream" uid="uid://c3hpx6y3j5d5j" path="res://assets/audio/footsteps/concrete1.wav" id="4_6mr4j"]
 [ext_resource type="AudioStream" uid="uid://ddkyogg773f66" path="res://assets/audio/footsteps/concrete2.wav" id="5_m758e"]
 [ext_resource type="AudioStream" uid="uid://u4ixajyniles" path="res://assets/audio/footsteps/concrete3.wav" id="6_ju16h"]
@@ -36,6 +37,11 @@ rings = 3
 [sub_resource type="BoxShape3D" id="BoxShape3D_2cu1u"]
 margin = 0.0
 size = Vector3(0.45, 1.2, 0.45)
+
+[sub_resource type="LabelSettings" id="LabelSettings_nk4m7"]
+font_size = 13
+font_color = Color(1, 1, 1, 0.615686)
+outline_color = Color(0.0588235, 0.0588235, 0.0588235, 1)
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_pwfu8"]
 random_pitch = 1.2
@@ -182,6 +188,18 @@ text = "[W,A,S,D] - Move
 [Alt + F4] - Quit"
 fit_content = true
 scroll_active = false
+
+[node name="Version" type="Label" parent="UILayer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 40.0
+grow_vertical = 0
+theme = ExtResource("4_6i36l")
+text = "build 240330 - pre alpha"
+label_settings = SubResource("LabelSettings_nk4m7")
+vertical_alignment = 2
 
 [node name="SoundQueue" type="Node3D" parent="."]
 script = ExtResource("3_1jge1")
