@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 public partial class Airstrike : Node3D
@@ -11,7 +10,7 @@ public partial class Airstrike : Node3D
 	[Export] private AnimationPlayer animationPlayer;
 	[Export] private string planeAnimationName = "plane_move";
 
-	public List<Node3D> HitPoints = new();
+	public List<Node3D> HitPoints = [];
 
 	[Signal] public delegate void AirstrikeCalledEventHandler();
 	[Signal] public delegate void AirstrikeFinishedEventHandler();

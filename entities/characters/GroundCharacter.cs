@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class GroundCharacter : CharacterBody3D
 {
@@ -194,7 +193,7 @@ public partial class GroundCharacter : CharacterBody3D
                 break;
             }
         }
-        return new object[] { vector, remainder, collision };
+        return [vector, remainder, collision];
     }
     #endregion
 

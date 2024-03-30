@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 [GlobalClass]
 public partial class WeaponSpawner : StaticBody3D, IInteractable

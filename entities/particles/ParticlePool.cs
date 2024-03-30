@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public partial class ParticlePool : Node3D
 {
 	[Export] private bool useRandom;
-	private List<ParticleQueue> particleQueues = new();
+	private List<ParticleQueue> particleQueues = [];
 	private RandomNumberGenerator random = new();
 	
 
@@ -50,7 +50,7 @@ public partial class ParticlePool : Node3D
 
 		if (numberOfPQChildren < 2)
 		{
-			return new string[] { "ParticlePool needs at least 2 ParticleQueue children" };
+			return ["ParticlePool needs at least 2 ParticleQueue children"];
 		}
 
 		return base._GetConfigurationWarnings();

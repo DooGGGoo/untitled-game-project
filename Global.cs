@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 public sealed partial class Global : Node

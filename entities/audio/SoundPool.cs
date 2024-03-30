@@ -1,11 +1,10 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 [Tool, GlobalClass]
 public partial class SoundPool : Node3D
 {
-    private readonly List<SoundQueue> sounds = new();
+    private readonly List<SoundQueue> sounds = [];
     private RandomNumberGenerator random = new();
 
     public override void _Ready()
@@ -38,7 +37,7 @@ public partial class SoundPool : Node3D
 
         if (numberOfSQChildren < 2)
         {
-            return new string[] { "SoundPool needs at least 2 SoundQueue children" };
+            return ["SoundPool needs at least 2 SoundQueue children"];
         }
 
         return base._GetConfigurationWarnings();

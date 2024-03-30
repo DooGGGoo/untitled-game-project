@@ -6,7 +6,7 @@ public partial class ParticleQueue : Node3D
 {
 	[Export] private int InstancesCount = 1;
     private int next = 0;
-    private List<GpuParticles3D> particleEmitters = new();
+    private List<GpuParticles3D> particleEmitters = [];
     private Global Global = Global.Instance;
 
     public override void _Ready()
@@ -44,7 +44,7 @@ public partial class ParticleQueue : Node3D
     {
         if (GetChildCount() == 0)
         {
-            return new string[] { "ParticleQueue has no children. Expected new GpuParticles3D" };
+            return ["ParticleQueue has no children. Expected new GpuParticles3D"];
         }
 
         return base._GetConfigurationWarnings();

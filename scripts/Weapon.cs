@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 public partial class Weapon : Node3D
