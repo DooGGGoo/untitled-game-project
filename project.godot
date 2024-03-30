@@ -47,6 +47,11 @@ enabled=PackedStringArray("res://addons/anthonyec.camera_preview/plugin.cfg", "r
 
 folder_colors={
 "res://assets/": "blue",
+"res://assets/audio/": "yellow",
+"res://assets/fonts/": "gray",
+"res://assets/materials/": "purple",
+"res://assets/particles/": "gray",
+"res://assets/ui/": "gray",
 "res://entities/": "red",
 "res://maps/": "orange",
 "res://missions/": "pink",

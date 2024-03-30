@@ -1,7 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://xximjq7gsnrp"]
+[gd_scene load_steps=10 format=3 uid="uid://xximjq7gsnrp"]
 
 [ext_resource type="Script" path="res://scripts/Weapon.cs" id="1_s3e55"]
 [ext_resource type="Script" path="res://scripts/WeaponData.cs" id="2_8v2b7"]
+[ext_resource type="Script" path="res://entities/audio/SoundQueue.cs" id="3_lyrvr"]
+[ext_resource type="AudioStream" uid="uid://c481jtxga2ypk" path="res://assets/audio/weapons/smg/smg1_fire1.wav" id="4_64qiy"]
 
 [sub_resource type="Curve" id="Curve_awpr7"]
 _data = [Vector2(0, 0.611722), 0.0, 0.208284, 0, 0, Vector2(1, 0.67033), 0.0, 1.4, 0, 0]
@@ -32,6 +34,13 @@ size = Vector3(0.02, 0.02, 0.14)
 [sub_resource type="BoxMesh" id="BoxMesh_ux7ig"]
 size = Vector3(0.02, 0.035, 0.085)
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_h8l58"]
+random_pitch = 1.1
+random_volume_offset_db = 0.5
+streams_count = 1
+stream_0/stream = ExtResource("4_64qiy")
+stream_0/weight = 1.0
+
 [node name="weapon_test_secondary" type="Node3D" node_paths=PackedStringArray("RayCast")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0217792, 0)
 script = ExtResource("1_s3e55")
@@ -49,3 +58,14 @@ mesh = SubResource("BoxMesh_ux7ig")
 [node name="RayCast3D" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.119757)
 target_position = Vector3(0, 0, -100)
+
+[node name="SoundQueue" type="Node3D" parent="."]
+script = ExtResource("3_lyrvr")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SoundQueue"]
+stream = SubResource("AudioStreamRandomizer_h8l58")
+volume_db = 2.33
+pitch_scale = 0.95
+max_polyphony = 30
+
+[connection signal="ShotFired" from="." to="SoundQueue" method="PlaySound"]

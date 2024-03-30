@@ -1,14 +1,13 @@
-[gd_scene load_steps=17 format=3 uid="uid://c7xuvylsuwi2a"]
+[gd_scene load_steps=16 format=3 uid="uid://c7xuvylsuwi2a"]
 
 [ext_resource type="Script" path="res://entities/characters/player/Player.cs" id="1_xom2y"]
 [ext_resource type="Script" path="res://entities/characters/player/View.cs" id="2_kipc3"]
 [ext_resource type="Script" path="res://entities/audio/SoundQueue.cs" id="3_1jge1"]
 [ext_resource type="Script" path="res://entities/characters/WeaponInventory.cs" id="3_cfqmk"]
-[ext_resource type="AudioStream" uid="uid://d4m830oi76afq" path="res://assets/audio/footsteps/footstep_concrete_01.wav" id="4_6mr4j"]
-[ext_resource type="AudioStream" uid="uid://bl22easo48uxl" path="res://assets/audio/footsteps/footstep_concrete_02.wav" id="5_m758e"]
-[ext_resource type="AudioStream" uid="uid://dc0r6h0wpsyrg" path="res://assets/audio/footsteps/footstep_concrete_03.wav" id="6_ju16h"]
-[ext_resource type="AudioStream" uid="uid://blyssx0l6k746" path="res://assets/audio/footsteps/footstep_concrete_04.wav" id="7_0nk3b"]
-[ext_resource type="AudioStream" uid="uid://cjk7ncep5ph8k" path="res://assets/audio/footsteps/footstep_concrete_05.wav" id="8_l4qxf"]
+[ext_resource type="AudioStream" uid="uid://c3hpx6y3j5d5j" path="res://assets/audio/footsteps/concrete1.wav" id="4_6mr4j"]
+[ext_resource type="AudioStream" uid="uid://ddkyogg773f66" path="res://assets/audio/footsteps/concrete2.wav" id="5_m758e"]
+[ext_resource type="AudioStream" uid="uid://u4ixajyniles" path="res://assets/audio/footsteps/concrete3.wav" id="6_ju16h"]
+[ext_resource type="AudioStream" uid="uid://bno86hvm6fto" path="res://assets/audio/footsteps/concrete4.wav" id="8_l4qxf"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_66coo"]
 size = Vector3(0.5, 1.8, 0.5)
@@ -41,17 +40,15 @@ size = Vector3(0.45, 1.2, 0.45)
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_pwfu8"]
 random_pitch = 1.2
 random_volume_offset_db = 0.2
-streams_count = 5
+streams_count = 4
 stream_0/stream = ExtResource("4_6mr4j")
 stream_0/weight = 1.0
 stream_1/stream = ExtResource("5_m758e")
 stream_1/weight = 1.0
 stream_2/stream = ExtResource("6_ju16h")
 stream_2/weight = 1.0
-stream_3/stream = ExtResource("7_0nk3b")
+stream_3/stream = ExtResource("8_l4qxf")
 stream_3/weight = 1.0
-stream_4/stream = ExtResource("8_l4qxf")
-stream_4/weight = 1.0
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StandingCollisionShape", "CrouchingCollisionShape", "CrouchAboveCheck", "PlayerView", "InteractionCheck", "GrabbedObjectPositionMarker", "grabJoint", "grabStaticBody")]
 script = ExtResource("1_xom2y")
@@ -63,10 +60,10 @@ InteractionCheck = NodePath("View/RayCast3D")
 GrabbedObjectPositionMarker = NodePath("View/RayCast3D/GrabbedObjectPosition")
 grabJoint = NodePath("View/RayCast3D/Generic6DOFJoint3D")
 grabStaticBody = NodePath("View/RayCast3D/GrabbedObjectPosition/GrabStaticBody")
-MovementAcceleration = 4.85
-MovementFriction = 10.85
-WalkSpeed = 3.35
-SprintSpeed = 5.3
+MovementAcceleration = 4.95
+MovementFriction = 11.0
+WalkSpeed = 3.45
+SprintSpeed = 5.365
 StepHeight = 0.401
 
 [node name="View" type="Node3D" parent="." node_paths=PackedStringArray("PlayerCamera", "viewmodel")]
@@ -112,8 +109,10 @@ linear_spring_x/stiffness = 30.0
 linear_spring_x/damping = 0.1
 linear_spring_y/enabled = true
 linear_spring_y/stiffness = 30.0
+linear_spring_y/damping = 0.1
 linear_spring_z/enabled = true
 linear_spring_z/stiffness = 30.0
+linear_spring_z/damping = 0.1
 angular_limit_x/damping = 3.0
 angular_limit_y/damping = 3.0
 angular_limit_z/damping = 3.0
