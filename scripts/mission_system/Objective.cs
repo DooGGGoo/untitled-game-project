@@ -8,10 +8,9 @@ public sealed partial class Objective : Node
     
     [Signal] public delegate void ObjectiveCompletedEventHandler();
 
-    public override void _EnterTree()
+    public override void _Ready()
     {
-        GetParent<Node3D>().ProcessMode = ProcessModeEnum.Disabled;
-        GetParent<Node3D>().Visible = false;
+        ToggleDisabled();
     }
 
     public void Complete()

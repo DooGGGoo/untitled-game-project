@@ -103,7 +103,7 @@ font = ExtResource("3_dyl7s")
 script = ExtResource("4_l2yqe")
 
 [node name="LevelExtractionArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2, 1, 2.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2, 1.001, 2.8)
 script = ExtResource("6_p36mg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LevelExtractionArea"]

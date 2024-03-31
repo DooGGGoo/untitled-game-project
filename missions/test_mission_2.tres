@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="Mission" load_steps=2 format=3 uid="uid://dn2uptqt6psg8"]
+[gd_resource type="Resource" script_class="Mission" load_steps=2 format=3 uid="uid://cefgt55mepuq3"]
 
-[ext_resource type="Script" path="res://scripts/mission_system/Mission.cs" id="1_oo8as"]
+[ext_resource type="Script" path="res://scripts/mission_system/Mission.cs" id="1_bal2i"]
 
 [resource]
-script = ExtResource("1_oo8as")
-MissionName = "test mission 2"
-MissionDescription = "objectives 1 & 3"
-ObjectivesPaths = Array[NodePath]([NodePath("LevelObjectivePoint/Button/Objective"), NodePath("LevelObjectivePoint3/Button/Objective")])
+script = ExtResource("1_bal2i")
+MissionName = "Test_2"
+MissionDescription = "1 & 2 & 3"
+ObjectivesPaths = Array[NodePath]([NodePath("LevelObjectivePoint/Button/Objective"), NodePath("LevelObjectivePoint2/Button/Objective"), NodePath("LevelObjectivePoint3/Button/Objective")])
 LevelScenePath = "res://maps/map_missions_test.tscn"

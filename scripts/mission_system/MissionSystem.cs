@@ -54,6 +54,7 @@ public sealed partial class MissionSystem : Node
         ActiveMission = mission;
         ActiveMission.MissionCompleted += EndMission;
         
+        
         AvailableMissions.Remove(mission);
 
         return ActiveMission;
@@ -63,7 +64,9 @@ public sealed partial class MissionSystem : Node
     public void EndMission()
     {
         if (ActiveMission == null) return;
-
+        
+        ActiveMission.MissionCompleted -= EndMission;
+        
         AvailableMissions.Add(ActiveMission);
         ActiveMission = null;
     }

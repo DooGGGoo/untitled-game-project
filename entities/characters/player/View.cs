@@ -182,19 +182,28 @@ public partial class View : Node3D
         float v = 1f - Mathf.Sin(r < Mathf.Pi ? r : r - Mathf.Pi) * Mathf.Abs(player.Velocity.Length());
         float h = Mathf.Sin(tHor * 2f * Mathf.Pi) * Mathf.Abs(player.Velocity.Length());
 
+
+        // Vector3 viewmodelRotation = viewmodel.RotationDegrees;
+
+        // viewmodelRotation.X = Mathf.Lerp(viewmodel.Rotation.X, mouseInput.Y * .9f, 0.125f);
+        // viewmodelRotation.Y = Mathf.Lerp(viewmodel.Rotation.Y, mouseInput.X * .9f, 0.125f);
+        // viewmodelRotation.Z = Mathf.Lerp(viewmodel.Rotation.Z, mouseInput.X * .33f, 0.125f);
+
+        // viewmodel.RotationDegrees += viewmodelRotation;
+
+        // viewmodel.RotationDegrees = viewmodel.RotationDegrees.Clamp(new Vector3(-6f, -6f, -6f), new Vector3(6f, 6f, 6f));
+        // viewmodel.RotationDegrees = viewmodel.RotationDegrees.Slerp(Vector3.Zero, 0.125f);
+
+        Vector3 viewmodelPosition = viewmodel.Position;
+        // if (Global.Instance.CurrentLevel.CurrentPlayer)
+        viewmodelPosition.X = Mathf.Lerp(viewmodelPosition.X, mouseInput.X * .005f, 0.055f);
+        viewmodelPosition.Y = Mathf.Lerp(viewmodelPosition.Y, mouseInput.Y * .005f, 0.055f);
+
+
+        viewmodel.Position = viewmodelPosition;
+        
         viewmodel.Position += new Vector3(h / 1000f, v / 1000f, 0f);
         viewmodel.Position = viewmodel.Position.Lerp(viewmodelInitialPosition, 0.125f);
-
-        Vector3 viewmodelRotation = viewmodel.RotationDegrees;
-
-        viewmodelRotation.X = Mathf.Lerp(viewmodel.Rotation.X, mouseInput.Y * .9f, 0.125f);
-        viewmodelRotation.Y = Mathf.Lerp(viewmodel.Rotation.Y, mouseInput.X * .9f, 0.125f);
-        viewmodelRotation.Z = Mathf.Lerp(viewmodel.Rotation.Z, mouseInput.X * .33f, 0.125f);
-
-        viewmodel.RotationDegrees += viewmodelRotation;
-
-        viewmodel.RotationDegrees = viewmodel.RotationDegrees.Clamp(new Vector3(-6f, -6f, -6f), new Vector3(6f, 6f, 6f));
-        viewmodel.RotationDegrees = viewmodel.RotationDegrees.Slerp(Vector3.Zero, 0.125f);
     }
 
     #endregion

@@ -21,6 +21,7 @@ public partial class MissionUIDisplay : Control
             GD.Print($"Accepted mission {mission.MissionName}");
             PackedScene level = ResourceLoader.Load<PackedScene>(mission.LevelScenePath);
             Global.Instance.CurrentLevel.ChangeLevel(level);
+            //mission.Start();
         };
     }
 }

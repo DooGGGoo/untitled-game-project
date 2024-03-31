@@ -54,9 +54,11 @@ mesh = SubResource("QuadMesh_d3s3j")
 shape = SubResource("BoxShape3D_5tcmx")
 
 [node name="SubViewport" type="SubViewport" parent="3DUI"]
+process_mode = 3
 disable_3d = true
 canvas_item_default_texture_filter = 3
 size = Vector2i(1200, 675)
+render_target_update_mode = 4
 
 [node name="ComputerUI" parent="3DUI/SubViewport" instance=ExtResource("3_6q5lh")]
 
