@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dkh3ne7tmorbc"]
+[gd_scene load_steps=12 format=3 uid="uid://dkh3ne7tmorbc"]
 
 [ext_resource type="Script" path="res://entities/level/computer/Computer.cs" id="1_d6nte"]
 [ext_resource type="PackedScene" uid="uid://bfby131moaoeq" path="res://entities/level/computer/ui_mission_template.tscn" id="2_hnhoi"]
@@ -12,6 +12,7 @@ viewport_path = NodePath("3DUI/SubViewport")
 resource_local_to_scene = true
 shading_mode = 0
 specular_mode = 2
+disable_ambient_light = true
 albedo_texture = SubResource("ViewportTexture_48nq0")
 texture_filter = 2
 disable_receive_shadows = true
@@ -25,6 +26,9 @@ size = Vector2(1.067, 0.6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5tcmx"]
 size = Vector3(1.067, 0.6, 0.075)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_iayil"]
+light_mode = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yeykr"]
 size = Vector3(0.893555, 0.0393066, 0.338135)
@@ -56,14 +60,87 @@ shape = SubResource("BoxShape3D_5tcmx")
 [node name="SubViewport" type="SubViewport" parent="3DUI"]
 process_mode = 3
 disable_3d = true
+handle_input_locally = false
 canvas_item_default_texture_filter = 3
+positional_shadow_atlas_size = 0
 size = Vector2i(1200, 675)
 render_target_update_mode = 4
 
 [node name="ComputerUI" parent="3DUI/SubViewport" instance=ExtResource("3_6q5lh")]
+material = SubResource("CanvasItemMaterial_iayil")
+
+[node name="TextureRect" parent="3DUI/SubViewport/ComputerUI" index="0"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="VBoxContainer" parent="3DUI/SubViewport/ComputerUI" index="1"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="Control" parent="3DUI/SubViewport/ComputerUI/VBoxContainer" index="0"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="Apps" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control" index="0"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="Mail" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps" index="0"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="MarginContainer" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps/Mail" index="0"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="ColorRect" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps/Mail/MarginContainer" index="0"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="MarginContainer" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps/Mail/MarginContainer/ColorRect" index="0"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="VBoxContainer" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps/Mail/MarginContainer/ColorRect/MarginContainer" index="0"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="Button" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps/Mail" index="1"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="HBoxContainer" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps/Mail" index="2"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
 
 [node name="Button" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps/Mail/HBoxContainer" index="0"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
 disabled = true
+
+[node name="Button2" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps/Mail/HBoxContainer" index="1"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="MarginContainer" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control" index="1"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="GridContainer" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control/MarginContainer" index="0"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="Button" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control/MarginContainer/GridContainer" index="0"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="Button2" parent="3DUI/SubViewport/ComputerUI/VBoxContainer/Control/MarginContainer/GridContainer" index="1"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
+
+[node name="ColorRect2" parent="3DUI/SubViewport/ComputerUI/VBoxContainer" index="1"]
+material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.67172)

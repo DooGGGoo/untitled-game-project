@@ -6,11 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://c8hufy0b7hp07" path="res://entities/tests/interactable_test.tscn" id="4_3melh"]
 [ext_resource type="Script" path="res://entities/Button3D.cs" id="5_bkb6d"]
 [ext_resource type="Script" path="res://entities/level/WeaponSpawner.cs" id="8_2oitn"]
-[ext_resource type="PackedScene" uid="uid://cpeptpsgeknxy" path="res://entities/tests/weapons/weapon_test.tscn" id="9_xgi73"]
+[ext_resource type="PackedScene" uid="uid://cpeptpsgeknxy" path="res://entities/weapons/weapon_test.tscn" id="9_xgi73"]
 [ext_resource type="FontFile" uid="uid://d3lj676xv236i" path="res://assets/fonts/Fixedsys Excelsior 3.01 Regular.ttf" id="10_tsq0w"]
-[ext_resource type="PackedScene" uid="uid://bxadjnscr4b86" path="res://entities/tests/weapons/weapon_test_2.tscn" id="11_7e8qj"]
+[ext_resource type="PackedScene" uid="uid://bxadjnscr4b86" path="res://entities/weapons/weapon_test_2.tscn" id="11_7e8qj"]
 [ext_resource type="PackedScene" uid="uid://dkh3ne7tmorbc" path="res://entities/level/computer/Computer.tscn" id="11_lxbj6"]
-[ext_resource type="PackedScene" uid="uid://xximjq7gsnrp" path="res://entities/tests/weapons/weapon_test_secondary.tscn" id="12_8h6y3"]
+[ext_resource type="PackedScene" uid="uid://xximjq7gsnrp" path="res://entities/weapons/weapon_test_secondary.tscn" id="12_8h6y3"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_eox80"]
 panorama = ExtResource("2_2iwr3")

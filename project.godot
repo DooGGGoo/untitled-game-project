@@ -54,6 +54,7 @@ folder_colors={
 "res://assets/audio/": "yellow",
 "res://assets/fonts/": "gray",
 "res://assets/materials/": "purple",
+"res://assets/materials/textures/": "teal",
 "res://assets/particles/": "gray",
 "res://assets/ui/": "gray",
 "res://entities/": "red",
