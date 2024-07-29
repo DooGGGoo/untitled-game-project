@@ -8,9 +8,9 @@
 [ext_resource type="Script" path="res://entities/Button3D.cs" id="6_dihxa"]
 [ext_resource type="Material" uid="uid://byy0tf2266p3d" path="res://assets/materials/jerma.tres" id="6_fwhoe"]
 [ext_resource type="PackedScene" uid="uid://df317tod58c0w" path="res://entities/characters/enemy/scp/SCP173.tscn" id="8_rae2q"]
+[ext_resource type="FontFile" uid="uid://diwbyyf4vej8m" path="res://assets/fonts/Mx437_DOS-V_TWN16.ttf" id="8_wchsa"]
 [ext_resource type="Script" path="res://entities/level/WeaponSpawner.cs" id="10_ntu0d"]
 [ext_resource type="PackedScene" uid="uid://cpeptpsgeknxy" path="res://entities/weapons/weapon_test.tscn" id="11_6liem"]
-[ext_resource type="FontFile" uid="uid://d3lj676xv236i" path="res://assets/fonts/Fixedsys Excelsior 3.01 Regular.ttf" id="11_f872t"]
 [ext_resource type="Script" path="res://entities/props/PhysicsProp.cs" id="12_dhpw0"]
 [ext_resource type="PackedScene" uid="uid://bxadjnscr4b86" path="res://entities/weapons/weapon_test_2.tscn" id="12_tl38v"]
 [ext_resource type="PackedScene" uid="uid://xximjq7gsnrp" path="res://entities/weapons/weapon_test_secondary.tscn" id="13_vpdia"]
@@ -324,10 +324,12 @@ transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
 mesh = SubResource("BoxMesh_7s1je")
 
 [node name="Label3D" type="Label3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner"]
-transform = Transform3D(-1, 0, -8.74228e-08, -7.57103e-08, 0.5, 0.866025, 4.37114e-08, 0.866025, -0.5, 0, 0.2, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, -7.57103e-08, 0.5, 0.866025, 4.37114e-08, 0.866025, -0.5, 0, 0.178896, -0.170746)
+billboard = 2
+double_sided = false
+texture_filter = 0
 text = "weapon_test"
-font = ExtResource("11_f872t")
-font_size = 25
+font = ExtResource("8_wchsa")
 
 [node name="WeaponSpawner2" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.3, 0.5, 7.5)
@@ -343,9 +345,12 @@ transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
 mesh = SubResource("BoxMesh_7s1je")
 
 [node name="Label3D" type="Label3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner2"]
-transform = Transform3D(-1, 0, -8.74228e-08, -7.57103e-08, 0.5, 0.866025, 4.37114e-08, 0.866025, -0.5, 0, 0.2, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, -7.57103e-08, 0.5, 0.866025, 4.37114e-08, 0.866025, -0.5, 0, 0.178896, -0.170746)
+billboard = 2
+double_sided = false
+texture_filter = 0
 text = "weapon_test_2"
-font = ExtResource("11_f872t")
+font = ExtResource("8_wchsa")
 font_size = 25
 
 [node name="WeaponSpawner3" type="StaticBody3D" parent="Map/NavigationRegion3D/test_objs"]
@@ -362,24 +367,31 @@ transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
 mesh = SubResource("BoxMesh_7s1je")
 
 [node name="Label3D" type="Label3D" parent="Map/NavigationRegion3D/test_objs/WeaponSpawner3"]
-transform = Transform3D(-1, 0, -8.74228e-08, -7.57103e-08, 0.5, 0.866025, 4.37114e-08, 0.866025, -0.5, 0, 0.2, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, -7.57103e-08, 0.5, 0.866025, 4.37114e-08, 0.866025, -0.5, 0, 0.178896, -0.170746)
+billboard = 2
+double_sided = false
+texture_filter = 0
 text = "weapon_test_seconary"
-font = ExtResource("11_f872t")
+font = ExtResource("8_wchsa")
 font_size = 25
 
 [node name="Enemies" type="Node" parent="."]
 
-[node name="173" parent="Enemies" instance=ExtResource("8_rae2q")]
+[node name="173" parent="Enemies" node_paths=PackedStringArray("navigationAgent", "onScreenNotifier", "cooldownTimer") instance=ExtResource("8_rae2q")]
 process_mode = 4
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -18.1, 1, -5.3)
+navigationAgent = NodePath("NavigationAgent3D")
+onScreenNotifier = NodePath("VisibleOnScreenNotifier3D")
+cooldownTimer = NodePath("CooldownTimer")
 
-[node name="GenericEnemy" parent="Enemies" instance=ExtResource("6_838wa")]
-process_mode = 4
+[node name="GenericEnemy" parent="Enemies" node_paths=PackedStringArray("navigationAgent") instance=ExtResource("6_838wa")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -11, 1, -8.1)
+navigationAgent = NodePath("NavigationAgent3D")
 
-[node name="GenericEnemy2" parent="Enemies" instance=ExtResource("6_838wa")]
+[node name="GenericEnemy2" parent="Enemies" node_paths=PackedStringArray("navigationAgent") instance=ExtResource("6_838wa")]
 process_mode = 4
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -15, 1, -7.1)
+navigationAgent = NodePath("NavigationAgent3D")
 
 [node name="PropPhysics" type="RigidBody3D" parent="."]
 transform = Transform3D(-0.123654, 0, 0.992325, 0, 1, 0, -0.992325, 0, -0.123654, 4.87749, 0.55308, 11.0318)
@@ -421,10 +433,14 @@ shape = SubResource("SphereShape3D_e8nub")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CameraShakeTrigger"]
 mesh = SubResource("SphereMesh_veo4k")
 
-[node name="Computer" parent="." instance=ExtResource("18_i7my3")]
+[node name="Computer" parent="." node_paths=PackedStringArray("PCCamera", "missionsContainer") instance=ExtResource("18_i7my3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.43723, 1.38186, -2.48585)
+PCCamera = NodePath("Camera3D")
+missionsContainer = NodePath("3DUI/SubViewport/ComputerUI/VBoxContainer/Control/Apps/Mail/MarginContainer/ColorRect/MarginContainer/VBoxContainer")
 
 [node name="Label3D" type="Label3D" parent="Computer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425561, 0)
+billboard = 2
+texture_filter = 0
 text = "this is map_1"
-font = ExtResource("11_f872t")
+font = ExtResource("8_wchsa")

@@ -67,7 +67,9 @@ size = Vector2i(1200, 675)
 render_target_update_mode = 4
 
 [node name="ComputerUI" parent="3DUI/SubViewport" instance=ExtResource("3_6q5lh")]
+texture_filter = 1
 material = SubResource("CanvasItemMaterial_iayil")
+use_parent_material = true
 
 [node name="TextureRect" parent="3DUI/SubViewport/ComputerUI" index="0"]
 material = SubResource("CanvasItemMaterial_iayil")

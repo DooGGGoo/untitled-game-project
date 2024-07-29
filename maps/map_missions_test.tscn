@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://entities/level/Level.cs" id="1_nodc1"]
 [ext_resource type="Material" uid="uid://bg66ey6w10il2" path="res://assets/materials/dev_1.tres" id="2_dffkr"]
-[ext_resource type="FontFile" uid="uid://d3lj676xv236i" path="res://assets/fonts/Fixedsys Excelsior 3.01 Regular.ttf" id="3_dyl7s"]
+[ext_resource type="FontFile" uid="uid://diwbyyf4vej8m" path="res://assets/fonts/Mx437_DOS-V_TWN16.ttf" id="3_r4bqx"]
 [ext_resource type="Script" path="res://scripts/mission_system/Objective.cs" id="4_l2yqe"]
 [ext_resource type="PackedScene" uid="uid://clmdui4kep3fn" path="res://entities/tests/button_test.tscn" id="4_xxx21"]
 [ext_resource type="Script" path="res://entities/level/LevelExtractionArea.cs" id="6_p36mg"]
@@ -48,11 +48,13 @@ size = Vector3(1, 0.5, 1)
 material = ExtResource("2_dffkr")
 
 [node name="Label3D" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, -4.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.65159, -7.88102)
 pixel_size = 0.0487
-text = "Boobs 2
+billboard = 2
+texture_filter = 0
+text = "2
 "
-font = ExtResource("3_dyl7s")
+font = ExtResource("3_r4bqx")
 
 [node name="Node3D" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.230636, 0)
@@ -61,11 +63,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.230636, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0.5, -2.8)
 
 [node name="Label3D" type="Label3D" parent="LevelObjectivePoint"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.248415, 0.822064)
 pixel_size = 0.0067
+billboard = 2
+texture_filter = 0
 text = "Objective 1
 "
-font = ExtResource("3_dyl7s")
+font = ExtResource("3_r4bqx")
 
 [node name="Button" parent="LevelObjectivePoint" instance=ExtResource("4_xxx21")]
 
@@ -76,11 +80,13 @@ script = ExtResource("4_l2yqe")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.5, -2.8)
 
 [node name="Label3D" type="Label3D" parent="LevelObjectivePoint2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.248415, 0.822064)
 pixel_size = 0.0067
+billboard = 2
+texture_filter = 0
 text = "Objective 2
 "
-font = ExtResource("3_dyl7s")
+font = ExtResource("3_r4bqx")
 
 [node name="Button" parent="LevelObjectivePoint2" instance=ExtResource("4_xxx21")]
 
@@ -91,11 +97,13 @@ script = ExtResource("4_l2yqe")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.5, -2.8)
 
 [node name="Label3D" type="Label3D" parent="LevelObjectivePoint3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.248415, 0.822064)
 pixel_size = 0.0067
+billboard = 2
+texture_filter = 0
 text = "Objective 3
 "
-font = ExtResource("3_dyl7s")
+font = ExtResource("3_r4bqx")
 
 [node name="Button" parent="LevelObjectivePoint3" instance=ExtResource("4_xxx21")]
 
