@@ -45,4 +45,5 @@ As for name of the project, it internally started as game set in SCP universe, b
 
 
 # Credits
-## [**If You think this project uses Your work without proper credit/license/permission, please contact me in any way**]
+[Credits](credits.txt)
+## **If You think this project uses Your work without proper credit/license/permission, please contact me in any way**
