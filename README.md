@@ -12,14 +12,23 @@ Untitled game project I made quite a long time ago.
 
 ## Controls:
 [LMB] - Shoot
+
 [RMB] - ADS, throw prop
+
 [1, 2] - Switch weapons
+
 [E] - Use
+
 [W, A, S, D] - Movement
+
 [Space] - Jump
+
 [Shift] - Sprint
+
 [C] - Crouch
+
 [F1] - (debug) Spawn Explosion
+
 [F2] - (debug) Spawn Freedom™ Airstike™
 
 ## Notes
